@@ -1,6 +1,7 @@
 package com.estate.real.document;
 
 import com.estate.real.config.CollectionName;
+import com.estate.real.model.AccountStatus;
 import lombok.Data;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -13,7 +14,8 @@ public class Account {
     private String password;
     private String fullName;
     private String role;
-    private String status;
+    @Indexed
+    private AccountStatus status;
     private String address;
 
     public Account() {
