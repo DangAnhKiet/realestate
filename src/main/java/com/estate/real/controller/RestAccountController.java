@@ -13,11 +13,10 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "account")
 public class RestAccountController {
-
     @Autowired
     AccountService accountService;
 
-    @RequestMapping(value = "/add", method = RequestMethod.POST)
+    @RequestMapping(value = "/add", method = RequestMethod.GET)
     public GeneralResponse add(@RequestBody AccountRequest request){
         return accountService.addAccount(request);
     }
