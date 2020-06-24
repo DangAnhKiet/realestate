@@ -10,6 +10,11 @@ import java.util.*;
 
 @Controller
 public class DemoController {
+    @RequestMapping(value={"/login"}, method = RequestMethod.GET)
+    public String login(Model model){
+        model.addAttribute("checklogin","login thanh cong");
+        return "Login";
+    }
     private static List<Person> persons = new ArrayList<Person>();
 
     static {
