@@ -15,4 +15,5 @@ public interface AccountRepository extends MongoRepository<Account, ObjectId>, A
 
     @Query(value = "{'status':?0}")
     public List<Account> findByStatus(String status);
+
 }
