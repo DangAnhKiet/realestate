@@ -54,7 +54,7 @@
            success: function (objResult) {
                var jsonResult =JSON.parse(JSON.stringify(objResult));
                 if(jsonResult.success == true && jsonResult.strResult == "admin"){
-                    alert("la admin");
+                    window.location.href = "http://localhost:8080/admin-manage";
                 }else if(jsonResult == "member"){
                    alert("la member");
                 }else{

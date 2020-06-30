@@ -8,10 +8,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import java.util.*;
 
 @Controller
-public class DemoController {
+public class LocationController {
     @RequestMapping(value={"/login"}, method = RequestMethod.GET)
     public String login(Model model){
         model.addAttribute("checklogin","login thanh cong");
         return "Login";
+    }
+
+    @RequestMapping(value={"/admin-manage"}, method = RequestMethod.GET)
+    public String manageRealOfAdmin(){
+        return "ManageReal";
     }
 }

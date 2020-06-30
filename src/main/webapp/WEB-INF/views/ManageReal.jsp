@@ -7,7 +7,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
-<jsp:include page="/WEB-INF/head_tag.jsp">
+<jsp:include page="head_tag.jsp">
     <jsp:param name="title" value="Management Real Estate"/>
     <jsp:param name="link-css-this-page" value="../css/manage-real.css"/>
 </jsp:include>
@@ -72,7 +72,7 @@
 </div>
 <script type="text/javascript">
 </script>
-<jsp:include page="/WEB-INF/foot_tag.jsp"/>
+<jsp:include page="foot_tag.jsp"/>
 <%--<script src="./ProjectTruffle/src/js/truffle-contract.js"></script>--%>
 <%--<script src="./ProjectTruffle/src/js/web3.min.js"></script>--%>
 </body>
