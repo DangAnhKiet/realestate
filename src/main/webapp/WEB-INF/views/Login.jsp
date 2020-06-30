@@ -53,10 +53,11 @@
            }),
            success: function (objResult) {
                var jsonResult =JSON.parse(JSON.stringify(objResult));
+               // alert(jsonResult.strResult);
                 if(jsonResult.success == true && jsonResult.strResult == "admin"){
                     window.location.href = "http://localhost:8080/admin-manage";
-                }else if(jsonResult == "member"){
-                   alert("la member");
+                }else if(jsonResult.strResult == "member"){
+                    window.location.href = "http://localhost:8080/member";
                 }else{
                     document.getElementById("alert-login").style.display = "block";
                 }

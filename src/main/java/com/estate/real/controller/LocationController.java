@@ -15,6 +15,16 @@ public class LocationController {
         return "Login";
     }
 
+    @RequestMapping(value={"/"}, method = RequestMethod.GET)
+    public String home(){
+        return "Home";
+    }
+
+    @RequestMapping(value={"/member"}, method = RequestMethod.GET)
+    public String member(){
+        return "HomeMember";
+    }
+
     @RequestMapping(value={"/admin-manage"}, method = RequestMethod.GET)
     public String manageRealOfAdmin(){
         return "ManageReal";
