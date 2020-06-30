@@ -51,11 +51,11 @@
               "password":password,
                "role":role
            }),
-           success: function (responseText) {
-               alert(responseText);
-                if(responseText == 'admin'){
+           success: function (objResult) {
+               var jsonResult =JSON.parse(JSON.stringify(objResult));
+                if(jsonResult.success == true && jsonResult.strResult == "admin"){
                     alert("la admin");
-                }else if(responseText == "member"){
+                }else if(jsonResult == "member"){
                    alert("la member");
                 }else{
                     document.getElementById("alert-login").style.display = "block";

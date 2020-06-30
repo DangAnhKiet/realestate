@@ -17,4 +17,9 @@ public class GeneralResponse {
     public GeneralResponse(String strResult){
         this.strResult = strResult;
     }
+
+    public GeneralResponse(boolean success, String strResult){
+        this.success = success;
+        this.strResult = strResult;
+    }
 }

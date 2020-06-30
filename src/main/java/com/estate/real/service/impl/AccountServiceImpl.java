@@ -52,9 +52,9 @@ public class AccountServiceImpl implements AccountService {
             return new GeneralResponse(false);
         }else{
             if(Role.admin.toString().equals(account.getRole())){
-                return new GeneralResponse("admin");
+                return new GeneralResponse(true,"admin");
             }else if(Role.member.toString().equals(account.getRole())){
-                return new GeneralResponse("member");
+                return new GeneralResponse(true,"member");
             }else{
                 return new GeneralResponse(false);
 
