@@ -3,6 +3,7 @@ package com.estate.real.service.impl;
 import com.estate.real.Repository.inf.AccountRepository;
 import com.estate.real.document.Account;
 import com.estate.real.model.AccountStatus;
+import com.estate.real.model.Role;
 import com.estate.real.model.request.AccountLoginRequest;
 import com.estate.real.model.request.AccountRequest;
 import com.estate.real.model.response.GeneralResponse;
@@ -42,15 +43,22 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public GeneralResponse login(AccountLoginRequest request) {
-        Account account = accountRepository.findByNameLogin(request.getNameLogin());
+        Account account = accountRepository.findByNameLogin(request.getNameLogin(), AccountStatus.active.toString());
         if (account == null){
             return new GeneralResponse(false);
         }
 
         if (!request.getPassword().equals(account.getPassword())){
             return new GeneralResponse(false);
-        }
+        }else{
+            if(Role.admin.toString().equals(account.getRole())){
+                return new GeneralResponse("admin");
+            }else if(Role.member.toString().equals(account.getRole())){
+                return new GeneralResponse("member");
+            }else{
+                return new GeneralResponse(false);
 
-        return new GeneralResponse(true);
+            }
+        }
     }
 }

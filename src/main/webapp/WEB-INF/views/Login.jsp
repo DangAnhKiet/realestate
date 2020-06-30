@@ -19,7 +19,6 @@
         <div class="col-sm-12 wrap-login">
             <div>
                 <h2 class="login-title">KH-REAL ESTATE</h2>
-                <form action="adminLogin" method="post">
                     <div class="form-group">
                         <lable for="username">Username:</lable>
                         <input type="text" id="username" name="username" class="form-control">
@@ -28,16 +27,42 @@
                         <lable for="password">Password:</lable>
                         <input type="password" name="password" id="password" class="form-control">
                     </div>
+                    <p style="display: none; color: darkred" id="alert-login">Tên đăng nhập hoặc mật khẩu không đúng</p>
                     <div style="display: flex; justify-content: center; text-align: center">
                         <div>
-                            <button type="submit" class="btn btn-success">ĐĂNG NHẬP</button>
+                            <button id="i-btn-login" class="btn btn-success">ĐĂNG NHẬP</button>
                         </div>
-
                     </div>
-                </form>
             </div>
         </div>
     </div>
 </div>
+<script type="text/javascript">
+    document.getElementById("i-btn-login").addEventListener("click",function(){
+       var password = document.getElementById("password").value;
+       var username = document.getElementById("username").value;
+       var role = "admin";
+       $.ajax({
+           type:'POST',
+           contentType: "application/json",
+           url: 'http://localhost:8080/account/login/',
+           data: JSON.stringify({
+               "nameLogin":username,
+              "password":password,
+               "role":role
+           }),
+           success: function (responseText) {
+               alert(responseText);
+                if(responseText == 'admin'){
+                    alert("la admin");
+                }else if(responseText == "member"){
+                   alert("la member");
+                }else{
+                    document.getElementById("alert-login").style.display = "block";
+                }
+           }
+       });
+    });
+</script>
 </body>
 </html>

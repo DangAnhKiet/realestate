@@ -17,18 +17,19 @@ public class democontract {
         Web3j web3j = Web3j.build(new HttpService(ContractInfo.locationEthereum));
         Credentials credentials = Credentials.create(ContractInfo.pkDeploy);
         //3.Configure gas parameters
-        BigInteger gasLimit = BigInteger.valueOf(672197885);
+        BigInteger gasLimit = BigInteger.valueOf(672197500);
 
-        BigInteger gasPrice = Convert.toWei("0.0000000000000000000000000001", Convert.Unit.GWEI).toBigInteger();
+        BigInteger gasPrice =
+                Convert.toWei("1", Convert.Unit.GWEI).toBigInteger();
         try {
 //            ManageRealEsate manageRealEsate = ManageRealEsate.deploy(web3j, credentials, gasPrice, gasLimit).send();
 //            System.out.println("Smart contract address: "+manageRealEsate.getContractAddress());
 
             ManageRealEsate manageRealEsate = ManageRealEsate.load(ContractInfo.addressContract, web3j, credentials,
                     gasLimit, gasPrice);
-
-            TransactionReceipt transactionReceipt = manageRealEsate.addLand("Quan 1", "Tran dudf",
-                    BigInteger.valueOf(1000000)).send();
+//
+            TransactionReceipt transactionReceipt = manageRealEsate.addLand("Quan 1", "Tran hung dao",
+                    BigInteger.valueOf(1000000000)).send();
             System.out.println("add status: " + transactionReceipt.isStatusOK());
         } catch (Exception e) {
 //            System.out.println("Loi deploy smart contract");
