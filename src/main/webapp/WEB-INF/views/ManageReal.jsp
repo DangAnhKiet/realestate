@@ -17,7 +17,7 @@
         <div class="col-sm-12">
             <h3 style="text-align: center;margin-top: 14px;">QUẢN LÍ ĐẤT</h3>
             <div class="wrap-address">
-                <span><strong>Tài khoản hiện tại:</strong>
+                <span><strong>Địa chỉ của admin:</strong>
                 <span>0x6787654567545675456754</span>
                 </span>
                 <input type="button" id="i-update-address" class="btn btn-success" value="Cập nhập">
@@ -26,15 +26,12 @@
                     <img id="i-logout" src="../../imgs/icons/sign-out-alt-solid.svg" alt="">
                 </div>
             </div>
-            <div class="wrap-item">
-                <img src="../../imgs/item-real/200.png" alt="hinh-mau">
-                <img src="../../imgs/item-real/200.png" alt="hinh-mau">
-                <img src="../../imgs/item-real/200.png" alt="hinh-mau">
-                <img src="../../imgs/item-real/200.png" alt="hinh-mau">
-                <img src="../../imgs/item-real/200.png" alt="hinh-mau">
-            </div>
-
             <div class="wrap-adding">
+                <div class="wrap-buyer-address">
+                    <label>Đại chỉ chủ đất</label>
+                    <br/>
+                    <input type="text" placeholder="0x000000000000000">
+                </div>
                 <div class="wrap-select-district">
                     <select class="ui dropdown select-district">
                         <option value="">Tên quận</option>
@@ -61,16 +58,49 @@
                     <input type="text" id="price">
                 </div>
                 <div class="wrap-upload-img">
-                        <label for="img">Hình ảnh:</label>
-                        <input type="file" id="img" name="img" accept="image/*">
+                    <label for="img">Hình ảnh:</label>
+                    <input type="file" id="img" name="img" accept="image/*">
                 </div>
-                <div style="margin-bottom: 5px;"><input type="button" id="i-btn-adding"value="Đăng bán"class="btn btn-primary"></div>
+                <div style="margin-bottom: 5px;"><input type="button"
+                                                        id="i-btn-adding" value="Thêm đất" class="btn btn-primary">
+                </div>
 
             </div>
+            <div class="wrap-item">
+                <img src="../../imgs/item-real/200.png" alt="hinh-mau">
+                <img src="../../imgs/item-real/200.png" alt="hinh-mau">
+                <img src="../../imgs/item-real/200.png" alt="hinh-mau">
+                <img src="../../imgs/item-real/200.png" alt="hinh-mau">
+                <img src="../../imgs/item-real/200.png" alt="hinh-mau">
+            </div>
+
+
         </div>
     </div>
 </div>
 <script type="text/javascript">
+    document.getElementById("i-btn-adding").addEventListener("click", function () {
+        let buyAddress = "0x0987654321745556764565675";
+        let district = "Quận 1";
+        let street = "Trần hưng đạo";
+        let price = "1000000000";
+        let pathImage = "https://picsum.photos/200/300";
+        $.ajax({
+           type:"POST",
+            contentType:"application/json",
+            url: 'http://localhost:8080/land/add',
+            data: JSON.stringify({
+                "buyAddress": buyAddress,
+                "district": district,
+                "street": street,
+                "price":price,
+                "pathImage": pathImage
+            }),
+            success: function(ojbResponse){
+               alert(ojbResponse);
+            }
+        });
+    });
 </script>
 <jsp:include page="foot_tag.jsp"/>
 <%--<script src="./ProjectTruffle/src/js/truffle-contract.js"></script>--%>
