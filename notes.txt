@@ -1,6 +1,7 @@
+Pc Kiet: 913 290 701
 - Khi sữa code sol:
 + Vào thư mục truffle: chạy lệnh: truffle compile
 + Đứng ngay tại thư mục real chạy lệnh:  web3j truffle generate ./truffle/build/contracts/ManageRealEsate.json -p
 contract -o ./
-
++ Sau đó sử lại import package trong class ManageRealEsate.java: package  com.estate.real.contract;
 

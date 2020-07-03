@@ -2,6 +2,7 @@ package com.estate.real.service.impl;
 
 import com.estate.real.Repository.inf.LandRepository;
 import com.estate.real.config.ContractInfo;
+import com.estate.real.contract.ManageRealEsate;
 import com.estate.real.document.Land;
 import com.estate.real.model.request.LandRequest;
 import com.estate.real.model.response.GeneralResponse;
@@ -39,21 +40,22 @@ public class LandServiceImpl implements LandService {
         BigInteger gasPrice =
                 Convert.toWei("1", Convert.Unit.GWEI).toBigInteger();
         try {
-//            ManageRealEsate manageRealEsate = ManageRealEsate.deploy(web3j, credentials, gasPrice, gasLimit).send();
-//            System.out.println("Smart contract address: "+manageRealEsate.getContractAddress());
-
             ManageRealEsate manageRealEsate = ManageRealEsate.load(ContractInfo.addressContract, web3j, credentials,
                     gasLimit, gasPrice);
-//
-            TransactionReceipt transactionReceipt = manageRealEsate.addLand("Quan 1", "Tran hung dao",
-                    BigInteger.valueOf(1000000000)).send();
-            System.out.println("add status: " + transactionReceipt.isStatusOK());
+            TransactionReceipt transactionReceipt = manageRealEsate.addLand(land.getDistrict(),land.getStreet(),
+                    land.getImage(),land.getPrice()).send();
+            System.out.println("Trạng thái của quá trình thêm land vào blockchain: " + transactionReceipt.isStatusOK());
+            if(transactionReceipt.isStatusOK()){
+                landRepository.save(land);
+                return new GeneralResponse(true);
+            }else{
+                System.out.println("Qua trinh them land vao blockchain THAT BAI. Khong them vao database");
+                return new GeneralResponse(false);
+            }
         } catch (Exception e) {
-//            System.out.println("Loi deploy smart contract");
+            System.out.println("Loi deploy smart contract");
             e.printStackTrace(System.out);
         }
-        //Thêm đất vào database khi thêm vào etherum thành công
-        landRepository.save(land);
-        return new GeneralResponse(true);
+        return new GeneralResponse(false);
     }
 }

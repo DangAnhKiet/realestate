@@ -30,7 +30,7 @@
                 <div class="wrap-buyer-address">
                     <label>Đại chỉ chủ đất</label>
                     <br/>
-                    <input type="text" placeholder="0x000000000000000">
+                    <input  type="text" placeholder="0x000000000000000">
                 </div>
                 <div class="wrap-select-district">
                     <select class="ui dropdown select-district">
@@ -90,7 +90,7 @@
             contentType:"application/json",
             url: 'http://localhost:8080/land/add',
             data: JSON.stringify({
-                "buyAddress": buyAddress,
+                "addressSeller": buyAddress,
                 "district": district,
                 "street": street,
                 "price":price,
