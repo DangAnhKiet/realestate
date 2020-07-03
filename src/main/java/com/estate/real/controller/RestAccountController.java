@@ -1,6 +1,5 @@
 package com.estate.real.controller;
 
-import com.estate.real.Repository.inf.AccountRepository;
 import com.estate.real.document.Account;
 import com.estate.real.model.request.AccountLoginRequest;
 import com.estate.real.model.request.AccountRequest;
@@ -18,17 +17,17 @@ public class RestAccountController {
     AccountService accountService;
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public GeneralResponse add(@RequestBody AccountRequest request){
+    public GeneralResponse add(@RequestBody AccountRequest request) {
         return accountService.addAccount(request);
     }
 
     @RequestMapping(value = "/get", method = RequestMethod.GET)
-    public List<Account> add(@RequestParam String status){
+    public List<Account> add(@RequestParam String status) {
         return accountService.getAllByStatus(status);
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public GeneralResponse add(@RequestBody AccountLoginRequest request){
+    public GeneralResponse add(@RequestBody AccountLoginRequest request) {
         return accountService.login(request);
     }
 }
