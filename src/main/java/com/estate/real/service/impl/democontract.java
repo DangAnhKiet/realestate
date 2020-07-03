@@ -26,11 +26,18 @@ public class democontract {
 //            ManageRealEsate manageRealEsate = ManageRealEsate.load(ContractInfo.addressContract, web3j, credentials,
 //                    gasLimit, gasPrice);
 //
+//            ManageRealEsate manageRealEsate = ManageRealEsate.deploy(web3j, credentials, gasPrice, gasLimit).send();
+//            System.out.println("Smart contract address: "+manageRealEsate.getContractAddress());
+
+//            ManageRealEsate manageRealEsate = ManageRealEsate.load(ContractInfo.addressContract, web3j, credentials,
+//                    gasLimit, gasPrice);
+//`
 //            TransactionReceipt transactionReceipt = manageRealEsate.addLand("Quan 1", "Tran hung dao",
 //                    BigInteger.valueOf(1000000000)).send();
 //            System.out.println("add status: " + transactionReceipt.isStatusOK());
         } catch (Exception e) {
 //            System.out.println("Loi deploy smart contract");
+            System.out.println("Loi deploy smart contract");
             e.printStackTrace(System.out);
         }
     }
