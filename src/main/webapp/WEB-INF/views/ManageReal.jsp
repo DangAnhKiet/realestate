@@ -94,7 +94,7 @@
                 "district": district,
                 "street": street,
                 "price":price,
-                "pathImage": pathImage
+                "image": pathImage
             }),
             success: function(ojbResponse){
                alert(ojbResponse);

@@ -1,6 +1,6 @@
-generate:   web3j truffle generate ./truffle/build/contracts/ManageRealEsate.json -p contract -o ./
+- Khi sữa code sol:
++ Vào thư mục truffle: chạy lệnh: truffle compile
++ Đứng ngay tại thư mục real chạy lệnh:  web3j truffle generate ./truffle/build/contracts/ManageRealEsate.json -p
+contract -o ./
 
 
-addland
-nguoi dung click add tu fontend land/add
-goi api addland
