@@ -30,10 +30,10 @@
                 <div class="wrap-buyer-address">
                     <label>Đại chỉ chủ đất</label>
                     <br/>
-                    <input  type="text" placeholder="0x000000000000000">
+                    <input id="i-seller-address" type="text" placeholder="0x000000000000000">
                 </div>
                 <div class="wrap-select-district">
-                    <select class="ui dropdown select-district">
+                    <select id="district" class="ui dropdown select-district">
                         <option value="">Tên quận</option>
                         <option value="1-district">Quận 1</option>
                         <option value="2-district">Quận 2</option>
@@ -43,21 +43,21 @@
                     </select>
                 </div>
                 <div class="wrap-select-street">
-                    <select class="ui dropdown select-district">
+                    <select id="street" class="ui dropdown select-district">
                         <option value="">Tên đường</option>
-                        <option value="">Cao thắng</option>
-                        <option value="">Trần hưng đạo</option>
-                        <option value="">Lê lai</option>
-                        <option value="">Hoàng văn thụ</option>
-                        <option value="">3 tháng 2</option>
-                        <option value="">An dương vương</option>
+                        <option value="1-street">Cao thắng</option>
+                        <option value="2-street">Trần hưng đạo</option>
+                        <option value="3-street">Lê lai</option>
+                        <option value="4-street">Hoàng văn thụ</option>
+                        <option value="5-street">3 tháng 2</option>
+                        <option value="6-street">An dương vương</option>
                     </select>
                 </div>
-                <div class="wrap-price">
+                <div  class="wrap-price">
                     <lable for="price">Giá bán(VNĐ)</lable>
-                    <input type="text" id="price">
+                    <input id="price-id" type="text" id="price">
                 </div>
-                <div class="wrap-upload-img">
+                <div id="image-id" class="wrap-upload-img">
                     <label for="img">Hình ảnh:</label>
                     <input type="file" id="img" name="img" accept="image/*">
                 </div>
@@ -80,10 +80,13 @@
 </div>
 <script type="text/javascript">
     document.getElementById("i-btn-adding").addEventListener("click", function () {
-        let buyAddress = "0x0987654321745556764565675";
-        let district = "Quận 1";
-        let street = "Trần hưng đạo";
-        let price = "1000000000";
+        let buyAddress = document.getElementById("i-seller-address").value;
+        // alert(buyAddress);
+        let d = document.getElementById("district");
+        let district = d.options[d.selectedIndex].text;
+        let s = document.getElementById("street");
+        let street = s.options[s.selectedIndex].text;
+        let price = document.getElementById("price-id").value;
         let pathImage = "https://picsum.photos/200/300";
         $.ajax({
            type:"POST",

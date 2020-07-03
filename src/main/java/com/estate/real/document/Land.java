@@ -1,6 +1,7 @@
 package com.estate.real.document;
 
 import com.estate.real.config.CollectionName;
+import com.estate.real.model.enums.StatusLand;
 import lombok.Data;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -12,5 +13,9 @@ public class Land {
     private String street;
     private String price;
     private String image;
+    private StatusLand status;
+
+    public Land() {
+    }
 }
 

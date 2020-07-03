@@ -4,8 +4,10 @@ import com.estate.real.Repository.inf.LandRepository;
 import com.estate.real.config.ContractInfo;
 import com.estate.real.contract.ManageRealEsate;
 import com.estate.real.document.Land;
+import com.estate.real.model.request.LandPagingRequest;
 import com.estate.real.model.request.LandRequest;
 import com.estate.real.model.response.GeneralResponse;
+import com.estate.real.model.response.LandResponse;
 import com.estate.real.service.inf.LandService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +18,10 @@ import org.web3j.protocol.http.HttpService;
 import org.web3j.utils.Convert;
 
 import java.math.BigInteger;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class LandServiceImpl implements LandService {
@@ -58,4 +64,15 @@ public class LandServiceImpl implements LandService {
         }
         return new GeneralResponse(false);
     }
+
+    @Override
+    public List<LandResponse> getLandPaging(LandPagingRequest request) {
+        List<Land> lands = landRepository.getLandPaging(request);
+        List<LandResponse> landResponses = new ArrayList<>();
+        if (lands != null) {
+            return lands.stream().map(LandResponse::new).collect(Collectors.toList());
+        }
+        return landResponses;
+    }
+
 }
