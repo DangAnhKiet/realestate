@@ -9,6 +9,7 @@ import com.estate.real.model.request.LandRequest;
 import com.estate.real.model.response.GeneralResponse;
 import com.estate.real.model.response.LandResponse;
 import com.estate.real.service.inf.LandService;
+import com.estate.real.utils.MyWeb3j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.web3j.crypto.Credentials;
@@ -38,25 +39,20 @@ public class LandServiceImpl implements LandService {
         land.setPrice(request.getPrice());
         land.setStreet(request.getStreet());
 
-        //Thêm đất và ethereum
-        Web3j web3j = Web3j.build(new HttpService(ContractInfo.locationEthereum));
-        Credentials credentials = Credentials.create(ContractInfo.pkDeploy);
-        //3.Configure gas parameters
-        BigInteger gasLimit = BigInteger.valueOf(672197500);
-        BigInteger gasPrice =
-                Convert.toWei("1", Convert.Unit.GWEI).toBigInteger();
+        //Thêm đất vào ethereum
         try {
-            ManageRealEsate manageRealEsate = ManageRealEsate.load(ContractInfo.addressContract, web3j, credentials,
-                    gasLimit, gasPrice);
-            TransactionReceipt transactionReceipt = manageRealEsate.addLand(land.getDistrict(),land.getStreet(),
-                    land.getImage(),land.getPrice()).send();
-            System.out.println("Trạng thái của quá trình thêm land vào blockchain: " + transactionReceipt.isStatusOK());
-            if(transactionReceipt.isStatusOK()){
-                landRepository.save(land);
-                return new GeneralResponse(true);
-            }else{
-                System.out.println("Qua trinh them land vao blockchain THAT BAI. Khong them vao database");
-                return new GeneralResponse(false);
+            ManageRealEsate manageRealEsate = MyWeb3j.LoadSmartContract();
+            if(manageRealEsate != null){
+                TransactionReceipt transactionReceipt = manageRealEsate.addLand(land.getDistrict(),land.getStreet(),
+                        land.getImage(),land.getPrice()).send();
+                System.out.println("Trạng thái của quá trình thêm land vào blockchain: " + transactionReceipt.isStatusOK());
+                if(transactionReceipt.isStatusOK()){
+                    landRepository.save(land);
+                    return new GeneralResponse(true);
+                }else{
+                    System.out.println("Qua trinh them land vao blockchain THAT BAI. Khong them vao database");
+                    return new GeneralResponse(false);
+                }
             }
         } catch (Exception e) {
             System.out.println("Loi deploy smart contract");
