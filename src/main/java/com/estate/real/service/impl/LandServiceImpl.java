@@ -73,4 +73,13 @@ public class LandServiceImpl implements LandService {
         return landResponses;
     }
 
+    @Override
+    public List<LandResponse> getAllLand() {
+        List<Land> lands = landRepository.getAllLands();
+        List<LandResponse> landResponses = new ArrayList<>();
+        if(lands != null){
+            return lands.stream().map(LandResponse::new).collect(Collectors.toList());
+        }
+        return landResponses;
+    }
 }

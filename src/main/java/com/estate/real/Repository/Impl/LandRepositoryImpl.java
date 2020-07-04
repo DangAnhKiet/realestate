@@ -2,6 +2,7 @@ package com.estate.real.Repository.Impl;
 
 import com.estate.real.Repository.extend.LandRepositoryExtend;
 import com.estate.real.document.Land;
+import com.estate.real.model.enums.LandStatus;
 import com.estate.real.model.request.LandPagingRequest;
 import com.estate.real.model.response.LandResponse;
 import org.bson.types.ObjectId;
@@ -31,6 +32,14 @@ public class LandRepositoryImpl implements LandRepositoryExtend {
         Query query = new Query(criteria);
         query.limit(request.getLimit());
         query.addCriteria(Criteria.where("status").is(request.getStatus()));
+
+        return mongoTemplate.find(query, Land.class);
+    }
+
+    @Override
+    public List<Land> getAllLands() {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("status").lt(LandStatus.deleted.ordinal()));
 
         return mongoTemplate.find(query, Land.class);
     }

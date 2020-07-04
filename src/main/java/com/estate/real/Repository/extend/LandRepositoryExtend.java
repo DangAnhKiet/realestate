@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface LandRepositoryExtend {
     public List<Land> getLandPaging(LandPagingRequest request);
+    public List<Land> getAllLands();
 }

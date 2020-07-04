@@ -6,11 +6,13 @@
  To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
 <jsp:include page="head_tag.jsp">
     <jsp:param name="title" value="Management Real Estate"/>
     <jsp:param name="link-css-this-page" value="../css/manage-real.css"/>
 </jsp:include>
+
 <body>
 <div class="container">
     <div class="row">
@@ -67,19 +69,22 @@
 
             </div>
             <div class="wrap-item">
-                <div class="textWithBlurredBg">
-                    <img src="imgs/item-real/200.png" alt="hinh-mau">
-                    <p class="detail" onclick="document.getElementById('i-view-detail').style.display='block'">Xem chi
-                        tiết</p>
-                    <p class="buy">Mua</p>
-                </div>
-                <%--                <img src="../../imgs/item-real/200.png" alt="hinh-mau">--%>
-                <%--                <img src="../../imgs/item-real/200.png" alt="hinh-mau">--%>
-                <%--                <img src="../../imgs/item-real/200.png" alt="hinh-mau">--%>
-                <%--                <img src="../../imgs/item-real/200.png" alt="hinh-mau">--%>
-                <%--                <img src="../../imgs/item-real/200.png" alt="hinh-mau">--%>
+                <c:forEach items="${listLands}" var="land">
+                    <%--                    private String addressSeller;--%>
+                    <%--                    private String district;--%>
+                    <%--                    private String street;--%>
+                    <%--                    private String price;--%>
+                    <%--                    private String image;--%>
+                    <%--                    private int status;--%>
+                    <div class="textWithBlurredBg">
+                        <img src="${land.image}" alt="hinh-mau">
+                        <p class="detail" onclick="document.getElementById('i-view-detail').style.display='block'">Xem
+                            chi
+                            tiết</p>
+                        <p class="buy">Mua</p>
+                    </div>
+                </c:forEach>
             </div>
-
             <%--            Modal view detail--%>
             <div class="w3-container">
                 <div id="i-view-detail" class="w3-modal">

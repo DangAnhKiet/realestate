@@ -1,5 +1,8 @@
 package com.estate.real.controller;
 
+import com.estate.real.service.impl.LandServiceImpl;
+import com.estate.real.service.inf.LandService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -9,6 +12,9 @@ import java.util.*;
 
 @Controller
 public class LocationController {
+    @Autowired
+    LandService landService;
+
     @RequestMapping(value={"/login"}, method = RequestMethod.GET)
     public String login(Model model){
         model.addAttribute("checklogin","login thanh cong");
@@ -26,7 +32,8 @@ public class LocationController {
     }
 
     @RequestMapping(value={"/admin-manage"}, method = RequestMethod.GET)
-    public String manageRealOfAdmin(){
+    public String manageRealOfAdmin(Model model){
+        model.addAttribute("listLands",landService.getAllLand());
         return "ManageReal";
     }
 }
