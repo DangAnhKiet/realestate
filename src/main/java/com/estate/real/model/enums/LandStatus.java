@@ -1,7 +1,7 @@
 package com.estate.real.model.enums;
 
-public enum StatusLand {
-    selling,
+public enum LandStatus {
+    active,
     pending,
-    Owner
+    deleted
 }

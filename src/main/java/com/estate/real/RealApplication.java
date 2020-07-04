@@ -25,7 +25,6 @@ public class RealApplication {
         }else{
             SpringApplication.run(RealApplication.class, args);
         }
-
     }
 
 

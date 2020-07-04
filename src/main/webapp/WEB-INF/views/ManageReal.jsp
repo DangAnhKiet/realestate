@@ -1,9 +1,9 @@
- <%--
-  Created by IntelliJ IDEA.
-  User: hauphvn
-  Date: 5/8/2020
-  Time: 9:35 AM
-  To change this template use File | Settings | File Templates.
+<%--
+ Created by IntelliJ IDEA.
+ User: hauphvn
+ Date: 5/8/2020
+ Time: 9:35 AM
+ To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
@@ -53,7 +53,7 @@
                         <option value="6-street">An dương vương</option>
                     </select>
                 </div>
-                <div  class="wrap-price">
+                <div class="wrap-price">
                     <lable for="price">Giá bán(VNĐ)</lable>
                     <input id="price-id" type="text" id="price">
                 </div>
@@ -67,17 +67,74 @@
 
             </div>
             <div class="wrap-item">
-                <img src="../../imgs/item-real/200.png" alt="hinh-mau">
-                <img src="../../imgs/item-real/200.png" alt="hinh-mau">
-                <img src="../../imgs/item-real/200.png" alt="hinh-mau">
-                <img src="../../imgs/item-real/200.png" alt="hinh-mau">
-                <img src="../../imgs/item-real/200.png" alt="hinh-mau">
+                <div class="textWithBlurredBg">
+                    <img src="imgs/item-real/200.png" alt="hinh-mau">
+                    <p class="detail" onclick="document.getElementById('i-view-detail').style.display='block'">Xem chi
+                        tiết</p>
+                    <p class="buy">Mua</p>
+                </div>
+                <%--                <img src="../../imgs/item-real/200.png" alt="hinh-mau">--%>
+                <%--                <img src="../../imgs/item-real/200.png" alt="hinh-mau">--%>
+                <%--                <img src="../../imgs/item-real/200.png" alt="hinh-mau">--%>
+                <%--                <img src="../../imgs/item-real/200.png" alt="hinh-mau">--%>
+                <%--                <img src="../../imgs/item-real/200.png" alt="hinh-mau">--%>
             </div>
 
+            <%--            Modal view detail--%>
+            <div class="w3-container">
+                <div id="i-view-detail" class="w3-modal">
+                    <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:800px">
 
+                        <div class="w3-center"><br>
+                            <span onclick="document.getElementById('i-view-detail').style.display='none'"
+                                  class="w3-button w3-xlarge w3-hover-red w3-display-topright" title="Close Modal">&times;</span>
+                            <img src="https://loremflickr.com/640/360">
+                        </div>
+
+                        <form class="w3-container" action="/action_page.php">
+                            <div class="w3-section">
+                                <h3>Thông tin chi tiết</h3>
+                                <hr>
+                                <h5>Diện tích</h5>
+                                <p>Dài: 4.12m</p>
+                                <p>Ngang: 4.12m</p>
+                                <p>Nở hậu: 4.12m</p>
+                                <p>Tổng diện tích sử dụng: 4.12m</p>
+                                <hr>
+                                <h5>Vị trí</h5>
+                                <p>Đường: 227 Nguyễn văn cừ</p>
+                                <p>Phường: 5</p>
+                                <p>Quận: 5</p>
+                                <p>Thành phố: Hồ Chí Minh</p>
+                                <hr>
+                                <>h5Mô tả thêm</h5>
+                                <p>Nhà cách mặt tiền đường lớn 2 căn, nằm trong con hẻm an ninh đường Trần Khắc Chân,
+                                    phường Tân Định, quận 1. Con hẻm thông ra Trần Khánh Dư, khu phố rất yên tĩnh,
+                                    nhà sát nhà, hàng xóm thuận hòa, đoàn kết.
+                                </p>
+                            </div>
+                        </form>
+
+                        <div class="w3-container w3-border-top w3-padding-16 w3-light-grey">
+                            <button onclick="document.getElementById('i-view-detail').style.display='none'"
+                                    type="button"
+                                    class="w3-right w3-button w3-red">Đóng
+                            </button>
+                            <button style="margin-right: 3px;"
+                                    onclick="document.getElementById('i-view-detail').style.display='none'"
+                                    type="button"
+                                    class="w3-right w3-button w3-blue">Mua ngay
+                            </button>
+                            <%--                            <span class="w3-right w3-padding w3-hide-small"> <a href="#">Mua ngay</a></span>--%>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
+
 <script type="text/javascript">
     document.getElementById("i-btn-adding").addEventListener("click", function () {
         let buyAddress = document.getElementById("i-seller-address").value;
@@ -89,18 +146,18 @@
         let price = document.getElementById("price-id").value;
         let pathImage = "https://picsum.photos/200/300";
         $.ajax({
-           type:"POST",
-            contentType:"application/json",
+            type: "POST",
+            contentType: "application/json",
             url: 'http://localhost:8080/land/add',
             data: JSON.stringify({
                 "addressSeller": buyAddress,
                 "district": district,
                 "street": street,
-                "price":price,
+                "price": price,
                 "image": pathImage
             }),
-            success: function(ojbResponse){
-               alert(ojbResponse);
+            success: function (ojbResponse) {
+                alert(ojbResponse);
             }
         });
     });

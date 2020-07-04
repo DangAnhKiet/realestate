@@ -1,7 +1,7 @@
 package com.estate.real.document;
 
 import com.estate.real.config.CollectionName;
-import com.estate.real.model.AccountStatus;
+import com.estate.real.model.enums.AccountStatus;
 import lombok.Data;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;

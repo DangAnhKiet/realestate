@@ -52,3 +52,54 @@
     margin: 0px 0px 0px 16px;
     font-weight: 600;
 }
+.textWithBlurredBg {
+    display: inline-block;
+    position: relative;
+    width: 261px;
+    margin-bottom: 4px;
+}
+
+.textWithBlurredBg img {
+    transition: .3s;
+    width: 100%;
+}
+
+.textWithBlurredBg .detail {
+    top: 30%;
+}
+.textWithBlurredBg .detail:hover {
+    background-color: #fff;
+    color: #000000;
+}
+.textWithBlurredBg .buy:hover {
+    background-color: #fff;
+    color: #000000;
+}
+
+.textWithBlurredBg .buy {
+    top: 50%;
+}
+
+.textWithBlurredBg:hover img {
+    filter: blur(2px) brightness(60%);
+    box-shadow: 0 0 16px cyan;
+}
+
+.textWithBlurredBg :not(img) {
+    position: absolute;
+    z-index: 1;
+    color: #fff;
+    margin-left: 21px;
+    width: 80%;
+    opacity: 0;
+    transition: .3s;
+    border: 1px solid;
+    cursor: pointer;
+    border-radius: 4px;
+    height: 30px;
+
+}
+
+.textWithBlurredBg:hover :not(img) {
+    opacity: 1;
+}

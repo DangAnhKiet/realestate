@@ -1,7 +1,7 @@
 package com.estate.real.model.response;
 
 import com.estate.real.document.Land;
-import com.estate.real.model.enums.StatusLand;
+import com.estate.real.model.enums.LandStatus;
 import lombok.Data;
 
 @Data
@@ -11,7 +11,7 @@ public class LandResponse {
     private String street;
     private String price;
     private String image;
-    private StatusLand status;
+    private int status;
 
 
     public LandResponse() {

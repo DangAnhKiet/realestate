@@ -2,17 +2,15 @@ package com.estate.real.service.impl;
 
 import com.estate.real.Repository.inf.AccountRepository;
 import com.estate.real.document.Account;
-import com.estate.real.model.AccountStatus;
-import com.estate.real.model.Role;
+import com.estate.real.model.enums.AccountStatus;
+import com.estate.real.model.enums.Role;
 import com.estate.real.model.request.AccountLoginRequest;
 import com.estate.real.model.request.AccountRequest;
 import com.estate.real.model.response.GeneralResponse;
 import com.estate.real.service.inf.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sun.security.provider.MD5;
 
-import java.util.Base64;
 import java.util.List;
 
 @Service

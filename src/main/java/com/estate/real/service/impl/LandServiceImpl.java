@@ -4,6 +4,7 @@ import com.estate.real.Repository.inf.LandRepository;
 import com.estate.real.config.ContractInfo;
 import com.estate.real.contract.ManageRealEsate;
 import com.estate.real.document.Land;
+import com.estate.real.model.enums.LandStatus;
 import com.estate.real.model.request.LandPagingRequest;
 import com.estate.real.model.request.LandRequest;
 import com.estate.real.model.response.GeneralResponse;
@@ -38,13 +39,14 @@ public class LandServiceImpl implements LandService {
         land.setImage(request.getImage());
         land.setPrice(request.getPrice());
         land.setStreet(request.getStreet());
+        land.setStatus(LandStatus.active.ordinal());
 
         //Thêm đất vào ethereum
         try {
             ManageRealEsate manageRealEsate = MyWeb3j.LoadSmartContract();
             if(manageRealEsate != null){
                 TransactionReceipt transactionReceipt = manageRealEsate.addLand(land.getDistrict(),land.getStreet(),
-                        land.getImage(),land.getPrice()).send();
+                        land.getImage(),land.getPrice(),BigInteger.valueOf(land.getStatus())).send();
                 System.out.println("Trạng thái của quá trình thêm land vào blockchain: " + transactionReceipt.isStatusOK());
                 if(transactionReceipt.isStatusOK()){
                     landRepository.save(land);

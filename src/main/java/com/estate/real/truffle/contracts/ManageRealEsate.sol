@@ -1,6 +1,7 @@
 pragma solidity ^0.5.0;
 
 contract ManageRealEsate {
+    enum Status {active, pending, deleted}
     struct Land
     {
         address ownerAddress;
@@ -9,6 +10,7 @@ contract ManageRealEsate {
         string cost;
         uint landID;
         string pathImage;
+        Status status;
     }
 
     address public owner;   // government who creates the contract
@@ -29,8 +31,9 @@ contract ManageRealEsate {
     mapping(address => Land[]) public __ownedLands;
     //1. FIRST OPERATION
     //Nhân viên sở tài nguyên sẽ thêm bds bằng hàm này
-    function addLand(string memory _district, string memory _street, string memory _pathImage, string memory _cost)
-public isOwner
+    function addLand(string memory _district, string memory _street, string memory _pathImage, string memory _cost,
+        Status _status)
+    public isOwner
     {
         totalLandsCounter = totalLandsCounter + 1;
         Land memory myLand = Land(
@@ -40,6 +43,7 @@ public isOwner
             street : _street,
             cost : _cost,
             pathImage : _pathImage,
+            status : _status,
             landID : totalLandsCounter
             });
         __ownedLands[msg.sender].push(myLand);
@@ -63,6 +67,7 @@ public isOwner
                     street : __ownedLands[msg.sender][i].street,
                     cost : __ownedLands[msg.sender][i].cost,
                     pathImage : __ownedLands[msg.sender][i].pathImage,
+                    status : __ownedLands[msg.sender][i].status,
                     landID : __ownedLands[msg.sender][i].landID
                     });
                 __ownedLands[_landBuyer].push(myLand);
@@ -81,17 +86,33 @@ public isOwner
         return false;
     }
     //3. GET A LAND OF AN ACCOUNT
-    function getLand(address _landHolder, uint _index) public view returns (address, string memory, string memory,
-        string memory,string memory, uint){
-        return (__ownedLands[_landHolder][_index].ownerAddress,
-        __ownedLands[_landHolder][_index].district,
-        __ownedLands[_landHolder][_index].street,
-        __ownedLands[_landHolder][_index].cost,
-        __ownedLands[_landHolder][_index].pathImage,
-        __ownedLands[_landHolder][_index].landID);
+    function getLandByAddress(address _landHolder, uint _index) public view returns (address, string memory, string
+        memory,
+        string memory, string memory, Status, uint){
+        Land memory land = Land(
+            {
+            ownerAddress : __ownedLands[_landHolder][_index].ownerAddress,
+            district : __ownedLands[_landHolder][_index].district,
+            street : __ownedLands[_landHolder][_index].street,
+            cost : __ownedLands[_landHolder][_index].cost,
+            pathImage : __ownedLands[_landHolder][_index].pathImage,
+            status : __ownedLands[_landHolder][_index].status,
+            landID : __ownedLands[_landHolder][_index].landID
+            });
+        return (land.ownerAddress,
+        land.district,
+        land.street,
+        land.cost,
+        land.pathImage,
+        land.status,
+        land.landID);
     }
-
-    //4. GET TOTAL NO OF LANDS
+    //4. GET ALL LAND FOR ADMIN
+//    function getAllLands() public view returns(address, string memory, string memory, string memory, string memory,
+//        Status, uint){
+//
+//    }
+    //5. GET TOTAL NO OF LANDS
     function getNoOfLand(address _landHolder) external view returns (uint){
         uint size = 0;
         uint lengthOfArr = __ownedLands[_landHolder].length;
