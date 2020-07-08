@@ -54,6 +54,7 @@ contract ManageRealEsate {
     function transferLand(address _landBuyer, uint _landID) public returns (bool)
     {
         //find out the particular land ID in owner's collection
+        // PAYABLE
         for (uint i = 0; i < (__ownedLands[msg.sender].length); i++)
         {
             //if given land ID is indeed in owner's collection

@@ -13,8 +13,15 @@ import com.estate.real.service.inf.LandService;
 import com.estate.real.utils.MyWeb3j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.web3j.abi.EventEncoder;
+import org.web3j.abi.FunctionReturnDecoder;
+import org.web3j.abi.TypeReference;
+import org.web3j.abi.datatypes.Event;
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
+import org.web3j.protocol.core.DefaultBlockParameterName;
+import org.web3j.protocol.core.methods.request.EthFilter;
+import org.web3j.protocol.core.methods.response.Log;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.http.HttpService;
 import org.web3j.utils.Convert;
@@ -22,6 +29,7 @@ import org.web3j.utils.Convert;
 import java.math.BigInteger;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -49,6 +57,19 @@ public class LandServiceImpl implements LandService {
                         land.getImage(),land.getPrice(),BigInteger.valueOf(land.getStatus())).send();
                 System.out.println("Trạng thái của quá trình thêm land vào blockchain: " + transactionReceipt.isStatusOK());
                 if(transactionReceipt.isStatusOK()){
+                    //Get event khi add vao ethereum
+                    Log log = transactionReceipt.getLogs().get(0);
+                    List<String> args = FunctionReturnDecoder.decode(log.getData(0))
+//                    EthFilter filter = new EthFilter(DefaultBlockParameterName.EARLIEST, DefaultBlockParameterName.LATEST,
+//                            manageRealEsate.getContractAddress());
+//                    String encodedEventSignature = EventEncoder.encode(
+//                            new Event("Add",
+//                                    Arrays.<TypeReference<?>>asList(), Arrays.<TypeReference<?>>asList())
+//                    );
+//                    System.out.println("emit event add: "+encodedEventSignature);
+//                    filter.addSingleTopic(encodedEventSignature);
+//                    System.out.println("emit event add: "+encodedEventSignature);
+                    //Them land vao database
                     landRepository.save(land);
                     return new GeneralResponse(true);
                 }else{

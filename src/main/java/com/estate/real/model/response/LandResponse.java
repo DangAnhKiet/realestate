@@ -12,6 +12,7 @@ public class LandResponse {
     private String price;
     private String image;
     private int status;
+    private int landId;
 
 
     public LandResponse() {
