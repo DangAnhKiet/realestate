@@ -9,7 +9,7 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
 <jsp:include page="head_tag.jsp">
-    <jsp:param name="title" value="Trang chủ"/>
+    <jsp:param name="title" value="Home Admin"/>
     <jsp:param name="link-css-this-page" value="../css/manage-real.css"/>
 </jsp:include>
 <body>

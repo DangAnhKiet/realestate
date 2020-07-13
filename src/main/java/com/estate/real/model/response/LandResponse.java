@@ -25,5 +25,6 @@ public class LandResponse {
         this.price = land.getPrice();
         this.image = land.getImage();
         this.status = land.getStatus();
+        this.landId = land.getLandId();
     }
 }

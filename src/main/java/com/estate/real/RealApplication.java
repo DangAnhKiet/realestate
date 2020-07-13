@@ -2,6 +2,7 @@ package com.estate.real;
 
 import com.estate.real.config.ContractInfo;
 import com.estate.real.contract.ManageRealEsate;
+import com.estate.real.utils.MyWeb3j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.web3j.crypto.Credentials;
@@ -17,7 +18,7 @@ public class RealApplication {
 
     public static void main(String[] args) {
         if(isDeploySmartContract){
-            if(ContractInfo.runDeploySmartContract()){
+            if(MyWeb3j.runDeploySmartContract()){
                 SpringApplication.run(RealApplication.class, args);
             }else{
                 System.out.println("Deploy that bai khong the chay ung dung spring boot");

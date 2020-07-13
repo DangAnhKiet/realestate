@@ -70,15 +70,16 @@
             </div>
             <div class="wrap-item">
                 <c:forEach items="${listLands}" var="land">
-                    <%--                    private String addressSeller;--%>
-                    <%--                    private String district;--%>
-                    <%--                    private String street;--%>
-                    <%--                    private String price;--%>
-                    <%--                    private String image;--%>
-                    <%--                    private int status;--%>
                     <div class="textWithBlurredBg">
                         <img src="${land.image}" alt="hinh-mau">
-                        <p class="detail" onclick="document.getElementById('i-view-detail').style.display='block'">Xem
+                        <p id="land-id-${land.landId}"
+                           data-address-seller = '${land.addressSeller}'
+                           data-district = '${land.district}'
+                           data-street = '${land.street}'
+                           data-image = '${land.image}'
+                           data-price = '${land.price}'
+                           data-status = '${land.status}'
+                           class="detail" onclick="showDetailInfo(${land.landId})">Xem
                             chi
                             tiết</p>
                         <p class="buy">Mua</p>
@@ -93,13 +94,14 @@
                         <div class="w3-center"><br>
                             <span onclick="document.getElementById('i-view-detail').style.display='none'"
                                   class="w3-button w3-xlarge w3-hover-red w3-display-topright" title="Close Modal">&times;</span>
-                            <img src="https://loremflickr.com/640/360">
+                            <img id="spec-image" src="https://loremflickr.com/640/360">
                         </div>
 
                         <form class="w3-container" action="/action_page.php">
                             <div class="w3-section">
                                 <h3>Thông tin chi tiết</h3>
                                 <hr>
+                                <h5>Giá: <span id="spec-price"></span></h5>
                                 <h5>Diện tích</h5>
                                 <p>Dài: 4.12m</p>
                                 <p>Ngang: 4.12m</p>
@@ -107,12 +109,12 @@
                                 <p>Tổng diện tích sử dụng: 4.12m</p>
                                 <hr>
                                 <h5>Vị trí</h5>
-                                <p>Đường: 227 Nguyễn văn cừ</p>
-                                <p>Phường: 5</p>
-                                <p>Quận: 5</p>
+                                <p>Đường: <span id="spec-street"></span></p>
+                                <p>Phường: <span id="spec-ward"></span></p>
+                                <p>Quận: <span id="spec-district"></span></p>
                                 <p>Thành phố: Hồ Chí Minh</p>
                                 <hr>
-                                <>h5Mô tả thêm</h5>
+                                <h5>Mô tả thêm</h5>
                                 <p>Nhà cách mặt tiền đường lớn 2 căn, nằm trong con hẻm an ninh đường Trần Khắc Chân,
                                     phường Tân Định, quận 1. Con hẻm thông ra Trần Khánh Dư, khu phố rất yên tĩnh,
                                     nhà sát nhà, hàng xóm thuận hòa, đoàn kết.
@@ -141,6 +143,28 @@
 </div>
 
 <script type="text/javascript">
+    function showDetailInfo(land){
+        <%--data-addressSeller = '${land.addressSeller}'--%>
+        <%--data-district = '${land.district}'--%>
+        <%--data-street = '${land.street}'--%>
+        <%--data-image = '${land.image}'--%>
+        <%--data-price = '${land.price}'--%>
+        <%--data-status = '${land.status}'--%>
+    // <img id="spec-image" src="https://loremflickr.com/640/360">
+    //         <p>Đường: <span id="spec-street"></span></p>
+    //     <p>Phường: <span id="spec-ward"></span></p>
+    //     <p>Quận: <span id="spec-district"></span></p>
+        const elemId= "land-id-"+land;
+        const elemLand = document.getElementById(elemId);
+
+        let elemStreet = document.getElementById("spec-street").innerText = elemLand.dataset.street;
+        let elemDistrict = document.getElementById("spec-district").innerText = elemLand.dataset.district;
+        let elemImage = document.getElementById("spec-image").src = elemLand.dataset.image;
+        let elemPrice = document.getElementById("spec-price").innerText = elemLand.dataset.price;
+
+        document.getElementById('i-view-detail').style.display = "block";
+
+    }
     document.getElementById("i-btn-adding").addEventListener("click", function () {
         let buyAddress = document.getElementById("i-seller-address").value;
         // alert(buyAddress);

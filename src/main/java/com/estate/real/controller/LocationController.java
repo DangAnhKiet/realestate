@@ -31,9 +31,15 @@ public class LocationController {
         return "HomeMember";
     }
 
-    @RequestMapping(value={"/admin-manage"}, method = RequestMethod.GET)
+    @RequestMapping(value={"/admin/manage"}, method = RequestMethod.GET)
     public String manageRealOfAdmin(Model model){
         model.addAttribute("listLands",landService.getAllLand());
         return "ManageReal";
+    }
+
+    @RequestMapping(value = {"/admin/home"}, method= RequestMethod.GET)
+    public String homeAdmin(){
+
+        return "HomeAdmin";
     }
 }

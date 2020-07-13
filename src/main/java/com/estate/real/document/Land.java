@@ -14,6 +14,7 @@ public class Land {
     private String price;
     private String image;
     private int status;
+    private int landId;
 
     public Land() {
     }

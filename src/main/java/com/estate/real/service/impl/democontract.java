@@ -2,106 +2,72 @@ package com.estate.real.service.impl;
 
 import com.estate.real.config.ContractInfo;
 import com.estate.real.contract.ManageRealEsate;
-import org.web3j.crypto.Credentials;
+import com.estate.real.utils.MyWeb3j;
+import org.web3j.crypto.*;
 import org.web3j.protocol.Web3j;
-import org.web3j.protocol.core.methods.response.TransactionReceipt;
+import org.web3j.protocol.core.DefaultBlockParameterName;
+import org.web3j.protocol.core.methods.response.*;
 import org.web3j.protocol.http.HttpService;
+import org.web3j.tx.Transfer;
 import org.web3j.utils.Convert;
+import org.web3j.utils.Numeric;
 
+import java.io.File;
+import java.io.IOException;
+import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
+import java.util.Optional;
 
 public class democontract {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException, CipherException, InvalidAlgorithmParameterException, NoSuchAlgorithmException, NoSuchProviderException {
         Web3j web3j = Web3j.build(new HttpService(ContractInfo.locationEthereum));
-        Credentials credentials = Credentials.create(ContractInfo.pkDeploy);
-        //3.Configure gas parameters
-        BigInteger gasLimit = BigInteger.valueOf(672197500);
-
-        BigInteger gasPrice =
-                Convert.toWei("1", Convert.Unit.GWEI).toBigInteger();
+//        Credentials credentials = Credentials.create("0x62F5a8222c1c63587dfb84be589526Df2AB81E9a");
+//        Credentials credentials = WalletUtils.loadBip39Credentials("password", "mnemonic");
+        Credentials credentials = Credentials.create("a4438682c7cf0d82406c380953e88c3a27fc2cacea2c29d7c656fcc855b1035a");
+        String addressChuDat = "0x62F5a8222c1c63587dfb84be589526Df2AB81E9a";
+        String buyerAddress = "0xe474937df3638Fb46eE7B8627C31d2D5b17FE4a1";
         try {
-            ManageRealEsate manageRealEsate = ManageRealEsate.deploy(web3j, credentials, gasPrice, gasLimit).send();
-            System.out.println("Smart contract address: "+manageRealEsate.getContractAddress());
 
-//            ManageRealEsate manageRealEsate = ManageRealEsate.load(ContractInfo.addressContract, web3j, credentials,
-//                    gasLimit, gasPrice);
-//
-//            ManageRealEsate manageRealEsate = ManageRealEsate.deploy(web3j, credentials, gasPrice, gasLimit).send();
-//            System.out.println("Smart contract address: "+manageRealEsate.getContractAddress());
+// Get nonce
+                EthGetTransactionCount ethGetTransactionCount = MyWeb3j.web3j.ethGetTransactionCount(MyWeb3j.credentials.getAddress(),
+                        DefaultBlockParameterName.LATEST).send();
+                BigInteger nonce = ethGetTransactionCount.getTransactionCount();
 
-//            ManageRealEsate manageRealEsate = ManageRealEsate.load(ContractInfo.addressContract, web3j, credentials,
-//                    gasLimit, gasPrice);
-//`
-//            TransactionReceipt transactionReceipt = manageRealEsate.addLand("Quan 1", "Tran hung dao",
-//                    BigInteger.valueOf(1000000000)).send();
-//            System.out.println("add status: " + transactionReceipt.isStatusOK());
+                RawTransaction rawTransaction = RawTransaction.createEtherTransaction(
+                        nonce,
+                        MyWeb3j.gasPrice,
+                        MyWeb3j.gasLimit,
+                        MyWeb3j.recipientAddress,
+                        MyWeb3j.value);
+                // Sign the transaction
+                byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, MyWeb3j.credentials);
+
+// Convert it to Hexadecimal String to be sent to the node
+                String hexValue = Numeric.toHexString(signedMessage);
+
+                // Send transaction
+                EthSendTransaction ethSendTransaction = MyWeb3j.web3j.ethSendRawTransaction(hexValue).send();
+                String transactionHash = ethSendTransaction.getTransactionHash();
+                System.out.println("transactionHash: " + transactionHash);
+                // Wait for transaction to be mined
+//                Optional<TransactionReceipt> transactionReceipt = null;
+//                do {
+//                    System.out.println("checking if transaction " + transactionHash + " is mined....");
+//                    EthGetTransactionReceipt ethGetTransactionReceiptResp = MyWeb3j.web3j.ethGetTransactionReceipt(transactionHash).send();
+//                    transactionReceipt = ethGetTransactionReceiptResp.getTransactionReceipt();
+//                    Thread.sleep(3000); // Wait 3 sec
+//                } while(!transactionReceipt.isPresent());
+
+//                System.out.println("Transaction " + transactionHash + " was mined in block # " + transactionReceipt.get().getBlockNumber());
+//                System.out.println("Balance: " + Convert.fromWei(MyWeb3j.web3j.ethGetBalance(MyWeb3j.credentials.getAddress(),
+//                        DefaultBlockParameterName.LATEST).send().getBalance().toString(), Convert.Unit.ETHER));
         } catch (Exception e) {
 //            System.out.println("Loi deploy smart contract");
             System.out.println("Loi deploy smart contract");
             e.printStackTrace(System.out);
         }
     }
-
-
-//        try
-//
-//    {
-//            Web3ClientVersion clientVersion = web3.web3ClientVersion().send();
-//            EthBlockNumber blockNumber = web3.ethBlockNumber().send();
-//            EthGasPrice gasPrice = web3.ethGasPrice().send();
-//            EthGetBalance getBalanceWei = web3.ethGetBalance("0x89E8416eA5b69863CCb34D3A5C74A86bf5549147", DefaultBlockParameterName.LATEST).send();
-////            EthGetBalance getBalanceWei = web3.ethGetBalance("0x89E8416eA5b69863CCb34D3A5C74A86bf5549147",new DefaultBlockParameterNumber(3000000)).send();
-//            System.out.println("balance in wei: "+getBalanceWei);
-//            BigDecimal getBalanceEther = Convert.fromWei(getBalanceWei.getBalance().toString(), Convert.Unit.ETHER);
-//            System.out.println("balance in ether: "+getBalanceEther);
-//            EthGetTransactionCount getTransactionCount = web3.ethGetTransactionCount("0x89E8416eA5b69863CCb34D3A5C74A86bf5549147", DefaultBlockParameterName.LATEST).send();
-//            System.out.println("Transaction count: "+ getTransactionCount.getTransactionCount());
-//            System.out.println("Client version: "+clientVersion.getWeb3ClientVersion());
-//            System.out.println("Gas price: "+gasPrice.getGasPrice());
-//            System.out.println("Block number: "+blockNumber.getBlockNumber());
-
-    //Load a wallet
-
-    //Send funds from one account to another
-    //1. Get none:
-//        EthGetTransactionCount getTransactionCount = web3.ethGetTransactionCount(credentials.getAddress(), DefaultBlockParameterName.LATEST).send();
-//        BigInteger nonce = getTransactionCount.getTransactionCount();
-//        System.out.println("nonce: "+nonce);
-    //2.Configure recipient account and amount to send
-//        String recipientAddress = "0x89E8416eA5b69863CCb34D3A5C74A86bf5549147";
-//        BigInteger valueToTranfer = Convert.toWei("1", Convert.Unit.ETHER).toBigInteger();
-//        System.out.println(valueToTranfer);
-    //3.Configure gas parameters
-//        BigInteger gasLimit = BigInteger.valueOf(21000);
-//        BigInteger gasPrice = Convert.toWei("1", Convert.Unit.GWEI).toBigInteger();
-//        System.out.println("gasPrice: " + gasPrice);
-    //Prepare a rew transaction
-//        RawTransaction rawTransaction = RawTransaction.createEtherTransaction(
-//                nonce,
-//                gasPrice,
-//                gasLimit,
-//                recipientAddress,
-//                valueToTranfer
-//        );
-    //Sign the transaction
-//        byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, credentials);
-//        System.out.println("byte[] signedMessage: " + signedMessage.toString());
-//        //Convert it to Hexadecimal String to be send to the node
-//        String hexValue  = Numeric.toHexString(signedMessage);
-//        System.out.println("hexValue: "+ hexValue);
-
-    //Send to the node via JSON RPC.
-//        EthSendTransaction ethSendTransaction= web3.ethSendRawTransaction(hexValue).send();
-    //Get the transaction hash
-//        String transactionHash = ethSendTransaction.getTransactionHash();
-//        System.out.println("Transaction hash: " + transactionHash);
-// Wait for transaction to be mined
-//        Optional<TransactionReceipt> transactionReceipt = null;
-//    }catch(
-//    Exception e)
-//
-//    {
-//        e.printStackTrace();
-//    }
-
 }
