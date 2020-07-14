@@ -4,6 +4,8 @@ import com.estate.real.document.Land;
 import com.estate.real.model.enums.LandStatus;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class LandResponse {
     private String addressSeller;

@@ -27,7 +27,8 @@ public class LocationController {
     }
 
     @RequestMapping(value={"/member"}, method = RequestMethod.GET)
-    public String member(){
+    public String member(Model model){
+        model.addAttribute("listLands", landService.getAllLand());
         return "HomeMember";
     }
 
