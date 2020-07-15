@@ -83,7 +83,9 @@
                         </select>
                     </div>
                 </div>
-                <button type="button" class="btn btn-find">Tìm kiếm</button>
+                <div style="margin-bottom: 5px;"><input type="button"
+                                                        id="i-btn-adding" value="Tìm kiếm" class="btn btn-find">
+                </div>
             </form>
             <br/>
             <!--           end wrap filter -->
@@ -105,7 +107,13 @@
                                class="detail" onclick="showDetailInfo(${land.landId})">Xem
                                 chi
                                 tiết</p>
-                            <p class="buy">Mua</p>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Tên nhà đất</h5>
+                                <p class="card-text"><span class="key-card-text">Giá niêm yết: </span> <span class="value-card-text">8 tỷ</span> <br />
+                                    <span class="key-card-text">Diện tích: </span> <span class="value-card-text">600m2</span><br />
+                                    <span class="key-card-text">Tình trạng: </span> <span class="value-card-text">Đang bán</span></p>
+                                <a href="#" class="btn btn-primary">MUA</a>
                             </div>
                         </div>
                     </div>

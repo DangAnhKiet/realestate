@@ -7,7 +7,7 @@ contract ManageRealEsate {
         address ownerAddress;
         string district;
         string street;
-        string cost;
+        uint cost;
         uint landID;
         string pathImage;
         Status status;
@@ -23,6 +23,8 @@ contract ManageRealEsate {
     }
     event Add(address _owner, uint _landID);
     event Transfer(address indexed _from, address indexed _to, uint _landId);
+    event Transfer(address indexed _from, address indexed _to, uint _cost);
+
     modifier isOwner
     {
         require(msg.sender == owner);
@@ -74,12 +76,15 @@ contract ManageRealEsate {
                 __ownedLands[_landBuyer].push(myLand);
 
                 //remove land from current ownerAddress
-                delete __ownedLands[msg.sender][i];
+                delete __ownedLands[m   sg.sender][i];
                 totalLandsCounter--;
 
                 //inform the world
                 emit Transfer(msg.sender, _landBuyer, _landID);
-                return true;
+
+                emit Transfer(msg.sender, _landBuyer, __ownedLands[msg.sender][i].cost);
+                
+            return true;
             }
         }
 

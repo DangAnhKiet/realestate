@@ -1,6 +1,7 @@
 package com.estate.real.service.inf;
 
 import com.estate.real.document.Land;
+import com.estate.real.model.request.LandFilterRequest;
 import com.estate.real.model.request.LandPagingRequest;
 import com.estate.real.model.request.LandRequest;
 import com.estate.real.model.response.GeneralResponse;
@@ -14,4 +15,6 @@ public interface LandService {
     public List<LandResponse> getLandPaging(LandPagingRequest request);
 
     public List<LandResponse> getAllLand();
+
+    public List<LandResponse> getFilterLand(LandFilterRequest request);
 }

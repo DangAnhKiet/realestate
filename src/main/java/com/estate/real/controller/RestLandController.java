@@ -1,5 +1,6 @@
 package com.estate.real.controller;
 
+import com.estate.real.model.request.LandFilterRequest;
 import com.estate.real.model.request.LandPagingRequest;
 import com.estate.real.model.request.LandRequest;
 import com.estate.real.model.response.GeneralResponse;
@@ -27,5 +28,10 @@ public class RestLandController {
     @RequestMapping(value = "/get", method = RequestMethod.POST)
     public List<LandResponse> add(@RequestBody LandPagingRequest request) {
         return landService.getLandPaging(request);
+    }
+
+    @RequestMapping(value = "/filter", method = RequestMethod.POST)
+    public List<LandResponse> add(@RequestBody LandFilterRequest request) {
+        return landService.getFilterLand(request);
     }
 }

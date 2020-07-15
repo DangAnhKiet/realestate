@@ -1,21 +1,26 @@
 package com.estate.real.document;
 
 import com.estate.real.config.CollectionName;
-import com.estate.real.model.enums.LandStatus;
 import lombok.Data;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = CollectionName.LAND)
 @Data
 public class Land {
-    private String addressSeller;
+    private int landId;
+    private String addressHolder;
     private String district;
     private String street;
     private String price;
     private String image;
     private int status;
-    private int landId;
 
+    // 0
+    // 1
+    // 2
+//    active,
+//    pending,
+//    deleted
     public Land() {
     }
 }

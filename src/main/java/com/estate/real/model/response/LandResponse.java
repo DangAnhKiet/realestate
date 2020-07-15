@@ -1,10 +1,7 @@
 package com.estate.real.model.response;
 
 import com.estate.real.document.Land;
-import com.estate.real.model.enums.LandStatus;
 import lombok.Data;
-
-import java.util.List;
 
 @Data
 public class LandResponse {
@@ -21,7 +18,7 @@ public class LandResponse {
     }
 
     public LandResponse(Land land) {
-        this.addressSeller = land.getAddressSeller();
+        this.addressSeller = land.getAddressHolder();
         this.district = land.getDistrict();
         this.street = land.getStreet();
         this.price = land.getPrice();

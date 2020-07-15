@@ -3,6 +3,7 @@ package com.estate.real.Repository.Impl;
 import com.estate.real.Repository.extend.LandRepositoryExtend;
 import com.estate.real.document.Land;
 import com.estate.real.model.enums.LandStatus;
+import com.estate.real.model.request.LandFilterRequest;
 import com.estate.real.model.request.LandPagingRequest;
 import com.estate.real.model.response.LandResponse;
 import org.bson.types.ObjectId;
@@ -40,7 +41,16 @@ public class LandRepositoryImpl implements LandRepositoryExtend {
     public List<Land> getAllLands() {
         Query query = new Query();
         query.addCriteria(Criteria.where("status").lt(LandStatus.deleted.ordinal()));
+        return mongoTemplate.find(query, Land.class);
+    }
 
+    @Override
+    public List<Land> getFilterLand(LandFilterRequest request) {
+        Criteria criteria = new Criteria();
+        criteria = criteria.and("district").is(request.getDistrict());
+        criteria = criteria.and("street").is(request.getStreet());
+        criteria = criteria.and("price").gte(request.getPrice());
+        Query query = new Query(criteria);
         return mongoTemplate.find(query, Land.class);
     }
 }
