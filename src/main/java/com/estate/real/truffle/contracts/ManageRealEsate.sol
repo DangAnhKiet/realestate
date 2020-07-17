@@ -2,12 +2,15 @@ pragma solidity ^0.5.0;
 
 contract ManageRealEsate {
     enum Status {active, pending, deleted}
+    function () external payable{}
     struct Land
     {
         address ownerAddress;
         string district;
         string street;
-        uint cost;
+        string cost;
+        string ward;
+        string description;
         uint landID;
         string pathImage;
         Status status;
@@ -23,18 +26,21 @@ contract ManageRealEsate {
     }
     event Add(address _owner, uint _landID);
     event Transfer(address indexed _from, address indexed _to, uint _landId);
-    event Transfer(address indexed _from, address indexed _to, uint _cost);
-
+    event Pay(address indexed _from, uint _value, uint _landId);
     modifier isOwner
     {
         require(msg.sender == owner);
         _;
     }
+    modifier costs(uint _price){
+        require(msg.value >= _price);
+        _;
+    }
     mapping(address => Land[]) public __ownedLands;
     //1. FIRST OPERATION
     //Nhân viên sở tài nguyên sẽ thêm bds bằng hàm này
-    function addLand(string memory _district, string memory _street, string memory _pathImage, string memory _cost,
-        Status _status)
+    function addLand(string memory _district, string memory _street, string memory _pathImage, string memory _cost, string memory _ward,
+        string memory _description, Status _status)
     public isOwner
     {
         totalLandsCounter = totalLandsCounter + 1;
@@ -44,6 +50,8 @@ contract ManageRealEsate {
             district : _district,
             street : _street,
             cost : _cost,
+            ward : _ward,
+            description : _description,
             pathImage : _pathImage,
             status : _status,
             landID : totalLandsCounter
@@ -69,6 +77,8 @@ contract ManageRealEsate {
                     district : __ownedLands[msg.sender][i].district,
                     street : __ownedLands[msg.sender][i].street,
                     cost : __ownedLands[msg.sender][i].cost,
+                    ward : __ownedLands[msg.sender][i].ward,
+                    description : __ownedLands[msg.sender][i].description,
                     pathImage : __ownedLands[msg.sender][i].pathImage,
                     status : __ownedLands[msg.sender][i].status,
                     landID : __ownedLands[msg.sender][i].landID
@@ -76,15 +86,12 @@ contract ManageRealEsate {
                 __ownedLands[_landBuyer].push(myLand);
 
                 //remove land from current ownerAddress
-                delete __ownedLands[m   sg.sender][i];
+                delete __ownedLands[msg.sender][i];
                 totalLandsCounter--;
 
                 //inform the world
                 emit Transfer(msg.sender, _landBuyer, _landID);
-
-                emit Transfer(msg.sender, _landBuyer, __ownedLands[msg.sender][i].cost);
-                
-            return true;
+                return true;
             }
         }
 
@@ -94,13 +101,15 @@ contract ManageRealEsate {
     //3. GET A LAND OF AN ACCOUNT
     function getLandByAddress(address _landHolder, uint _index) public view returns (address, string memory, string
         memory,
-        string memory, string memory, Status, uint){
+        string memory,string memory, string memory, string memory, Status, uint){
         Land memory land = Land(
             {
             ownerAddress : __ownedLands[_landHolder][_index].ownerAddress,
             district : __ownedLands[_landHolder][_index].district,
             street : __ownedLands[_landHolder][_index].street,
             cost : __ownedLands[_landHolder][_index].cost,
+            ward : __ownedLands[_landHolder][_index].ward,
+            description : __ownedLands[_landHolder][_index].description,
             pathImage : __ownedLands[_landHolder][_index].pathImage,
             status : __ownedLands[_landHolder][_index].status,
             landID : __ownedLands[_landHolder][_index].landID
@@ -109,6 +118,8 @@ contract ManageRealEsate {
         land.district,
         land.street,
         land.cost,
+        land.ward,
+        land.description,
         land.pathImage,
         land.status,
         land.landID);

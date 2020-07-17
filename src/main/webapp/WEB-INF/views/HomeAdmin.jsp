@@ -9,28 +9,14 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
 <jsp:include page="head_tag.jsp">
-    <jsp:param name="title" value="Home Admin"/>
+    <jsp:param name="title" value="Quản lí"/>
     <jsp:param name="link-css-this-page" value="../css/manage-real.css"/>
 </jsp:include>
 <body>
 <div class="container">
     <div class="row">
         <div class="col-sm-12">
-            <div class="sticky-top">
-                <ul class="nav-home-admin">
-                    <li><i class="fa fa-home" aria-hidden="true"></i></li>
-                    <li><a href="#">Sàn giao dịch</a></li>
-                    <li><a href="#">Quản lí đất</a></li>
-                    <li><a href="#">Trợ giúp</a></li>
-                    <li class="avatar">
-                        <img src="https://i.pravatar.cc/300" alt="Avatar">
-                        <ul class="avatar-detail">
-                            <li><a href="#">Thông tin cá nhân</a></li>
-                            <li><a href="#">Đăng xuất</a></li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
+           <jsp:include page="admin-header.jsp"/>
 
             <div class="bottom-header">
                 <div class="text-center">
@@ -43,19 +29,24 @@
             <form class="wrap-filter">
                 <div class="row">
                     <div class="col">
+                        <label for="exampleFormControlSelect1">Tên chủ bất động sản</label>
+                        <input placeholder="Nhập họ tên chủ đất" type="text" class="form-control" aria-label="Default"
+                               aria-describedby="inputGroup-sizing-default">
+                    </div>
+                    <div class="col">
                         <label for="exampleFormControlSelect1">Thành phố</label>
                         <select class="form-control" id="exampleFormControlSelect1">
-                            <option>1</option>
-                            <option>2</option>
-                            <option>3</option>
-                            <option>4</option>
-                            <option>5</option>
+                            <option>Hồ chí minh</option>
+                            <option>Hà Nội</option>
+                            <option>Đà nẵng</option>
+                            <option>Huế</option>
+<%--                            <option>5</option>--%>
                         </select>
                     </div>
                     <div class="col">
                         <label for="exampleFormControlSelect1">Quận</label>
                         <select class="form-control" id="exampleFormControlSelect1">
-                            <option>1</option>
+                            <option>Quận 1</option>
                             <option>2</option>
                             <option>3</option>
                             <option>4</option>
@@ -65,21 +56,20 @@
                     <div class="col">
                         <label for="exampleFormControlSelect1">Diện tích</label>
                         <select class="form-control" id="exampleFormControlSelect1">
-                            <option>1</option>
-                            <option>2</option>
-                            <option>3</option>
-                            <option>4</option>
-                            <option>5</option>
+                            <option> 10m2 đến 50m2 </option>
+                            <option> 50m2 đến 200m2 </option>
+                            <option> 200m2 đến 500m2 </option>
+                            <option> >1000m2 </option>
                         </select>
                     </div>
                     <div class="col">
                         <label for="exampleFormControlSelect1">Giá</label>
                         <select class="form-control" id="exampleFormControlSelect1">
-                            <option>1</option>
-                            <option>2</option>
-                            <option>3</option>
-                            <option>4</option>
-                            <option>5</option>
+                            <option> <1 tỷ VNĐ </option>
+                            <option> 1 tỷ - 3 tỷ VNĐ </option>
+                            <option> 3 tỷ - 10  tỷ VNĐ </option>
+                            <option> 10 tỷ - 20 tỷ VNĐ </option>
+                            <option> >20 tỷ VNĐ </option>
                         </select>
                     </div>
                 </div>

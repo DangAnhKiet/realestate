@@ -32,10 +32,28 @@ public class LocationController {
         return "HomeMember";
     }
 
+    @RequestMapping(value={"/help"}, method = RequestMethod.GET)
+    public String help(Model model){
+//        model.addAttribute("listLands", landService.getAllLand());
+        return "Help";
+    }
+
     @RequestMapping(value={"/admin/manage"}, method = RequestMethod.GET)
     public String manageRealOfAdmin(Model model){
         model.addAttribute("listLands",landService.getAllLand());
         return "ManageReal";
+    }
+
+    @RequestMapping(value={"/admin/accounts"}, method = RequestMethod.GET)
+    public String manageAccount(Model model){
+//        model.addAttribute("listLands",landService.getAllLand());
+        return "ManageAccount";
+    }
+
+    @RequestMapping(value={"/admin/registry"}, method = RequestMethod.GET)
+    public String registry(Model model){
+//        model.addAttribute("listLands",landService.getAllLand());
+        return "Registry";
     }
 
     @RequestMapping(value = {"/admin/home"}, method= RequestMethod.GET)

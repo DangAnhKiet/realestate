@@ -8,6 +8,8 @@ import java.util.Scanner;
 public class MyFile {
 
     public static final String ADDRESS_CONTRACT_FILE = "addressContract.txt";
+    public static final String ADDRESS_CONTRACT_SEND = "addressContractSend.txt";
+    public static final String ADDRESS_CONTRACT_RECEIVE = "addressContractReceive.txt";
 
     public static boolean CreateNewFile(String fileName) {
         File file = new File(fileName);
