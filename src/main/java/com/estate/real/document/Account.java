@@ -11,12 +11,11 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Account {
     @Indexed
     private String nameLogin;
-    private String password;
     private String fullName;
+    private String password;
     private String role;
-    @Indexed
     private AccountStatus status;
-    private String address;
+    private String privateKey;
 
     public Account() {
     }

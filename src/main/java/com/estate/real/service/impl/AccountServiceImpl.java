@@ -22,7 +22,7 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public GeneralResponse addAccount(AccountRequest request) {
         Account account = new Account();
-        account.setAddress(request.getAddress());
+        account.setPrivateKey(request.getAddress());
         account.setFullName(request.getFullName());
         account.setNameLogin(request.getNameLogin());
 //        String password = Base64.getEncoder().encodeToString();
