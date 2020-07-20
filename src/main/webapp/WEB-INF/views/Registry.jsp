@@ -2,7 +2,7 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
 <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-auth.js"></script>0
+<script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-auth.js"></script>
 <jsp:include page="head_tag.jsp">
     <jsp:param name="title" value="Đăng kí tài khoản"/>
     <jsp:param name="link-css-this-page" value="../css/manage-real.css"/>
@@ -27,17 +27,24 @@
                         <h3 class="register-heading">Đăng kí thông tin</h3>
                         <div class="row register-form">
                             <div class="col-md-6">
-                                <div class="form-group">
-                                    <input type="text" class="form-control" placeholder="Họ tên *" value="" />
+                                <div class="form-group has-check">
+                                    <input id="i-input-fullname" type="text" class="form-control" placeholder="Họ tên *" value="" />
+                                    <i id="i-check-fullname" data-check-status="false" style="color: orange;display: none;" class="fa fa-check"
+                                       aria-hidden="true"></i>
+<%--                                    <i style="color: orange;display: none;" class="fa fa-times" aria-hidden="true"></i>--%>
+                                </div>
+                                <div class="form-group has-check">
+                                    <input id="i-input-userlogin" type="text" class="form-control" placeholder="Tên đăng nhập *" value="" />
+                                    <i id="i-check-username-login" data-check-status="false" style="color: orange;display: none;" class="fa fa-check"
+                                       aria-hidden="true"></i>
                                 </div>
                                 <div class="form-group">
-                                    <input type="text" class="form-control" placeholder="Tên đăng nhập *" value="" />
+                                    <input id="i-input-password" type="password" class="form-control" placeholder="Mật khẩu *" value="" />
                                 </div>
-                                <div class="form-group">
-                                    <input type="password" class="form-control" placeholder="Mật khẩu *" value="" />
-                                </div>
-                                <div class="form-group">
-                                    <input type="password" class="form-control"  placeholder="Nhập lại mật khẩu *" value="" />
+                                <div class="form-group has-check">
+                                    <input id="i-input-repassword" type="password" class="form-control"  placeholder="Nhập lại mật khẩu *" value="" />
+                                    <i id="i-check-password" data-check-status="false" style="color: orange;display: none;" class="fa fa-check"
+                                       aria-hidden="true"></i>
                                 </div>
                                 <div class="form-group">
                                     <div class="maxl">
@@ -51,10 +58,13 @@
                                         </label>
                                     </div>
                                 </div>
+                                <p style="color:gray;">(*) Thông tin bắt buộc</p>
                             </div>
                             <div class="col-md-6">
-                                <div class="form-group">
-                                    <input required type="email" class="form-control" placeholder="Địa chỉ email *" value="" />
+                                <div class="form-group has-check">
+                                    <input id="i-input-email" required type="email" class="form-control" placeholder="Địa chỉ email *" value="" />
+                                    <i id="i-check-email" data-check-status="false" style="color: orange;display: none;" class="fa fa-check"
+                                       aria-hidden="true"></i>
                                 </div>
                                 <div class="form-group">
                                     <input id="i-phone-number" type="text" minlength="10" maxlength="11" name="txtEmpPhone"
@@ -66,18 +76,19 @@
                                 </div>
                                 <div class="form-group">
                                     <input id="i-code" type="text" minlength="10" maxlength="10" name="txtCodeConfirm" class="form-control"
-                                           placeholder="Nhập mã xác nhận gửi về số điện thoại của bạn *"
+                                           placeholder="Nhập mã xác nhận *"
                                            value="" />
                                     <div style="display: none;" id="is-sent-code">
-                                        <span class="label label-success">Mã xác nhận không đúng! </span>
+                                        <span class="text-danger">Mã xác nhận không đúng! </span>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <input type="text" minlength="10" maxlength="10" name="txtPrivateKey" class="form-control"
+                                    <input id="i-input-private-key" type="text" name="txtPrivateKey"
+                                           class="form-control"
                                            placeholder="Khóa bảo mật của ví tiền ảo *"
                                            value="" />
                                 </div>
-                                <input style="pointer-events:none; background-color:#ddd;" id="i-btn-register" type="submit" class="btnRegister"
+                                <input style="pointer-events:none; background-color:#ddd;" id="i-btn-register" type="button" class="btnRegister"
                                        value="Đăng kí"/>
                                 <a href="/admin/accounts"><input type="submit" class="btnRegister"  value="Quay lại"/></a>
                             </div>
@@ -142,13 +153,50 @@
     var objRegister = document.getElementById("i-btn-register");
     var objPhonenumber = document.getElementById("i-phone-number");
     var objInputAlert = document.getElementById("i-input-alert");
+    var objFullName = document.getElementById("i-input-fullname");
+    var objPassword = document.getElementById("i-input-password");
+    var objRePassword = document.getElementById("i-input-repassword");
+    var objUserLogin = document.getElementById("i-input-userlogin");
+    var objEmail = document.getElementById("i-input-email");
+    var objPrivateKey = document.getElementById("i-input-private-key");
+    var objRadioGender = document.getElementsByName("gender");
 
+    objFullName.addEventListener('focusout', function () {
+        document.getElementById('i-check-fullname').dataset.CheckStatus = "true";
+        document.getElementById('i-check-fullname').style.display = "block";
+
+    });
+    objUserLogin.addEventListener('focusout', function () {
+        document.getElementById('i-check-username-login').dataset.CheckStatus = "true";
+        document.getElementById('i-check-username-login').style.display = "block";
+
+    });
+    objPassword.addEventListener('focusout', function () {
+
+    });
+    objRePassword.addEventListener('focusout', function () {
+        if(objRePassword.value.includes(objPassword.value)){
+            document.getElementById('i-check-password').dataset.CheckStatus = "true";
+            document.getElementById('i-check-password').style.display = "block";
+        }else{
+            document.getElementById('i-check-password').dataset.CheckStatus = "false";
+            document.getElementById('i-check-password').classList.remove("fa-check");
+            document.getElementById('i-check-password').classList.add("fa-times");
+            document.getElementById('i-check-password').style.display = "block";
+        }
+
+
+    });
     objPhonenumber.addEventListener('focusout',function () {
         checkNumberPhone();
     });
     objRegister.addEventListener('click',function () {
         submitPhoneNumberAuthCode();
     });
+
+    objUserLogin.addEventListener('click',function () {
+        let strUserLogin= objUserLogin.value;
+    })
 
     function checkNumberPhone(){
         let validated = true;
@@ -202,15 +250,41 @@
             });
     }
     function submitPhoneNumberAuthCode() {
-        var codeFirebase = document.getElementById("i-code").value;
+        document.getElementById("is-sent-code").style.display = "none";
+        let codeFirebase = document.getElementById("i-code").value;
+        let checkedGender = "male";
+        for(let i = 0, length = objRadioGender.length; i < length; i++){
+            if(objRadioGender[i].checked){
+                checkedGender = objRadioGender[i].value;
+                break;
+            }
+        }
         confirmationResult
             .confirm(codeFirebase)
             .then(function (result) {
                 var user = result.user;
                 if (user) {
-                    alert("dung code");
+                    $.ajax({
+                        type: "POST",
+                        contentType: "application/json",
+                        url: 'http://localhost:8080/account/add',
+                        data: JSON.stringify({
+                            "nameLogin": objUserLogin.value,
+                            "fullName": objFullName.value,
+                            "password": objPassword.value,
+                            "email": objEmail.value,
+                            "phoneNumber": objPhonenumber.value,
+                            "privateKey": objPrivateKey.value,
+                            "gender": checkedGender,
+                            "status":"active",
+                            "role":"member"
+                        }),
+                        success: function (ojbResponse) {
+                            // alert(ojbResponse);
+                        }
+                    });
                 } else {
-                    alert("sai code");
+                    document.getElementById("is-sent-code").style.display = "block";
                 }
             })
             .catch(function (error) {
@@ -225,27 +299,25 @@
         let code = document.getElementById("i-code").value;
         return code;
     }
-    // function onSignInSubmit(){
-    //     var phoneNumber = getPhoneNumberFromUserInput();
-    //     var appVerifier = window.recaptchaVerifier;
-    //     firebase.auth().signInWithPhoneNumber(phoneNumber, appVerifier)
-    //         .then(function (confirmationResult) {
-    //             // SMS sent. Prompt user to type the code from the message, then sign the
-    //             // user in with confirmationResult.confirm(code).
-    //             window.confirmationResult = confirmationResult;
-    //         }).catch(function (error) {
-    //         // Error; SMS not sent
-    //         // ...
-    //     });
-    // }
 
     function loadCaptcha(){
         // document.getElementById("recaptcha-container").style.display = "block";
         firebase.auth().useDeviceLanguage();
-        window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier("recaptcha-container");
-        window.recaptchaVerifier.render().then(function (widgetId) {
-            window.recaptchaWidgetId = widgetId;
+        // window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier("recaptcha-container");
+        window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
+            'size': 'invisible',
+            'callback': function(response) {
+                // reCAPTCHA solved, allow signInWithPhoneNumber.
+                // ...
+            },
+            'expired-callback': function() {
+                // Response expired. Ask user to solve reCAPTCHA again.
+                // ...
+            }
         });
+        // window.recaptchaVerifier.render().then(function (widgetId) {
+        //     window.recaptchaWidgetId = widgetId;
+        // });
     }
 </script>
 </body>

@@ -8,6 +8,7 @@ import com.estate.real.model.request.AccountLoginRequest;
 import com.estate.real.model.request.AccountRequest;
 import com.estate.real.model.response.GeneralResponse;
 import com.estate.real.service.inf.AccountService;
+import com.estate.real.utils.MyWeb3j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,9 +30,17 @@ public class AccountServiceImpl implements AccountService {
         account.setPassword(request.getPassword());
         account.setRole(request.getRole());
         account.setStatus(AccountStatus.active);
+        account.setPhoneNumber(request.getPhoneNumber());
+        account.setPrivateKey(request.getPrivateKey());
 
-        accountRepository.save(account);
-        return new GeneralResponse(true);
+        String address = MyWeb3j.getAddress(request.getPrivateKey());
+        if(!address.isEmpty()){
+            account.setAddress(address);
+            accountRepository.save(account);
+            return new GeneralResponse(true);
+        }else{
+            return new GeneralResponse(false);
+        }
     }
 
     @Override
