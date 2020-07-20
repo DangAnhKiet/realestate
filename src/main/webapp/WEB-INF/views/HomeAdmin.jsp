@@ -1,10 +1,3 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: hauphvn
-  Date: 7/9/2020
-  Time: 9:20 PM
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
@@ -20,8 +13,8 @@
 
             <div class="bottom-header">
                 <div class="text-center">
-                    <h1 class="title">Browser Our Properties</h1>
-                    <h4 class="sub-title">An cư lập nghiệp - Xây đắp tương lai</h4>
+<%--                    <h1 class="title">Browser Our Properties</h1>--%>
+<%--                    <h4 class="sub-title">An cư lập nghiệp - Xây đắp tương lai</h4>--%>
                 </div>
             </div>
             <!--wrap-filter -->

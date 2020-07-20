@@ -178,7 +178,7 @@
 
 }
 .bottom-header{
-    background-image: url('https://placeimg.com/1600/200/any');
+    background-image: url('/imgs/item-real/background-building3.png');
     background-repeat: no-repeat;
     height:200px;
     margin-top:0px;
@@ -228,8 +228,8 @@
 /*REGISTRY*/
 .register{
     background: -webkit-linear-gradient(left, #FF5733, #FF8A33);
-    margin-top: 3%;
-    padding: 3%;
+    /*margin-top: 3%;*/
+    /*padding: 3%;*/
 }
 .register-left{
     text-align: center;
@@ -278,6 +278,7 @@
     margin-top: 10%;
 }
 .btnRegister{
+    margin-left: 1px;
     float: right;
     margin-top: 10%;
     border: none;
@@ -330,9 +331,14 @@
 .list-account a:hover{
     background-color: orange;
 }
+.wrap-accounts .bg-image{
+    height: 200px;
+    background-image: url("/imgs/item-real/background-building5.png");
+}
 .wrap-accounts .title{
     text-align: center;
-    margin-top: 20px;
+    line-height: 200px;
+    font-weight: 900;
 }
 .wrap-accounts .account-image{
     float: left;
@@ -355,7 +361,7 @@
 /*HELP*/
 .wrap-help .title{
     height: 200px;
-    background-color: orange;
+   background-image: url("/imgs/item-real/background-building4.png");
 }
 .wrap-help .title h2{
     line-height: 200px;

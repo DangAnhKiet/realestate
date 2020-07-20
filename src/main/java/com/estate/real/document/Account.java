@@ -14,6 +14,8 @@ public class Account {
     private String fullName;
     private String password;
     private String role;
+    private String email;
+    private String gender;
     private AccountStatus status;
     private String privateKey;
 

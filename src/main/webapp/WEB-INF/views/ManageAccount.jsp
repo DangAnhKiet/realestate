@@ -1,10 +1,3 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: hauphvn
-  Date: 7/9/2020
-  Time: 9:20 PM
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
@@ -14,18 +7,21 @@
 </jsp:include>
 
 <body>
-<jsp:include page="admin-header.jsp"/>
 <div class="container">
     <div class="row">
        <div class="col-sm-12 wrap-accounts">
-           <h2 class="title">Quản lí tài khoản</h2><br>
+           <jsp:include page="admin-header.jsp"/>
+           <div class="bg-image">
+               <h2 class="title">Quản lí tài khoản</h2>
+           </div>
+           <br>
            <nav class="navbar navbar-light bg-light wrap-nav-account">
                <div style="display: flex; width: 267px;" >
                       <div>
                           <input class="form-control" type="search" placeholder="Nhập tên hoặc địa chỉ tài khoản của chủ đất" aria-label="Search">
                       </div>
                        <div>
-                           <button style="font-weight: 600" class="btn btn-outline-success my-2 my-sm-0"
+                           <button style="margin-left: 3px;font-weight: 600" class="btn btn-outline-success my-2 my-sm-0"
                                    type="button"><span style="margin-left: 3px">Tìm</span></button>
                        </div>
                </div>
@@ -72,5 +68,6 @@
        </div>
     </div>
 </div>
+
 </body>
 </html>

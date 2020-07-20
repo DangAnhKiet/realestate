@@ -1,7 +1,10 @@
 package com.estate.real.controller;
 
+import com.estate.real.document.Account;
 import com.estate.real.service.impl.LandServiceImpl;
+import com.estate.real.service.inf.AccountService;
 import com.estate.real.service.inf.LandService;
+import com.estate.real.utils.MyFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,6 +17,8 @@ import java.util.*;
 public class LocationController {
     @Autowired
     LandService landService;
+    @Autowired
+    AccountService accountService;
 
     @RequestMapping(value={"/login"}, method = RequestMethod.GET)
     public String login(Model model){
@@ -26,10 +31,19 @@ public class LocationController {
         return "Home";
     }
 
+    @RequestMapping(value = {"/test"}, method = RequestMethod.GET)
+    public String test(){return "Test";}
+
     @RequestMapping(value={"/member"}, method = RequestMethod.GET)
     public String member(Model model){
         model.addAttribute("listLands", landService.getAllLand());
         return "HomeMember";
+    }
+
+    @RequestMapping(value={"/accounts/detail"}, method = RequestMethod.GET)
+    public String detailInfo(Model model){
+//        model.addAttribute("listLands", landService.getAllLand());
+        return "DetailInfo";
     }
 
     @RequestMapping(value={"/help"}, method = RequestMethod.GET)
@@ -52,7 +66,14 @@ public class LocationController {
 
     @RequestMapping(value={"/admin/registry"}, method = RequestMethod.GET)
     public String registry(Model model){
-//        model.addAttribute("listLands",landService.getAllLand());
+        //Get api key firebase
+        String apiKeyFirebase = MyFile.RealFromFile(MyFile.API_KEY_FIREBASE);
+//        List<Account> listAccounts = accountService.getAllByStatus()
+        if(apiKeyFirebase != null && !apiKeyFirebase.isEmpty()){
+            model.addAttribute("apiKeyFirebase",apiKeyFirebase);
+        }else{
+            model.addAttribute("apiKeyFirebase","");
+        }
         return "Registry";
     }
 
