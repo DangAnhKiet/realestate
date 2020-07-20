@@ -3,6 +3,7 @@ package com.estate.real.service.inf;
 import com.estate.real.document.Account;
 import com.estate.real.model.request.AccountLoginRequest;
 import com.estate.real.model.request.AccountRequest;
+import com.estate.real.model.request.ChangePasswordRequest;
 import com.estate.real.model.response.GeneralResponse;
 
 import java.util.List;
@@ -16,4 +17,8 @@ public interface AccountService {
     public GeneralResponse login(AccountLoginRequest request);
 
     public Account getAccountByNameLogin(String nameLogin);
+
+    public GeneralResponse checkNameLogin(String nameLogin);
+
+    public GeneralResponse changePassWord(ChangePasswordRequest request);
 }

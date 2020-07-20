@@ -6,6 +6,7 @@ import com.estate.real.model.enums.AccountStatus;
 import com.estate.real.model.enums.Role;
 import com.estate.real.model.request.AccountLoginRequest;
 import com.estate.real.model.request.AccountRequest;
+import com.estate.real.model.request.ChangePasswordRequest;
 import com.estate.real.model.response.GeneralResponse;
 import com.estate.real.service.inf.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,5 +64,19 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Account getAccountByNameLogin(String nameLogin) {
         return accountRepository.findByNameLogin(nameLogin);
+    }
+
+    @Override
+    public GeneralResponse checkNameLogin(String nameLogin) {
+        Account account = accountRepository.findByNameLogin(nameLogin);
+        if (account == null){
+            return new GeneralResponse(false);
+        }
+        return new GeneralResponse(true);
+    }
+
+    @Override
+    public GeneralResponse changePassWord(ChangePasswordRequest request) {
+        return new GeneralResponse(true);
     }
 }
