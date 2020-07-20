@@ -15,4 +15,5 @@ public interface AccountService {
 
     public GeneralResponse login(AccountLoginRequest request);
 
+    public Account getAccountByNameLogin(String nameLogin);
 }

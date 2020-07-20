@@ -17,17 +17,22 @@ public class RestAccountController {
     AccountService accountService;
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public GeneralResponse add(@RequestBody AccountRequest request) {
+    public GeneralResponse addAccount(@RequestBody AccountRequest request) {
         return accountService.addAccount(request);
     }
 
-    @RequestMapping(value = "/get", method = RequestMethod.GET)
-    public List<Account> add(@RequestParam String status) {
+    @RequestMapping(value = "/get/status", method = RequestMethod.GET)
+    public List<Account> getAllByStatus(@RequestParam String status) {
         return accountService.getAllByStatus(status);
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public GeneralResponse add(@RequestBody AccountLoginRequest request) {
+    public GeneralResponse login(@RequestBody AccountLoginRequest request) {
         return accountService.login(request);
+    }
+
+    @RequestMapping(value = "/get/name", method = RequestMethod.POST)
+    public Account getAccountByNameLogin(@RequestParam String name) {
+        return accountService.getAccountByNameLogin(name);
     }
 }

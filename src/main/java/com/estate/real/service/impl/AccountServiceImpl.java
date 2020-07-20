@@ -36,7 +36,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public List<Account> getAllByStatus(String status) {
-        return accountRepository.findByStatus(status);
+        return accountRepository.findAllByStatus(status);
     }
 
     @Override
@@ -58,5 +58,10 @@ public class AccountServiceImpl implements AccountService {
 
             }
         }
+    }
+
+    @Override
+    public Account getAccountByNameLogin(String nameLogin) {
+        return accountRepository.findByNameLogin(nameLogin);
     }
 }

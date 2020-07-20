@@ -16,6 +16,7 @@ public class Account {
     private String role;
     private String email;
     private String gender;
+    @Indexed
     private AccountStatus status;
     private String privateKey;
 

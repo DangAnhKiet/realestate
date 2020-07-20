@@ -13,6 +13,8 @@ public interface AccountRepository extends MongoRepository<Account, ObjectId>, A
     public Account findByNameLogin(String nameLogin, String status);
 
     @Query(value = "{'status':?0}")
-    public List<Account> findByStatus(String status);
+    public List<Account> findAllByStatus(String status);
 
+    @Query(value = "{'nameLogin':?0}")
+    public Account findByNameLogin(String nameLogin);
 }
