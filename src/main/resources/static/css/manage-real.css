@@ -277,6 +277,16 @@
     padding: 10%;
     margin-top: 10%;
 }
+.register-form .has-check{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: .4s;
+}
+.register-form .has-check:last-child{
+    flex-basis: 100%;
+    flex-shrink: 1;
+}
 .btnRegister{
     margin-left: 1px;
     float: right;

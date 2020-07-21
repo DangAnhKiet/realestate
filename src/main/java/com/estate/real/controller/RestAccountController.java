@@ -35,9 +35,4 @@ public class RestAccountController {
     public Account getAccountByNameLogin(@RequestParam String name) {
         return accountService.getAccountByNameLogin(name);
     }
-
-    @RequestMapping(value = "/check/name", method = RequestMethod.POST)
-    public GeneralResponse checkNameLogin(@RequestParam String name) {
-        return accountService.checkNameLogin(name);
-    }
 }

@@ -15,6 +15,7 @@ public class AccountResponse {
     private String gender;
     private AccountStatus status;
     private String privateKey;
+    private String phoneNumber;
 
 
     public AccountResponse() {
@@ -29,5 +30,6 @@ public class AccountResponse {
         this.role = account.getRole();
         this.status = account.getStatus();
         this.privateKey = account.getPrivateKey();
+        this.phoneNumber = account.getPhoneNumber();
     }
 }

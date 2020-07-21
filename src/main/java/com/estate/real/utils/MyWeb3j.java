@@ -168,7 +168,15 @@ public class MyWeb3j {
             e.printStackTrace();
             result = false;
         }
+        return result;
+    }
 
+    public static String getAddress(String privateKey){
+        String result = "";
+        Credentials credentials = Credentials.create(privateKey);
+        if( null != credentials.getAddress()){
+            result = credentials.getAddress();
+        }
         return result;
     }
 

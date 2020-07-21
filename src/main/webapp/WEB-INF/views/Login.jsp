@@ -45,7 +45,7 @@
        $.ajax({
            type:'POST',
            contentType: "application/json",
-           url: 'http://localhost:8080/account/login/',
+           url: 'http://localhost:8084/account/login/',
            data: JSON.stringify({
                "nameLogin":username,
               "password":password,
@@ -55,9 +55,9 @@
                var jsonResult =JSON.parse(JSON.stringify(objResult));
                // alert(jsonResult.strResult);
                 if(jsonResult.success == true && jsonResult.strResult == "admin"){
-                    window.location.href = "http://localhost:8080/admin-manage";
+                    window.location.href = "http://localhost:8084/admin-manage";
                 }else if(jsonResult.strResult == "member"){
-                    window.location.href = "http://localhost:8080/member";
+                    window.location.href = "http://localhost:8084/member";
                 }else{
                     document.getElementById("alert-login").style.display = "block";
                 }
