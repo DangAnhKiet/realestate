@@ -11,6 +11,7 @@ public class MyFile {
     public static final String ADDRESS_CONTRACT_SEND = "addressContractSend.txt";
     public static final String ADDRESS_CONTRACT_RECEIVE = "addressContractReceive.txt";
     public static final String API_KEY_FIREBASE = "apiKeyFirebase.txt";
+    private static String UPLOADED_FOLDER = "uploaded";
 
     public static boolean CreateNewFile(String fileName) {
         File file = new File(fileName);

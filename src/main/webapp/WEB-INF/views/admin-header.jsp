@@ -9,7 +9,7 @@
         <li class="avatar">
             <img src="https://i.pravatar.cc/300" alt="Avatar">
             <ul class="avatar-detail">
-                <li><a href="#">Thông tin cá nhân</a></li>
+                <li><a href="/accounts/detail">Thông tin cá nhân</a></li>
                 <li><a href="#">Đăng xuất</a></li>
             </ul>
         </li>
