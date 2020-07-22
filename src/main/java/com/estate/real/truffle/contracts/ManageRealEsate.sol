@@ -8,8 +8,8 @@ contract ManageRealEsate {
         address ownerAddress;
         string district;
         string street;
-        string cost;
         string ward;
+        string cost;
         string description;
         uint landID;
         string pathImage;

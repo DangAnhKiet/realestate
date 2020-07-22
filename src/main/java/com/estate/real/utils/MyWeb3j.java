@@ -1,8 +1,8 @@
 package com.estate.real.utils;
 
 import com.estate.real.config.ContractInfo;
-import com.estate.real.contract.ContractReceive;
-import com.estate.real.contract.ContractSend;
+//import com.estate.real.contract.ContractReceive;
+//import com.estate.real.contract.ContractSend;
 import com.estate.real.contract.ManageRealEsate;
 import org.web3j.abi.datatypes.Function;
 import org.web3j.crypto.Credentials;
@@ -88,32 +88,32 @@ public class MyWeb3j {
                             System.out.println("Deploy smart contract that bai");
                         }
                         break;
-                    case MyWeb3j.CONTRACT_RECEIVE:
-                        ContractReceive contractReceive = ContractReceive.deploy(web3j, credentials, gasPriceDeploy, gasLimitDeploy).send();
-                        if(contractReceive.isValid()){
-                            MyFile.CreateNewFile(addressContractTXT);
-                            MyFile.WriteToFile(addressContractTXT, contractReceive.getContractAddress());
-                            System.out.println("Deploy smart contract thanh cong");
-                            return true;
-                        }else{
-                            MyFile.CreateNewFile(addressContractTXT);
-                            MyFile.WriteToFile(addressContractTXT, "0x0000");
-                            System.out.println("Deploy smart contract that bai");
-                        }
-                        break;
-                    case MyWeb3j.CONTRACT_SEND:
-                        ContractSend contractSend = ContractSend.deploy(web3j, credentials, gasPriceDeploy, gasLimitDeploy).send();
-                        if(contractSend.isValid()){
-                            MyFile.CreateNewFile(addressContractTXT);
-                            MyFile.WriteToFile(addressContractTXT, contractSend.getContractAddress());
-                            System.out.println("Deploy smart contract thanh cong");
-                            return true;
-                        }else{
-                            MyFile.CreateNewFile(addressContractTXT);
-                            MyFile.WriteToFile(addressContractTXT, "0x0000");
-                            System.out.println("Deploy smart contract that bai");
-                        }
-                        break;
+//                    case MyWeb3j.CONTRACT_RECEIVE:
+//                        ContractReceive contractReceive = ContractReceive.deploy(web3j, credentials, gasPriceDeploy, gasLimitDeploy).send();
+//                        if(contractReceive.isValid()){
+//                            MyFile.CreateNewFile(addressContractTXT);
+//                            MyFile.WriteToFile(addressContractTXT, contractReceive.getContractAddress());
+//                            System.out.println("Deploy smart contract thanh cong");
+//                            return true;
+//                        }else{
+//                            MyFile.CreateNewFile(addressContractTXT);
+//                            MyFile.WriteToFile(addressContractTXT, "0x0000");
+//                            System.out.println("Deploy smart contract that bai");
+//                        }
+//                        break;
+//                    case MyWeb3j.CONTRACT_SEND:
+//                        ContractSend contractSend = ContractSend.deploy(web3j, credentials, gasPriceDeploy, gasLimitDeploy).send();
+//                        if(contractSend.isValid()){
+//                            MyFile.CreateNewFile(addressContractTXT);
+//                            MyFile.WriteToFile(addressContractTXT, contractSend.getContractAddress());
+//                            System.out.println("Deploy smart contract thanh cong");
+//                            return true;
+//                        }else{
+//                            MyFile.CreateNewFile(addressContractTXT);
+//                            MyFile.WriteToFile(addressContractTXT, "0x0000");
+//                            System.out.println("Deploy smart contract that bai");
+//                        }
+//                        break;
                 }
 
             }catch(Exception e){

@@ -6,13 +6,16 @@ import com.estate.real.model.enums.AccountStatus;
 import com.estate.real.model.enums.Role;
 import com.estate.real.model.request.AccountLoginRequest;
 import com.estate.real.model.request.AccountRequest;
+import com.estate.real.model.request.ImageRequest;
 import com.estate.real.model.response.GeneralResponse;
 import com.estate.real.service.inf.AccountService;
 import com.estate.real.utils.MyWeb3j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class AccountServiceImpl implements AccountService {
@@ -72,5 +75,18 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Account getAccountByNameLogin(String nameLogin) {
         return accountRepository.findByNameLogin(nameLogin);
+    }
+
+    @Override
+    public GeneralResponse updateImage(ImageRequest request) {
+        Account account = accountRepository.findByNameLogin(request.getNameLogin());
+        if (account == null){
+            return new GeneralResponse(false);
+        }
+        Map<String, Object> map =new HashMap<>();
+
+        map.put("image", request.getImage());
+        accountRepository.updateImage(request.getNameLogin(), map);
+        return new GeneralResponse(true);
     }
 }
