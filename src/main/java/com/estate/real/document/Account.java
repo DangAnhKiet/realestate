@@ -10,9 +10,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Data
 public class Account {
     @Indexed(unique = true)
-    private String nameLogin;
-    private String fullName;
+    private String nameLogin; // chung minh nhan dan
     private String password;
+    private String fullName;
     private String role;
     private String email;
     private String gender;
@@ -20,6 +20,7 @@ public class Account {
     @Indexed
     private AccountStatus status;
     private String privateKey;
+    @Indexed(unique = true)
     private String address;
 
     public Account() {

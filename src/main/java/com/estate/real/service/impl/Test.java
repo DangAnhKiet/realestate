@@ -30,8 +30,8 @@ import java.util.Optional;
 
 public class Test {
     public static void main(String[] args) {
-//        IPFS ipfs = new IPFS("localhost",5001);
-        IPFS ipfs = new IPFS("/ip4/127.0.0.1/tcp/5001");
+        IPFS ipfs = new IPFS("localhost",5001);
+//        IPFS ipfs = new IPFS("/ip4/127.0.0.1/tcp/5001/");
         try{
             NamedStreamable.InputStreamWrapper is =
                     new NamedStreamable.InputStreamWrapper(new FileInputStream("addressContract.txt"));
