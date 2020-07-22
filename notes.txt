@@ -5,3 +5,11 @@ Pc Kiet: 913 290 701
 contract -o ./
 + Sau đó sử lại import package trong class ManageRealEsate.java: package  com.estate.real.contract;
 
+IPFS:
+- Cài đặt powershell: https://github.com/PowerShell/PowerShell/releases/tag/v7.0.3
+- Install ipfs ref:https://kauri.io/installing-ipfs/b01b9b7bebcd4ebf80edf021bdd0e232/a
+- ref: https://simpleaswater.com/installing-ipfs/#installing-from-a-prebuilt-package
+- ref: https://medium.com/better-programming/how-to-get-started-with-ipfs-and-node-fa04baec6b3a
+
+command in ipfs:
+-  ipfs cat /ipfs/QmQPeNsJPyVWPFDVHb77w8G42Fvo15z4bG2X8D2GhfbSXc/readme

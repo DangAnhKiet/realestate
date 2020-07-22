@@ -209,7 +209,7 @@
         $.ajax({
             type: "POST",
             contentType: "application/json",
-            url: 'http://localhost:8080/land/add',
+            url: 'http://localhost:8084/land/add',
             data: JSON.stringify({
                 "addressSeller": buyAddress,
                 "district": district,
