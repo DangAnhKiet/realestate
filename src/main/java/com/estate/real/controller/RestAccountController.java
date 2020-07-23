@@ -42,23 +42,4 @@ public class RestAccountController {
     public Account getAccountByNameLogin(@RequestParam String name) {
         return accountService.getAccountByNameLogin(name);
     }
-
-    @RequestMapping(value = "/update/image", method = RequestMethod.POST)
-    public String updateImage(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) {
-        if (file.isEmpty()) {
-            redirectAttributes.addFlashAttribute("message", "Vui lòng chọn một hình ảnh để cập nhật");
-            return "wrong";
-        }
-        try {
-            byte[] bytes = file.getBytes();
-            String hashImage = ipfsService.uploadImage(bytes);
-            boolean statusPin = ipfsService.pinHashImage(hashImage);
-            System.out.println("hash image: " + hashImage);
-            System.out.println(statusPin);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-//        return accountService.updateImage(request);
-    }
 }

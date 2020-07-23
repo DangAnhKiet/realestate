@@ -8,6 +8,7 @@ import io.ipfs.api.NamedStreamable;
 import io.ipfs.multihash.Multihash;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
@@ -23,12 +24,12 @@ public class IPFSServiceImpl implements IPFSService {
     AccountRepository accountRepository;
 
     @PostConstruct
-    public void onStart(){
+    public void onStart() {
         ipfs = new IPFS("/ip4/127.0.0.1/tcp/5001");
     }
 
     @Override
-    public String uploadImage(byte[] arrByte){
+    public String uploadImage(byte[] arrByte) {
         String result = "";
         try {
 //            IPFS ipfs = init(MyIPFS.URL_API);
@@ -45,23 +46,35 @@ public class IPFSServiceImpl implements IPFSService {
     }
 
     @Override
-    public boolean pinHashImage(String hashImage){
-        boolean result = false;
+    public String pinHashImage(String hashImage) {
+        String result;
 //        IPFS ipfs = MyIPFS.init(MyIPFS.URL_API);
         try {
 //            String hash = "QRFi3dgfSVKpc1B9idTEuN3cBScszNHP9sfyMUF7F8ff5o"; // Hash of a file
             Multihash multihash = Multihash.fromBase58(hashImage);
             ipfs.pin.add(multihash);
-            result = true;
-            Map<String,Object> map = new HashMap<>();
-            map.put("img", "https://ipfs.io/ipfs/" + multihash.toString());
-            accountRepository.updateImage("123", map);
+            Map<String, Object> map = new HashMap<>();
+            result = "https://ipfs.io/ipfs/" + multihash.toString();
             System.out.println("Pin hash thanh cong");
+            map.put("img", result);
+            accountRepository.updateImage("123", map);
         } catch (IOException ex) {
-            result = false;
             System.out.println("Loi pin hash image");
             throw new RuntimeException("Error whilst communicating with the IPFS node", ex);
         }
         return result;
+    }
+
+    @Override
+    public String uploadImageNew(MultipartFile file) {
+        String statusPin = null;
+        try {
+            byte[] bytes = file.getBytes();
+            String hashImage = uploadImage(bytes);
+            statusPin = pinHashImage(hashImage);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return statusPin;
     }
 }
