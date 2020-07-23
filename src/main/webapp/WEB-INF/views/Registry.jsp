@@ -268,7 +268,7 @@
                     $.ajax({
                         type: "POST",
                         contentType: "application/json",
-                        url: 'http://localhost:8080/account/add',
+                        url: 'http://localhost:8084/account/add',
                         data: JSON.stringify({
                             "nameLogin": objUserLogin.value,
                             "fullName": objFullName.value,

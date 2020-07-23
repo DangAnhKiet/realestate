@@ -3,10 +3,9 @@ package com.estate.real.controller;
 import com.estate.real.document.Account;
 import com.estate.real.model.request.AccountLoginRequest;
 import com.estate.real.model.request.AccountRequest;
-import com.estate.real.model.request.ImageRequest;
 import com.estate.real.model.response.GeneralResponse;
 import com.estate.real.service.inf.AccountService;
-import com.estate.real.utils.MyIPFS;
+import com.estate.real.service.inf.IPFSService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,6 +19,9 @@ import java.util.List;
 public class RestAccountController {
     @Autowired
     AccountService accountService;
+
+    @Autowired
+    IPFSService ipfsService;
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public GeneralResponse addAccount(@RequestBody AccountRequest request) {
@@ -47,12 +49,13 @@ public class RestAccountController {
             redirectAttributes.addFlashAttribute("message", "Vui lòng chọn một hình ảnh để cập nhật");
             return "wrong";
         }
-        try{
+        try {
             byte[] bytes = file.getBytes();
-            String hashImage = MyIPFS.uploadImage(bytes);
-            boolean statusPin = MyIPFS.pinHashImage(hashImage);
-            System.out.println("hash image: "+ hashImage);
-        }catch (IOException e){
+            String hashImage = ipfsService.uploadImage(bytes);
+            boolean statusPin = ipfsService.pinHashImage(hashImage);
+            System.out.println("hash image: " + hashImage);
+            System.out.println(statusPin);
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return null;
