@@ -1,6 +1,6 @@
 package com.estate.real.service.inf;
 
-import io.ipfs.multihash.Multihash;
+import com.estate.real.model.response.GeneralResponse;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface IPFSService {
@@ -9,4 +9,7 @@ public interface IPFSService {
     public String pinHashImage(String hashImage);
 
     public String uploadImageNew(MultipartFile file);
+
+    public GeneralResponse uploadImageInfo(MultipartFile file);
+
 }

@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -41,5 +40,14 @@ public class RestAccountController {
     @RequestMapping(value = "/get/name", method = RequestMethod.POST)
     public Account getAccountByNameLogin(@RequestParam String name) {
         return accountService.getAccountByNameLogin(name);
+    }
+
+    @RequestMapping(value = "/update/image", method = RequestMethod.POST)
+    public GeneralResponse updateImage(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) {
+        if (file.isEmpty()) {
+            redirectAttributes.addFlashAttribute("message", "Vui lòng chọn một hình ảnh để cập nhật");
+            return new GeneralResponse(false);
+        }
+        return ipfsService.uploadImageInfo(file);
     }
 }
