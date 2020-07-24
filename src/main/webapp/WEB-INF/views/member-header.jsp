@@ -3,8 +3,8 @@
 <div class="sticky-top">
     <ul class="nav-home-admin">
         <li><i class="fa fa-home" aria-hidden="true"></i></li>
-        <li><a class="nav-hover" id="i-admin-home" href="/admin/manage/land">Quản lí đất</a></li>
-        <li><a class="nav-hover" id="i-admin-account" href="/admin/manage/account">Quản lí tài khoản</a></li>
+        <li><a class="nav-hover" id="i-admin-home" href="/member">Sàn giao dịch</a></li>
+        <li><a class="nav-hover" id="i-admin-account" href="/member/lands">Quản lí đất</a></li>
         <li><a class="nav-hover" id="i-admin-help" href="/help">Trợ giúp</a></li>
         <li class="avatar">
             <img src="https://i.pravatar.cc/300" alt="Avatar">
@@ -26,9 +26,9 @@
     var url = window.location.href;
     if(typeof url == 'string'){
         removeHover();
-        if(url.includes("admin/manage/land") || url.includes("/admin/land/add")){
+        if(url.includes("/member")){
             document.getElementById("i-admin-home").classList.add("tab-current");
-        }else if(url.includes("/admin/manage/account")){
+        }else if(url.includes("admin/accounts")){
             document.getElementById("i-admin-account").classList.add("tab-current");
         }
         else if(url.includes("/help")){

@@ -12,9 +12,11 @@ public class Land {
     private int landId;
     private String addressHolder;
     private String district;
+    private String ward;
+    private String description;
+    private String pathImage;
     private String street;
     private String price;
-    private String image;
     private int status;
 
     // 0

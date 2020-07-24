@@ -14,7 +14,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "account")
+@RequestMapping(value = "api/account")
 public class RestAccountController {
     @Autowired
     AccountService accountService;
@@ -38,8 +38,15 @@ public class RestAccountController {
     }
 
     @RequestMapping(value = "/get/name", method = RequestMethod.POST)
-    public Account getAccountByNameLogin(@RequestParam String name) {
-        return accountService.getAccountByNameLogin(name);
+    public String getAccountByNameLogin(@RequestParam String name) {
+        Account account = accountService.getAccountByNameLogin(name);
+        if(account != null){
+            System.out.println("Get account by usename login: "+account.toString());
+            return account.getAddress();
+        }else{
+            System.out.println("Username khong ton tai.");
+            return "";
+        }
     }
 
     @RequestMapping(value = "/update/image", method = RequestMethod.POST)

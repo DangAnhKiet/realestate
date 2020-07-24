@@ -6,6 +6,7 @@ import com.estate.real.model.request.LandRequest;
 import com.estate.real.model.response.GeneralResponse;
 import com.estate.real.model.response.LandResponse;
 import com.estate.real.service.inf.LandService;
+import com.estate.real.utils.LandUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "land")
+@RequestMapping(value = "api/land")
 public class RestLandController {
     @Autowired
     LandService landService;

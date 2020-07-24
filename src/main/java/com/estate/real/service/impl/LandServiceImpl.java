@@ -33,10 +33,12 @@ public class LandServiceImpl implements LandService {
         Land land = new Land();
         land.setAddressHolder(request.getAddressSeller());
         land.setDistrict(request.getDistrict());
-        land.setImage(request.getImage());
+        land.setPathImage(request.getPathImage());
         land.setPrice(request.getPrice());
         land.setStreet(request.getStreet());
         land.setStatus(LandStatus.active.ordinal());
+        land.setWard(request.getWard());
+        land.setDescription(request.getDescription());
         //Mac dinh gan landId = -1,trong trường hợp không thể get from ethereum
         land.setLandId(-1);
 
@@ -45,7 +47,7 @@ public class LandServiceImpl implements LandService {
             ManageRealEsate manageRealEsate = MyWeb3j.LoadSmartContract();
             if (manageRealEsate != null) {
                 TransactionReceipt transactionReceipt = manageRealEsate.addLand(land.getDistrict(), land.getStreet(),
-                        land.getImage(), land.getPrice(), BigInteger.valueOf(land.getStatus())).send();
+                        land.getPathImage(), land.getPrice(),land.getWard(), land.getDescription(), BigInteger.valueOf(land.getStatus())).send();
                 System.out.println("Trạng thái của quá trình thêm land vào blockchain: " + transactionReceipt.isStatusOK());
                 if (transactionReceipt.isStatusOK()) {
                     //Get event để thêm landId vào db

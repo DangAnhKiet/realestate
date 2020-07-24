@@ -48,7 +48,8 @@ public class IPFSServiceImpl implements IPFSService {
 
     @Override
     public String pinHashImage(String hashImage) {
-        String result;
+        String result = "";
+//        IPFS ipfs = MyIPFS.init(MyIPFS.URL_API);
         try {
 //            String hash = "QRFi3dgfSVKpc1B9idTEuN3cBScszNHP9sfyMUF7F8ff5o"; // Hash of a file
             Multihash multihash = Multihash.fromBase58(hashImage);
@@ -57,7 +58,9 @@ public class IPFSServiceImpl implements IPFSService {
             System.out.println("Pin hash thanh cong");
         } catch (IOException ex) {
             System.out.println("Loi pin hash image");
-            throw new RuntimeException("Error whilst communicating with the IPFS node", ex);
+            ex.printStackTrace();
+            return result = "";
+//            throw new RuntimeException("Error whilst communicating with the IPFS node", ex);
         }
         return result;
     }

@@ -98,12 +98,11 @@
     });
     objAgreeUpload.addEventListener('click', function () {
         if (objNameChooseFileToUpload.innerText != "") {
-            // console.log(objNameChooseFileToUpload.textContent);
-            // let thisText = objHiddenFile.value;
-            // let thisImage = objHiddenFile.files[0];
-            // let formdata = new FormData();
-            // formdata.append("thisText", thisText);
-            // formdata.append("thisImage", thisImage);
+            let thisText = objHiddenFile.value;
+            let thisImage = objHiddenFile.files[0];
+            let formdata = new FormData();
+            formdata.append("thisText", thisText);
+            formdata.append("thisImage", thisImage);
             // document.getElementById('btnSubmit').click();
             //stop submit the form, we will post it manually.
             // event.preventDefault();
@@ -122,7 +121,7 @@
             $.ajax({
                 type: "POST",
                 enctype: 'multipart/form-data',
-                url: "http://localhost:8084/api/account/update/image",
+                url: "http://localhost:8084/account/update/image",
                 data: data,
                 processData: false,
                 contentType: false,

@@ -10,5 +10,7 @@ public class LandRequest {
     private String district;
     private String street;
     private String price;
-    private String image;
+    private String description;
+    private String ward;
+    private String pathImage;
 }

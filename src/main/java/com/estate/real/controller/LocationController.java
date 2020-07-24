@@ -1,6 +1,7 @@
 package com.estate.real.controller;
 
 import com.estate.real.document.Account;
+import com.estate.real.document.Land;
 import com.estate.real.service.impl.LandServiceImpl;
 import com.estate.real.service.inf.AccountService;
 import com.estate.real.service.inf.LandService;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.*;
 
@@ -52,16 +54,22 @@ public class LocationController {
         return "Help";
     }
 
-    @RequestMapping(value={"/admin/manage"}, method = RequestMethod.GET)
+    @RequestMapping(value={"/admin/manage/land"}, method = RequestMethod.GET)
     public String manageRealOfAdmin(Model model){
         model.addAttribute("listLands",landService.getAllLand());
-        return "ManageReal";
+        return "AdminManageLand";
     }
 
-    @RequestMapping(value={"/admin/accounts"}, method = RequestMethod.GET)
+    @RequestMapping(value={"/admin/land/list"}, method = RequestMethod.GET)
+    public String showListLand(Model model){
+//        model.addAttribute("listLands",landService.getAllLand());
+        return "AdminListLand";
+    }
+
+    @RequestMapping(value={"/admin/manage/account"}, method = RequestMethod.GET)
     public String manageAccount(Model model){
 //        model.addAttribute("listLands",landService.getAllLand());
-        return "ManageAccount";
+        return "AdminManageAccount";
     }
 
     @RequestMapping(value={"/admin/registry"}, method = RequestMethod.GET)
@@ -81,5 +89,17 @@ public class LocationController {
     public String homeAdmin(){
 
         return "HomeAdmin";
+    }
+
+    @RequestMapping(value = {"/member/lands"}, method = RequestMethod.GET)
+    public String memberLands(){
+//        List<Land> listLands = landService.getLandsByAddress(address);
+        return "LandsMember";
+    }
+
+    @RequestMapping(value = {"/admin/land/add"}, method = RequestMethod.GET)
+    public String adminAddLand(){
+//        List<Land> listLands = landService.getLandsByAddress(address);
+        return "AdminAddLand";
     }
 }

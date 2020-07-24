@@ -16,28 +16,29 @@
 <div class="container">
     <div class="row">
         <div class="col-sm-12">
-            <div class="sticky-top">
-                <ul class="nav-home-admin">
-                    <li><i class="fa fa-home" aria-hidden="true"></i></li>
-                    <li><a href="#">Sàn giao dịch</a></li>
-                    <li><a href="#">Quản lí đất</a></li>
-                    <li><a href="#">Trợ giúp</a></li>
-                    <li class="avatar">
-                        <img src="https://i.pravatar.cc/300" alt="Avatar">
-                        <ul class="avatar-detail">
-                            <li><a href="#">Thông tin cá nhân</a></li>
-                            <li><a href="#">Đăng xuất</a></li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
+            <jsp:include page="member-header.jsp"/>
+<%--            <div class="sticky-top">--%>
+<%--                <ul class="nav-home-admin">--%>
+<%--                    <li><i class="fa fa-home" aria-hidden="true"></i></li>--%>
+<%--                    <li><a href="#">Sàn giao dịch</a></li>--%>
+<%--                    <li><a href="#">Quản lí đất</a></li>--%>
+<%--                    <li><a href="#">Trợ giúp</a></li>--%>
+<%--                    <li class="avatar">--%>
+<%--                        <img src="https://i.pravatar.cc/300" alt="Avatar">--%>
+<%--                        <ul class="avatar-detail">--%>
+<%--                            <li><a href="#">Thông tin cá nhân</a></li>--%>
+<%--                            <li><a href="#">Đăng xuất</a></li>--%>
+<%--                        </ul>--%>
+<%--                    </li>--%>
+<%--                </ul>--%>
+<%--            </div>--%>
 
-            <div class="bottom-header">
-                <div class="text-center">
-                    <h1 class="title">Browser Our Properties</h1>
-                    <h4 class="sub-title">An cư lập nghiệp - Xây đắp tương lai</h4>
-                </div>
-            </div>
+<%--            <div class="bottom-header">--%>
+<%--                <div class="text-center">--%>
+<%--                    <h1 class="title">Browser Our Properties</h1>--%>
+<%--                    <h4 class="sub-title">An cư lập nghiệp - Xây đắp tương lai</h4>--%>
+<%--                </div>--%>
+<%--            </div>--%>
             <!--wrap-filter -->
             <br/>
             <form class="wrap-filter">

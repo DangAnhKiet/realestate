@@ -12,7 +12,8 @@ public class LandResponse {
     private String image;
     private int status;
     private int landId;
-
+    private String ward;
+    private String description;
 
     public LandResponse() {
     }
@@ -22,8 +23,10 @@ public class LandResponse {
         this.district = land.getDistrict();
         this.street = land.getStreet();
         this.price = land.getPrice();
-        this.image = land.getImage();
+        this.image = land.getPathImage();
         this.status = land.getStatus();
         this.landId = land.getLandId();
+        this.description = land.getDescription();
+        this.ward = land.getWard();
     }
 }
