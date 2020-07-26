@@ -1,8 +1,8 @@
 package com.estate.real.model.response;
 
 import com.estate.real.document.Account;
-import com.estate.real.document.Land;
 import com.estate.real.model.enums.AccountStatus;
+import com.estate.real.model.enums.Role;
 import lombok.Data;
 
 @Data
@@ -10,7 +10,7 @@ public class AccountResponse {
     private String nameLogin;
     private String fullName;
     private String password;
-    private String role;
+    private Role role;
     private String email;
     private String gender;
     private AccountStatus status;

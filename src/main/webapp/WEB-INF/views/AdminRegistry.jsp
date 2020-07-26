@@ -131,7 +131,7 @@
         </div>
 <%--        End popup--%>
     </div>
-
+    <jsp:include page="Footer.jsp"/>
 </div>
 <script type="text/javascript">
     window.onload = function() { // same as window.addEventListener('load', (event) => {
@@ -270,7 +270,7 @@
                     $.ajax({
                         type: "POST",
                         contentType: "application/json",
-                        url: 'http://localhost:8084/account/add',
+                        url: 'http://localhost:8084/api/account/add',
                         data: JSON.stringify({
                             "nameLogin": objUserLogin.value,
                             "fullName": objFullName.value,
@@ -279,8 +279,8 @@
                             "phoneNumber": objPhonenumber.value,
                             "privateKey": objPrivateKey.value,
                             "gender": checkedGender,
-                            "status":"active",
-                            "role":"member"
+                            "status": "active",
+                            "role": "member"
                         }),
                         success: function (ojbResponse) {
                             // alert(ojbResponse);
