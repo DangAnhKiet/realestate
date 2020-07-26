@@ -86,11 +86,13 @@
                                     <input id="i-input-private-key" type="text" name="txtPrivateKey"
                                            class="form-control"
                                            placeholder="Khóa bảo mật của ví tiền ảo *"
-                                           value="" />
+                                           value=""/>
                                 </div>
-                                <input style="pointer-events:none; background-color:#ddd;" id="i-btn-register" type="button" class="btnRegister"
+                                <input style="pointer-events:none; background-color:#ddd;" id="i-btn-register"
+                                       type="button" class="btnRegister button"
                                        value="Đăng kí"/>
-                                <a href="/admin/accounts"><input type="submit" class="btnRegister"  value="Quay lại"/></a>
+                                <a href="/admin/accounts"><input type="submit" class="btnRegister button"
+                                                                 value="Quay lại"/></a>
                             </div>
                         </div>
                     </div>

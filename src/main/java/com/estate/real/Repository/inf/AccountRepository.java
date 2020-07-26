@@ -9,8 +9,6 @@ import org.springframework.data.mongodb.repository.Query;
 import java.util.List;
 
 public interface AccountRepository extends MongoRepository<Account, ObjectId>, AccountRepositoryExtend {
-    @Query(value = "{$and:[{'nameLogin':?0},{'status':?1}]}")
-    public Account findByNameLogin(String nameLogin, String status);
 
     @Query(value = "{'status':?0}")
     public List<Account> findAllByStatus(String status);

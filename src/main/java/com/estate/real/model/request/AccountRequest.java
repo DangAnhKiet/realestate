@@ -1,15 +1,14 @@
 package com.estate.real.model.request;
 
-import com.estate.real.model.enums.AccountStatus;
+import com.estate.real.model.enums.Role;
 import lombok.Data;
-import org.springframework.data.mongodb.core.index.Indexed;
 
 @Data
 public class AccountRequest {
     private String nameLogin;
     private String password;
     private String fullName;
-    private String role;
+    private Role role;
     private String status;
     private String address;
     private String phoneNumber;

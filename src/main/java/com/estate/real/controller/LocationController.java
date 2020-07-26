@@ -1,8 +1,5 @@
 package com.estate.real.controller;
 
-import com.estate.real.document.Account;
-import com.estate.real.document.Land;
-import com.estate.real.service.impl.LandServiceImpl;
 import com.estate.real.service.inf.AccountService;
 import com.estate.real.service.inf.LandService;
 import com.estate.real.utils.MyFile;
@@ -11,9 +8,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-
-import java.util.*;
 
 @Controller
 public class LocationController {
@@ -82,13 +76,13 @@ public class LocationController {
         }else{
             model.addAttribute("apiKeyFirebase","");
         }
-        return "Registry";
+        return "AdminRegistry";
     }
 
     @RequestMapping(value = {"/admin/home"}, method= RequestMethod.GET)
     public String homeAdmin(){
 
-        return "HomeAdmin";
+        return "AdminHome";
     }
 
     @RequestMapping(value = {"/member/lands"}, method = RequestMethod.GET)

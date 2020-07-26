@@ -2,6 +2,7 @@ package com.estate.real.document;
 
 import com.estate.real.config.CollectionName;
 import com.estate.real.model.enums.AccountStatus;
+import com.estate.real.model.enums.Role;
 import lombok.Data;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -13,7 +14,7 @@ public class Account {
     private String nameLogin; // chung minh nhan dan
     private String password;
     private String fullName;
-    private String role;
+    private Role role;
     private String email;
     private String gender;
     private String phoneNumber;

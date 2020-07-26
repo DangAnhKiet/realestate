@@ -5,6 +5,7 @@ import com.estate.real.document.Account;
 import com.estate.real.model.enums.AccountStatus;
 import com.estate.real.model.enums.Role;
 import com.estate.real.model.request.AccountLoginRequest;
+import com.estate.real.model.request.AccountRegisterRequest;
 import com.estate.real.model.request.AccountRequest;
 import com.estate.real.model.request.ImageRequest;
 import com.estate.real.model.response.GeneralResponse;
@@ -13,6 +14,7 @@ import com.estate.real.utils.MyWeb3j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,21 +55,20 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public GeneralResponse login(AccountLoginRequest request) {
-        Account account = accountRepository.findByNameLogin(request.getNameLogin(), AccountStatus.active.toString());
-        if (account == null){
+        Account account = accountRepository.findByNameLogin(request.getNameLogin());
+        if (account == null) {
             return new GeneralResponse(false);
         }
-
-        if (!request.getPassword().equals(account.getPassword())){
+        String passwordRequest = Base64.getEncoder().encodeToString(request.getPassword().getBytes());
+        if (!account.getPassword().equals(passwordRequest)) {
             return new GeneralResponse(false);
-        }else{
-            if(Role.admin.toString().equals(account.getRole())){
-                return new GeneralResponse(true,"admin");
-            }else if(Role.member.toString().equals(account.getRole())){
-                return new GeneralResponse(true,"member");
-            }else{
+        } else {
+            if (account.getRole().equals(Role.admin)) {
+                return new GeneralResponse(true, "admin");
+            } else if (account.getRole().equals(Role.member)) {
+                return new GeneralResponse(true, "member");
+            } else {
                 return new GeneralResponse(false);
-
             }
         }
     }
@@ -80,13 +81,31 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public GeneralResponse updateImage(ImageRequest request) {
         Account account = accountRepository.findByNameLogin(request.getNameLogin());
-        if (account == null){
+        if (account == null) {
             return new GeneralResponse(false);
         }
-        Map<String, Object> map =new HashMap<>();
+        Map<String, Object> map = new HashMap<>();
 
         map.put("image", request.getImage());
         accountRepository.updateImage(request.getNameLogin(), map);
         return new GeneralResponse(true);
+    }
+
+    @Override
+    public GeneralResponse register(AccountRegisterRequest registerRequest) {
+        Account account = accountRepository.findByNameLogin(registerRequest.getNameLogin());
+        if (account != null) {
+            return new GeneralResponse(false, "account already exist!!!");
+        }
+        String password = Base64.getEncoder().encodeToString(registerRequest.getPassword().getBytes());
+
+        Account accountNew = new Account();
+        accountNew.setNameLogin(registerRequest.getNameLogin());
+        accountNew.setPassword(password);
+        accountNew.setEmail(registerRequest.getEmail());
+        accountNew.setPhoneNumber(registerRequest.getPhoneNumber());
+        accountNew.setRole(Role.member);
+        accountRepository.save(accountNew);
+        return new GeneralResponse(true, "success");
     }
 }

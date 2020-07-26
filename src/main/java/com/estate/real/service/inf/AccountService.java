@@ -2,6 +2,7 @@ package com.estate.real.service.inf;
 
 import com.estate.real.document.Account;
 import com.estate.real.model.request.AccountLoginRequest;
+import com.estate.real.model.request.AccountRegisterRequest;
 import com.estate.real.model.request.AccountRequest;
 import com.estate.real.model.request.ImageRequest;
 import com.estate.real.model.response.GeneralResponse;
@@ -19,4 +20,6 @@ public interface AccountService {
     public Account getAccountByNameLogin(String nameLogin);
 
     public GeneralResponse updateImage(ImageRequest request);
+
+    public GeneralResponse register(AccountRegisterRequest registerRequest);
 }
