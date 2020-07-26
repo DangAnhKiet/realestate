@@ -59,15 +59,21 @@
                                     </div>
                                 </div>
                                 <p style="color:gray;">(*) Thông tin bắt buộc</p>
+                                <p style="color:gray;">(*) Sau khi nhập só điện thoại bạn chờ mã code gửi về điện thoại
+                                    để xác nhận số điện thoại</p>
+
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group has-check">
-                                    <input id="i-input-email" required type="email" class="form-control" placeholder="Địa chỉ email *" value="" />
-                                    <i id="i-check-email" data-check-status="false" style="color: orange;display: none;" class="fa fa-check"
+                                    <input id="i-input-email" required type="email" class="form-control"
+                                           placeholder="Địa chỉ email *" value=""/>
+                                    <i id="i-check-email" data-check-status="false" style="color: orange;display: none;"
+                                       class="fa fa-check"
                                        aria-hidden="true"></i>
                                 </div>
                                 <div class="form-group">
-                                    <input id="i-phone-number" type="text" minlength="10" maxlength="11" name="txtEmpPhone"
+                                    <input id="i-phone-number" type="text" minlength="10" maxlength="11"
+                                           name="txtEmpPhone"
                                     class="form-control"
                                            placeholder="Số điện thoại *"
                                            value="" />
@@ -75,19 +81,20 @@
                                     <div id="recaptcha-container"></div>
                                 </div>
                                 <div class="form-group">
-                                    <input id="i-code" type="text" minlength="10" maxlength="10" name="txtCodeConfirm" class="form-control"
+                                    <input id="i-code" type="text" minlength="10" maxlength="10" name="txtCodeConfirm"
+                                           class="form-control"
                                            placeholder="Nhập mã xác nhận *"
-                                           value="" />
+                                           value=""/>
                                     <div style="display: none;" id="is-sent-code">
                                         <span class="text-danger">Mã xác nhận không đúng! </span>
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <input id="i-input-private-key" type="text" name="txtPrivateKey"
-                                           class="form-control"
-                                           placeholder="Khóa bảo mật của ví tiền ảo *"
-                                           value=""/>
-                                </div>
+                                <%--                                <div class="form-group">--%>
+                                <%--                                    <input id="i-input-private-key" type="text" name="txtPrivateKey"--%>
+                                <%--                                           class="form-control"--%>
+                                <%--                                           placeholder="Khóa bảo mật của ví tiền ảo *"--%>
+                                <%--                                           value=""/>--%>
+                                <%--                                </div>--%>
                                 <input style="pointer-events:none; background-color:#ddd;" id="i-btn-register"
                                        type="button" class="btnRegister button"
                                        value="Đăng kí"/>

@@ -30,8 +30,8 @@ public class AccountServiceImpl implements AccountService {
         account.setPrivateKey(request.getAddress());
         account.setFullName(request.getFullName());
         account.setNameLogin(request.getNameLogin());
-//        String password = Base64.getEncoder().encodeToString();
-        account.setPassword(request.getPassword());
+        String password = Base64.getEncoder().encodeToString(request.getPassword().getBytes());
+        account.setPassword(password);
         account.setRole(request.getRole());
         account.setStatus(AccountStatus.active);
         account.setPhoneNumber(request.getPhoneNumber());
@@ -45,6 +45,7 @@ public class AccountServiceImpl implements AccountService {
 //        }else{
 //            return new GeneralResponse(false);
 //        }
+        accountRepository.save(account);
         return new GeneralResponse(true);
     }
 
