@@ -13,3 +13,11 @@ IPFS:
 
 command in ipfs:
 -  ipfs cat /ipfs/QmQPeNsJPyVWPFDVHb77w8G42Fvo15z4bG2X8D2GhfbSXc/readme
+
+Ref: Management session with redis
+- https://www.javainuse.com/spring/springboot_session_redis
+
+-- Color:
+- #EEA738 - Cam
+- #63B175 - Xanh
+
