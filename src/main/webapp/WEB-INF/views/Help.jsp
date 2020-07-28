@@ -9,7 +9,7 @@
 <div class="container">
     <div class="row">
     <div class="col-sm-12 wrap-help">
-        <jsp:include page="admin-header.jsp"/>
+        <jsp:include page="Header.jsp"/>
         <div class="title">
             <h2>HỎI & ĐÁP</h2>
         </div>

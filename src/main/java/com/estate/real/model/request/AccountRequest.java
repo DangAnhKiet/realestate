@@ -16,4 +16,6 @@ public class AccountRequest {
     private String email;
     private String gender;
     private String img;
+    private String createdBy;
+    private String updatedBy;
 }

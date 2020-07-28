@@ -5,6 +5,8 @@ import lombok.Data;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.Date;
+
 @Document(collection = CollectionName.LAND)
 @Data
 public class Land {
@@ -18,6 +20,10 @@ public class Land {
     private String street;
     private String price;
     private int status;
+    private String createdDate;
+    private String updatedDate;
+    private String createdBy;
+    private String updatedBy;
 
     // 0
     // 1

@@ -1,16 +1,21 @@
 package com.estate.real.controller;
 
 import com.estate.real.document.Account;
+import com.estate.real.model.enums.StatusLogin;
 import com.estate.real.model.request.AccountLoginRequest;
 import com.estate.real.model.request.AccountRequest;
+import com.estate.real.model.response.AccountResponse;
 import com.estate.real.model.response.GeneralResponse;
 import com.estate.real.service.inf.AccountService;
 import com.estate.real.service.inf.IPFSService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @RestController
@@ -33,8 +38,18 @@ public class RestAccountController {
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public GeneralResponse login(@RequestBody AccountLoginRequest request) {
-        return accountService.login(request);
+    public String login(@RequestBody AccountLoginRequest request, HttpServletRequest servletRequest) {
+        String strResponse = accountService.login(servletRequest,request);
+        if(strResponse.contains(StatusLogin.ERROR_PASSWORD.toString())){
+//            model.addAttribute("errorLogin","Sai mật khẩu");
+            return "Sai mật khẩu";
+        }else if(strResponse.contains(StatusLogin.EXIST_ACCOUNT.toString())){
+//            model.addAttribute("errorLogin","Tài khoản không tồn tại");
+            return "Tài khoản không tồn tại";
+        }else{
+//            model.addAttribute("errorLogin","Tài khoản đã bị khóa");
+            return strResponse;
+        }
     }
 
     @RequestMapping(value = "/get/name", method = RequestMethod.POST)

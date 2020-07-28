@@ -7,6 +7,8 @@ import lombok.Data;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.Date;
+
 @Document(collection = CollectionName.ACCOUNT)
 @Data
 public class Account {
@@ -24,6 +26,11 @@ public class Account {
     private String privateKey;
     @Indexed(unique = true)
     private String address;
+
+    private String createdDate;
+    private String updatedDate;
+    private String createdBy;
+    private String updatedBy;
 
     public Account() {
     }

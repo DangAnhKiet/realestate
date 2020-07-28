@@ -10,7 +10,7 @@
 <div class="container">
     <div class="row">
         <div class="col-sm-12 wrap-accounts">
-            <jsp:include page="admin-header.jsp"/>
+            <jsp:include page="Header.jsp"/>
             <div class="bg-image">
                 <h3 class="title">ĐĂNG KÍ BẤT ĐỘNG SẢN</h3>
             </div>

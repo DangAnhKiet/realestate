@@ -1,31 +1,42 @@
 package com.estate.real.service.impl;
 
 import com.estate.real.Repository.inf.AccountRepository;
+import com.estate.real.contanst.AttributeAccount;
+import com.estate.real.contanst.Session;
 import com.estate.real.document.Account;
 import com.estate.real.model.enums.AccountStatus;
 import com.estate.real.model.enums.Role;
+import com.estate.real.model.enums.StatusLogin;
 import com.estate.real.model.request.AccountLoginRequest;
 import com.estate.real.model.request.AccountRegisterRequest;
 import com.estate.real.model.request.AccountRequest;
 import com.estate.real.model.request.ImageRequest;
+import com.estate.real.model.response.AccountResponse;
 import com.estate.real.model.response.GeneralResponse;
 import com.estate.real.service.inf.AccountService;
+import com.estate.real.utils.MyDate;
+import com.estate.real.utils.MyFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Base64;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.util.*;
 
 @Service
 public class AccountServiceImpl implements AccountService {
 
     @Autowired
     AccountRepository accountRepository;
+    @Autowired
+    IPFSServiceImpl ipfsService;
 
     @Override
     public GeneralResponse addAccount(AccountRequest request) {
+        Account accountTemp = accountRepository.findByNameLogin(request.getNameLogin(), AccountStatus.active.toString());
+        if (accountTemp != null) {
+            return new GeneralResponse(false, "error-exist");
+        }
         Account account = new Account();
         account.setPrivateKey(request.getAddress());
         account.setFullName(request.getFullName());
@@ -36,6 +47,11 @@ public class AccountServiceImpl implements AccountService {
         account.setStatus(AccountStatus.active);
         account.setPhoneNumber(request.getPhoneNumber());
         account.setPrivateKey(request.getPrivateKey());
+        account.setCreatedBy(request.getCreatedBy());
+        account.setUpdatedBy(request.getUpdatedBy());
+        account.setCreatedDate(MyDate.getNow());
+        account.setUpdatedDate(MyDate.getNow());
+        account.setImg(MyFile.RealFromFile(MyFile.PATH_AVATAR_DEFAULT));
 
 //        String address = MyWeb3j.getAddress(request.getPrivateKey());
 //        if(!address.isEmpty()){
@@ -55,33 +71,52 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public GeneralResponse login(AccountLoginRequest request) {
-        Account account = accountRepository.findByNameLogin(request.getNameLogin());
+    public String login(HttpServletRequest httpServletRequest,AccountLoginRequest request) {
+        if (httpServletRequest.getSession() != null) {
+            httpServletRequest.getSession().invalidate();
+        } 
+
+        Account account = accountRepository.findByNameLogin(request.getNameLogin(), AccountStatus.active.toString());
         if (account == null) {
-            return new GeneralResponse(false);
+            return StatusLogin.EXIST_ACCOUNT.toString();
         }
         String passwordRequest = Base64.getEncoder().encodeToString(request.getPassword().getBytes());
         if (!account.getPassword().equals(passwordRequest)) {
-            return new GeneralResponse(false);
-        } else {
-            if (account.getRole().equals(Role.admin)) {
-                return new GeneralResponse(true, "admin");
-            } else if (account.getRole().equals(Role.member)) {
-                return new GeneralResponse(true, "member");
-            } else {
-                return new GeneralResponse(false);
-            }
+            return StatusLogin.ERROR_PASSWORD.toString();
         }
+        AccountResponse accountResponse = new AccountResponse();
+        accountResponse.setEmail(account.getEmail());
+        accountResponse.setFullName(account.getFullName());
+        accountResponse.setGender(account.getGender());
+        accountResponse.setImg(account.getImg());
+        accountResponse.setNameLogin(account.getNameLogin());
+        accountResponse.setPhoneNumber(account.getPhoneNumber());
+        accountResponse.setRole(account.getRole());
+        accountResponse.setStatus(account.getStatus());
+
+        HashSet<String>  hsetSession = (HashSet<String>) httpServletRequest.getSession().getAttribute("MY_SESSION");
+        if(hsetSession == null){
+           hsetSession = new HashSet<>();
+        }
+            hsetSession.add(Session.ACCOUNT_LOGIN+"-"+accountResponse.getNameLogin()+"-"+accountResponse.getRole()+"-"+accountResponse.getImg());
+            httpServletRequest.getSession().setAttribute("MY_SESSION",hsetSession);
+            if(null != accountResponse.getRole() && Role.admin.toString().contains(accountResponse.getRole().toString())){
+                return "admin";
+            }
+            if(null != accountResponse.getRole() && Role.member.toString().contains(accountResponse.getRole().toString())){
+                return "member";
+            }
+        return StatusLogin.LOCK_ACCOUNT.toString();
     }
 
     @Override
     public Account getAccountByNameLogin(String nameLogin) {
-        return accountRepository.findByNameLogin(nameLogin);
+        return accountRepository.findByNameLogin(nameLogin,AccountStatus.active.toString());
     }
 
     @Override
     public GeneralResponse updateImage(ImageRequest request) {
-        Account account = accountRepository.findByNameLogin(request.getNameLogin());
+        Account account = accountRepository.findByNameLogin(request.getNameLogin(),AccountStatus.active.toString());
         if (account == null) {
             return new GeneralResponse(false);
         }
@@ -94,9 +129,9 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public GeneralResponse register(AccountRegisterRequest registerRequest) {
-        Account account = accountRepository.findByNameLogin(registerRequest.getNameLogin());
+        Account account = accountRepository.findByNameLogin(registerRequest.getNameLogin(),AccountStatus.active.toString());
         if (account != null) {
-            return new GeneralResponse(false, "account already exist!!!");
+            return new GeneralResponse(false, "Tài khoản đã tồn tại!");
         }
         String password = Base64.getEncoder().encodeToString(registerRequest.getPassword().getBytes());
 

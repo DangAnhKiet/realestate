@@ -9,12 +9,12 @@ import lombok.Data;
 public class AccountResponse {
     private String nameLogin;
     private String fullName;
-    private String password;
+//    private String password;
     private Role role;
     private String email;
     private String gender;
     private AccountStatus status;
-    private String privateKey;
+//    private String privateKey;
     private String phoneNumber;
     private String img;
 
@@ -27,10 +27,10 @@ public class AccountResponse {
         this.fullName = account.getFullName();
         this.gender = account.getGender();
         this.nameLogin = account.getNameLogin();
-        this.password = account.getPassword();
+//        this.password = account.getPassword();
         this.role = account.getRole();
         this.status = account.getStatus();
-        this.privateKey = account.getPrivateKey();
+//        this.privateKey = account.getPrivateKey();
         this.phoneNumber = account.getPhoneNumber();
         this.img = account.getImg();
     }

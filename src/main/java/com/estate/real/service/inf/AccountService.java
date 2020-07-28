@@ -5,8 +5,11 @@ import com.estate.real.model.request.AccountLoginRequest;
 import com.estate.real.model.request.AccountRegisterRequest;
 import com.estate.real.model.request.AccountRequest;
 import com.estate.real.model.request.ImageRequest;
+import com.estate.real.model.response.AccountResponse;
 import com.estate.real.model.response.GeneralResponse;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 public interface AccountService {
@@ -15,7 +18,7 @@ public interface AccountService {
 
     public List<Account> getAllByStatus(String status);
 
-    public GeneralResponse login(AccountLoginRequest request);
+    public String login(HttpServletRequest httpServletRequest, AccountLoginRequest request);
 
     public Account getAccountByNameLogin(String nameLogin);
 

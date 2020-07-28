@@ -1,6 +1,7 @@
 package com.estate.real.utils;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
@@ -12,6 +13,7 @@ public class MyFile {
     public static final String ADDRESS_CONTRACT_RECEIVE = "addressContractReceive.txt";
     public static final String API_KEY_FIREBASE = "apiKeyFirebase.txt";
     private static String UPLOADED_FOLDER = "uploaded";
+    public static String PATH_AVATAR_DEFAULT = "addressDefaultAvatar.txt";
 
     public static boolean CreateNewFile(String fileName) {
         File file = new File(fileName);
@@ -61,8 +63,26 @@ public class MyFile {
         return strResult;
     }
 
+    public static byte[] readerFileToByteArray(String path){
+        FileInputStream fis = null;
+        File file = new File(path);
+
+        byte[] bArrayResult = new byte[(int) file.length()];
+        try{
+            fis = new FileInputStream(file);
+            fis.read(bArrayResult);
+            fis.close();
+        }catch (IOException ioExp){
+            System.out.println("Loi doc file to byte");
+            ioExp.printStackTrace();
+        }
+        return bArrayResult;
+    }
+
     public static void main(String[] args) {
-//        System.out.println(CreateNewFile(MyFile.ADDRESS_CONTRACT_FILE));
-//        System.out.println(WriteToFile(MyFile.ADDRESS_CONTRACT_FILE,"hau2"));
+//        byte[] temp = readerFileToByteArray("src\\main\\resources\\static\\imgs\\item-real\\avatar-default.png");
+//        for (int i = 0; i < temp.length;i++){
+//            System.out.println((char) temp[i]);
+//        }
     }
 }

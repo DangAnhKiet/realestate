@@ -1,72 +1,60 @@
-`    <%--
-    - Đây là trong home của ứng dụng khi chưa đăng nhập
-    - Show những thông tin để khách hàng tham khảo,
-    --%>
     <%@ page contentType="text/html;charset=UTF-8" language="java" %>
     <html>
     <jsp:include page="head_tag.jsp">
         <jsp:param name="title" value="KH REAL ESTATE DAPP"/>
-        <jsp:param name="link-css-this-page" value="../css/home.css"/>
+        <jsp:param name="link-css-this-page" value="../css/manage-real.css"/>
     </jsp:include>
     <body>
     <div class="container">
         <div class="row">
             <div class="col-sm-12">
+                <jsp:include page="Header.jsp"/>
                 <div style="text-align: center;margin-top: 14px;" class="card-title">
                     <h3>SÀN GIAO DỊCH BẤT ĐỘNG SẢN</h3> <br/> <h4>KH
                     REALESTATE BLOCKCHAIN</h4>
                 </div>
-
-                <div class="wrap-login">
-                    <div class="btn-sign-in">
-                        <input type="button" class="btn btn-success" value="Đăng nhập"/>
+                <div style="text-align: center;">
+                    <div class="textWithBlurredBg">
+                        <img src="imgs/item-real/200.png" alt="hinh-mau">
+                        <p class="detail" onclick="document.getElementById('i-view-detail').style.display='block'">Xem chi
+                            tiết</p>
+                        <p class="buy">Mua</p>
                     </div>
-                    <div class="btn-sign-up">
-                        <input type="button" class="btn btn-primary" value="Đăng kí"/>
+
+                    <div class="textWithBlurredBg">
+                        <img src="imgs/item-real/200.png" alt="hinh-mau">
+                        <p class="detail">Xem chi tiết</p>
+                        <p class="buy">Mua</p>
+                    </div>
+
+                    <div class="textWithBlurredBg">
+                        <img src="imgs/item-real/200.png" alt="hinh-mau">
+                        <p class="detail">Xem chi tiết</p>
+                        <p class="buy">Mua</p>
+                    </div>
+                    <div class="textWithBlurredBg">
+                        <img src="imgs/item-real/200.png" alt="hinh-mau">
+                        <p class="detail">Xem chi tiết</p>
+                        <p class="buy">Mua</p>
+                    </div>
+
+                    <div class="textWithBlurredBg">
+                        <img src="imgs/item-real/200.png" alt="hinh-mau">
+                        <p class="detail">Xem chi tiết</p>
+                        <p class="buy">Mua</p>
+                    </div>
+                    <div class="textWithBlurredBg">
+                        <img src="imgs/item-real/200.png" alt="hinh-mau">
+                        <p class="detail">Xem chi tiết</p>
+                        <p class="buy">Mua</p>
+                    </div>
+
+                    <div class="textWithBlurredBg">
+                        <img src="imgs/item-real/200.png" alt="hinh-mau">
+                        <p class="detail">Xem chi tiết</p>
+                        <p class="buy">Mua</p>
                     </div>
                 </div>
-<%--                <div class="wrap-item">--%>
-<%--                    <div class="textWithBlurredBg">--%>
-<%--                        <img src="imgs/item-real/200.png" alt="hinh-mau">--%>
-<%--                        <p class="detail" onclick="document.getElementById('i-view-detail').style.display='block'">Xem chi--%>
-<%--                            tiết</p>--%>
-<%--                        <p class="buy">Mua</p>--%>
-<%--                    </div>--%>
-
-<%--                    <div class="textWithBlurredBg">--%>
-<%--                        <img src="imgs/item-real/200.png" alt="hinh-mau">--%>
-<%--                        <p class="detail">Xem chi tiết</p>--%>
-<%--                        <p class="buy">Mua</p>--%>
-<%--                    </div>--%>
-
-<%--                    <div class="textWithBlurredBg">--%>
-<%--                        <img src="imgs/item-real/200.png" alt="hinh-mau">--%>
-<%--                        <p class="detail">Xem chi tiết</p>--%>
-<%--                        <p class="buy">Mua</p>--%>
-<%--                    </div>--%>
-<%--                    <div class="textWithBlurredBg">--%>
-<%--                        <img src="imgs/item-real/200.png" alt="hinh-mau">--%>
-<%--                        <p class="detail">Xem chi tiết</p>--%>
-<%--                        <p class="buy">Mua</p>--%>
-<%--                    </div>--%>
-
-<%--                    <div class="textWithBlurredBg">--%>
-<%--                        <img src="imgs/item-real/200.png" alt="hinh-mau">--%>
-<%--                        <p class="detail">Xem chi tiết</p>--%>
-<%--                        <p class="buy">Mua</p>--%>
-<%--                    </div>--%>
-<%--                    <div class="textWithBlurredBg">--%>
-<%--                        <img src="imgs/item-real/200.png" alt="hinh-mau">--%>
-<%--                        <p class="detail">Xem chi tiết</p>--%>
-<%--                        <p class="buy">Mua</p>--%>
-<%--                    </div>--%>
-
-<%--                    <div class="textWithBlurredBg">--%>
-<%--                        <img src="imgs/item-real/200.png" alt="hinh-mau">--%>
-<%--                        <p class="detail">Xem chi tiết</p>--%>
-<%--                        <p class="buy">Mua</p>--%>
-<%--                    </div>--%>
-<%--                </div>--%>
 
                 <%--            Modal view detail--%>
                 <div class="w3-container">
@@ -119,45 +107,9 @@
                         </div>
                     </div>
                 </div>
-                <%--            <div class="wrap-adding">--%>
-                <%--                <div class="wrap-select-district">--%>
-                <%--                    <select class="ui dropdown select-district">--%>
-                <%--                        <option value="">Tên quận</option>--%>
-                <%--                        <option value="1-district">Quận 1</option>--%>
-                <%--                        <option value="2-district">Quận 2</option>--%>
-                <%--                        <option value="3-district">Quận 3</option>--%>
-                <%--                        <option value="4-district">Quận 4</option>--%>
-                <%--                        <option value="5-district">Quận 5</option>--%>
-                <%--                    </select>--%>
-                <%--                </div>--%>
-                <%--                <div class="wrap-select-street">--%>
-                <%--                    <select class="ui dropdown select-district">--%>
-                <%--                        <option value="">Tên đường</option>--%>
-                <%--                        <option value="">Cao thắng</option>--%>
-                <%--                        <option value="">Trần hưng đạo</option>--%>
-                <%--                        <option value="">Lê lai</option>--%>
-                <%--                        <option value="">Hoàng văn thụ</option>--%>
-                <%--                        <option value="">3 tháng 2</option>--%>
-                <%--                        <option value="">An dương vương</option>--%>
-                <%--                    </select>--%>
-                <%--                </div>--%>
-                <%--                <div class="wrap-price">--%>
-                <%--                    <lable for="price">Giá bán(VNĐ)</lable>--%>
-                <%--                    <input type="text" id="price">--%>
-                <%--                </div>--%>
-                <%--                <div class="wrap-upload-img">--%>
-                <%--                    <label for="img">Hình ảnh:</label>--%>
-                <%--                    <input type="file" id="img" name="img" accept="image/*">--%>
-                <%--                </div>--%>
-                <%--                <div style="margin-bottom: 5px;"><input type="button" id="i-btn-adding"value="Đăng bán"class="btn btn-primary"></div>--%>
-
-                <%--            </div>--%>
+                <jsp:include page="Footer.jsp"/>
             </div>
         </div>
     </div>
-    <script src="../../../resources/static/js/home.js"></script>
-    <jsp:include page="foot_tag.jsp"/>
-    <%--<script src="./ProjectTruffle/src/js/truffle-contract.js"></script>--%>
-    <%--<script src="./ProjectTruffle/src/js/web3.min.js"></script>--%>
     </body>
     </html>`
