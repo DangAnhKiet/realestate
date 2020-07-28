@@ -10,7 +10,7 @@
             <li><a class="nav-hover" id="i-admin-help" href="/help">Trợ giúp</a></li>
 
             <li class="avatar">
-                <img src="https://i.pravatar.cc/300" alt="Avatar">
+                <img id="i-img-ipfs" src="https://i.pravatar.cc/300" alt="Avatar">
                 <ul class="avatar-detail">
                     <li><a href="/accounts/detail">Thông tin cá nhân</a></li>
                     <li style="border-top: 1px dashed #fff;"><a href="/logout" methods="GET">Đăng xuất</a></li>
@@ -27,9 +27,25 @@
     </c:if>
 </div>
 <script type="text/javascript">
+    const regex1 = /\[/;
+    const regex2 = /\]/;
+
+    var objImgIpfs = document.getElementById('i-img-ipfs');
     var objHome = document.getElementById("i-home");
     var strSession ="${sessionScope.MY_SESSION.toString()}";
-    console.log(strSession);
+    var arrSesson = getSession(strSession);
+    arrSesson.forEach(setImgToAvatar);
+    function setImgToAvatar(value, index, array) {
+        if(value.includes("ipfs.io")){
+            objImgIpfs.src = value;
+        }
+    }
+    function getSession(objSession){
+        objSession = objSession.replace(regex1,"");
+        objSession = objSession.replace(regex2,"");
+        return objSession.split("-");
+    }
+
     if (objHome != null) {
         objHome.addEventListener("click", function () {
             window.location.href = "http://localhost:8084/";
