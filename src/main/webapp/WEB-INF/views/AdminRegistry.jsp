@@ -75,6 +75,13 @@
                                 <div id="recaptcha-container"></div>
                             </div>
                             <div class="form-group">
+                                <p>Bạn sẽ nhận được tin nhắn kèm mã kích hoạt như dưới đây, vui
+                                    lòng nhập mã số kích hoạt của riêng bạn vào khung bên để tiếp
+                                    tục.</p>
+                                <img src="/imgs/item-real/PhoneCodeSample.gif"
+                                     alt="Huong-dan-nhap-ma-code">
+                            </div>
+                            <div class="form-group">
                                 <input id="i-code" type="text" minlength="10" maxlength="10" name="txtCodeConfirm" class="form-control"
                                        placeholder="Nhập mã xác nhận *"
                                        value=""/>

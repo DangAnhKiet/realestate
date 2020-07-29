@@ -80,19 +80,22 @@ public class IPFSServiceImpl implements IPFSService {
     }
 
     @Override
-    public GeneralResponse uploadImageInfo(MultipartFile file) {
+    public GeneralResponse uploadImageInfo(MultipartFile file, String account) {
+        String hashImage = "", pathHashImg = "";
         try {
             byte[] bytes = file.getBytes();
-            String hashImage = uploadImage(bytes);
-            String statusPin = pinHashImage(hashImage);
+            hashImage = uploadImage(bytes);
+            pathHashImg = pinHashImage(hashImage);
             Map<String, Object> map = new HashMap<>();
             System.out.println("Pin hash thanh cong");
-            map.put("img", statusPin);
-            accountRepository.updateImage("123", map);
+            map.put("img", pathHashImg);
+            accountRepository.updateImage(account, map);
+            System.out.println("Upload anh thanh cong cho member: " + account);
         } catch (IOException e) {
             e.printStackTrace();
-            return new GeneralResponse(false);
+            return new GeneralResponse(false, "Lỗi không thể cập nhật hình ảnh. Xin thử lại lúc " +
+                    "khác.");
         }
-        return new GeneralResponse(true);
+        return new GeneralResponse(true, pathHashImg);
     }
 }

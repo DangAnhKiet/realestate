@@ -14,13 +14,11 @@
             <div class="card mb-3">
                 <div class="wrap-img-detail">
                     <img class="card-img-top" src="/imgs/item-real/metro-background.png" alt="Card image cap">
-                    <img class="avatar" src="https://i.pravatar.cc/300" alt="Avatar">
-                    <%--                    <form id="form2Submit" action="/account/update/image" method="post" enctype="multipart/form-data">--%>
+                        <img id="i-main-avatar" class="avatar" src="/imgs/item-real/avatar-default.png"
+                             alt="Avatar">
                     <div id="openUpload" class="wrap-icon-photograph">
                         <div class="img"><img src="/imgs/icons/photograph.png" alt=""></div>
-                        <%--                        <div class="alt"><p>Cập nhật hình đại diện</p></div>--%>
                     </div>
-                    <%--                    </form>--%>
                 </div>
                 <div class="card-body">
                     <h5 class="card-title">Card title</h5>
@@ -53,21 +51,27 @@
                             <form id="fileUploadForm" method="post" enctype="multipart/form-data">
                                 <input style="margin-bottom: 12px;" type="button" id="imgUpload" value="Chọn ảnh"
                                        onclick="document.getElementById('i-file').click();"/>
-                                <input type="file" style="display:none;" id="i-file" name="file" accept="image/*"/>
+                                <input type="file" style="display:none;" id="i-file" name="myImage"
+                                       accept="image/*"/>
+                                <input type="text" name="myAccount" id="i-account-form"
+                                       style="display:
+                                none">
                                 <input type="submit" style="display: none" id="btnSubmit">
                             </form>
                             <p id="i-choose-image" style="font-weight: 600; display: none;">Ảnh đã chọn: <span id="span-choose-image"></span></p>
+                            <div style="display: none;left: 45%;" id="i-updating-land" class="lds-hourglass"></div>
+                            <span class="alert alert-danger" id="i-alert-upload-img" style="display: none"></span>
                         </div>
+
                         <div style="text-align: right; padding-right: 10px;">
                             <hr>
                             <button onclick="document.getElementById('i-view-detail').style.display='none'"
                                     type="button"
-                                    class="btn btn-danger">Đóng
+                                    class="button">Đóng
                             </button>
                             <button id="btn-agree-update-img" style="margin-right: 3px;"
-                                    onclick="document.getElementById('i-view-detail').style.display='none'"
                                     type="button"
-                                    class="btn btn-primary">Đồng ý
+                                    class="button">Đồng ý
                             </button>
                             <hr>
                         </div>
@@ -79,72 +83,186 @@
     </div>
 </div>
 <script type="text/javascript">
-    var objOpenUpload = document.getElementById('openUpload');
-    var objInputUpload = document.getElementById('imgUpload');
-    var objSubmitUpload = document.getElementById('submit-upload-img');
-    var objHiddenFile = document.getElementById('i-file');
-    var objPopupUpdateImg = document.getElementById('i-view-detail');
-    var objChooseImge = document.getElementById('i-choose-image');
-    var objAgreeUpload = document.getElementById('btn-agree-update-img');
-    var objNameChooseFileToUpload = document.getElementById('span-choose-image');
+    window.addEventListener(('load'), function () {
+        let objOpenUpload = document.getElementById('openUpload');
+        let objInputUpload = document.getElementById('imgUpload');
+        let objSubmitUpload = document.getElementById('submit-upload-img');
+        let objHiddenFile = document.getElementById('i-file');
+        let objPopupUpdateImg = document.getElementById('i-view-detail');
+        let objChooseImge = document.getElementById('i-choose-image');
+        let objAgreeUpload = document.getElementById('btn-agree-update-img');
+        let objNameChooseFileToUpload = document.getElementById('span-choose-image');
+        let objMainAvatar = document.getElementById('i-main-avatar');
+        let objInputAccountForm = document.getElementById('i-account-form');
+        let objAlertUploadImg = document.getElementById('i-alert-upload-img');
+        let objUpdatingLand = document.getElementById('i-updating-land');
 
-    objHiddenFile.addEventListener('change', function (e) {
-        let fileName = e.target.files[0].name;
-        document.getElementById('span-choose-image').innerText = fileName;
-        objChooseImge.style.display = "block";
-    });
-    objOpenUpload.addEventListener('click', function () {
-        objPopupUpdateImg.style.display = "block";
-    });
-    objAgreeUpload.addEventListener('click', function () {
-        if (objNameChooseFileToUpload.innerText != "") {
-            // console.log(objNameChooseFileToUpload.textContent);
-            // let thisText = objHiddenFile.value;
-            // let thisImage = objHiddenFile.files[0];
-            // let formdata = new FormData();
-            // formdata.append("thisText", thisText);
-            // formdata.append("thisImage", thisImage);
-            // document.getElementById('btnSubmit').click();
-            //stop submit the form, we will post it manually.
-            // event.preventDefault();
+        resetAllAlert();
 
-            // Get form
-            var form = $('#fileUploadForm')[0];
+        function resetAllAlert() {
+            // reset alert
+            objAlertUploadImg.innerText = "";
+            objAlertUploadImg.style.display = "none";
 
-            // Create an FormData object
-            var data = new FormData(form);
+        }
+// Access our form...
+        const formUploadImage = document.getElementById( "fileUploadForm" );
+        // ...to take over the submit event
+        formUploadImage.addEventListener( 'submit', function ( event ) {
+            event.preventDefault();
+            console.log("chayj sendData");
+            sendData();
+        } );
 
-            // If you want to add an extra field for the FormData
-            data.append("CustomField", "This is some extra data, testing");
+        function getAvatar(){
+            if(objImgIpfs != null){
+                objMainAvatar.src = objImgIpfs.src;
+            }
+        }
+        objHiddenFile.addEventListener('change', function (e) {
+            let fileName = e.target.files[0].name;
+            document.getElementById('span-choose-image').innerText = fileName;
+            objChooseImge.style.display = "block";
+        });
+        objOpenUpload.addEventListener('click', function () {
+            objPopupUpdateImg.style.display = "block";
+        });
+        objAgreeUpload.addEventListener('click', function () {
+            console.log("chay ham dong y");
+            if(arrSesson != null) {
+                let pos = 0;
+                arrSesson.forEach(element => {
+                    if(pos == 1){
+                        objInputAccountForm.value = element;
+                    }
+                    pos++;
+                });
+            }
+            document.getElementById('btnSubmit').click();
+        });
 
-            // disabled the submit button
-            // $("#btnSubmit").prop("disabled", true);
-            $.ajax({
-                type: "POST",
-                enctype: 'multipart/form-data',
-                url: "http://localhost:8084/api/account/update/image",
-                data: data,
-                processData: false,
-                contentType: false,
-                cache: false,
-                timeout: 600000,
-                success: function (data) {
+        getAvatar();
+        const file = {
+            dom    : objHiddenFile,
+            binary : null
+        };
+        const reader = new FileReader();
+        reader.addEventListener( "load", function () {
+            file.binary = reader.result;
+        } );
+        // At page load, if a file is already selected, read it.
+        if( file.dom.files[0] ) {
+            reader.readAsBinaryString( file.dom.files[0] );
+        }
 
-                    // $("#result").text(data);
-                    console.log("SUCCESS : ", data);
-                    // $("#btnSubmit").prop("disabled", false);
+        // If not, read the file once the user selects it.
+        file.dom.addEventListener( "change", function () {
+            if( reader.readyState === FileReader.LOADING ) {
+                reader.abort();
+            }
 
-                },
-                error: function (e) {
+            reader.readAsBinaryString( file.dom.files[0] );
+        } );
+        function sendData() {
+            // reset alert
+            objUpdatingLand.style.display = "block";
+            objAgreeUpload.classList.add("lock-button");
+            // objAgreeUpload.classList.remove("lock-button");
+            resetAllAlert();
+            // If there is a selected file, wait it is read
+            // If there is not, delay the execution of the function
+            if( !file.binary && file.dom.files.length > 0 ) {
+                setTimeout( sendData, 10 );
+                return;
+            }
 
-                    // $("#result").text(e.responseText);
-                    console.log("ERROR : ", e);
-                    // $("#btnSubmit").prop("disabled", false);
+            // To construct our multipart form data request,
+            // We need an XMLHttpRequest instance
+            const XHR = new XMLHttpRequest();
 
-                }
-            });
+            // We need a separator to define each part of the request
+            const boundary = "blob";
+
+            // Store our body request in a string.
+            let data = "";
+
+            // So, if the user has selected a file
+            if ( file.dom.files[0] ) {
+                // Start a new part in our body's request
+                data += "--" + boundary + "\r\n";
+
+                // Describe it as form data
+                data += 'content-disposition: form-data; '
+                    // Define the name of the form data
+                    + 'name="'         + file.dom.name          + '"; '
+                    // Provide the real name of the file
+                    + 'filename="'     + file.dom.files[0].name + '"\r\n';
+                // And the MIME type of the file
+                data += 'Content-Type: ' + file.dom.files[0].type + '\r\n';
+
+                // There's a blank line between the metadata and the data
+                data += '\r\n';
+
+                // Append the binary data to our body's request
+                data += file.binary + '\r\n';
+            }
+
+            // Text data is simpler
+            // Start a new part in our body's request
+            data += "--" + boundary + "\r\n";
+
+            // Say it's form data, and name it
+            data += 'content-disposition: form-data; name="' + objInputAccountForm.name + '"\r\n';
+            // There's a blank line between the metadata and the data
+            data += '\r\n';
+
+            // Append the text data to our body's request
+            data += objInputAccountForm.value + "\r\n";
+
+            // Once we are done, "close" the body's request
+            data += "--" + boundary + "--";
+
+            // Define what happens on successful data submission
+            XHR.addEventListener( 'load', function( event ) {
+                let json = JSON.parse(XHR.responseText);
+               if(json.success === false && json.strResult != ""){
+                   objUpdatingLand.style.display = "none";
+                   objAgreeUpload.classList.remove("lock-button");
+                   objAlertUploadImg.innerText = json.strResult;
+                   objAlertUploadImg.style.display = "initial";
+               }else if(json.success === true){
+                   if(json.strResult != ""){
+                       objUpdatingLand.style.display = "none";
+                       objAgreeUpload.classList.remove("lock-button");
+                       objMainAvatar.src = json.strResult;
+                       document.getElementById('i-img-ipfs').src = json.strResult;
+                       document.getElementById('i-view-detail').style.display='none';
+                   }else{
+                       objUpdatingLand.style.display = "none";
+                       objAgreeUpload.classList.remove("lock-button");
+                       objMainAvatar.src = "imgs/item-real/avatar-default.png";
+                       document.getElementById('i-img-ipfs').src = "imgs/item-real/avatar-default.png";
+                       document.getElementById('i-view-detail').style.display='none';
+                   }
+               }
+            } );
+
+            // Define what happens in case of error
+            XHR.addEventListener( 'error', function( event ) {
+                console.log( 'Oops! Something went wrong.' +  JSON.stringify(event) );
+            } );
+
+            // Set up our request
+            XHR.open( 'POST', 'http://localhost:8084/api/account/update/image' );
+
+            // Add the required HTTP header to handle a multipart form data POST request
+            XHR.setRequestHeader( 'Content-Type','multipart/form-data; boundary=' + boundary );
+
+            // And finally, send our data.
+            XHR.send( data );
         }
     });
+
 </script>
 </body>
 </html>

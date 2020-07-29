@@ -14,115 +14,138 @@
 <%--    <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-firestore.js"></script>--%>
 <%--    <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-analytics.js"></script>--%>
 </head>
-<body onload="loadFirebase()">
-<%--<h1>vi du </h1>--%>
-<%--<input type="submit" class="btn btn-success" value="Run captcha" id="sign-in-button">--%>
-<div id="recaptcha-container"></div>
-<div id="hauphvn"></div>
-<%--<div class="form-group">--%>
-<%--    <input  type="text" maxlength="11" minlength="10"  required id="input-phone-guest" type="text" id="login" class="second" name="numberPhone" placeholder="Nhập số điện thoại" required>--%>
-<%--    <input style="display: none" id="input-code" type="number" required class="second" name="varifyCodeFirebase" placeholder="Nhập mã số xác nhận">--%>
-<%--</div>--%>
-<div class="form-group">
-    <input  type="text" maxlength="11" minlength="10"  required id="input-phone-guest" type="text" id="login" class="second" name="numberPhone" placeholder="Nhập số điện thoại" required>
-    <input style="display: none" id="input-code" type="number" required class="second" name="varifyCodeFirebase" placeholder="Nhập mã số xác nhận">
-</div>
-<button id="btn-verify-phone" onclick="checkNumberPhone()" type="button" style="cursor: pointer" class="btn-vip">Gửi mã xác nhận</button>
-<p style="display: none;" id="wrong-phone" class="text-danger">Số điện thoại chưa đăng ký.</p>
-<p style="display: none" id="wrong-code" class="text-danger">Mã xác nhận không hợp lệ.</p>
-<input type="text" placeholder="nhap code" id="my-code">
-<button onclick="submitPhoneNumberAuthCode()" type="button"  class="btn-vip"  >Đăng nhập</button>
+<body>
+<form id="theForm">
+    <p>
+        <label for="theText">text data:</label>
+        <input id="theText" name="myText" value="Some text data" type="text">
+    </p>
+    <p>
+        <label for="theFile">file data:</label>
+        <input id="theFile" name="myFile" type="file">
+    </p>
+    <button>Send Me!</button>
+</form>
 
-<!-- The core Firebase JS SDK is always required and must be listed first -->
+<script type="text/javascript">
+    // Because we want to access DOM nodes,
+    // we initialize our script at page load.
+    window.addEventListener( 'load', function () {
 
-<%--<script  src="./init-firebase.js"></script>--%>
-
-<script type="application/javascript">
-    // var firebaseConfig = {
-    //     apiKey: "AIzaSyCFYD5UslCuc_lKDrBGqxWDp4UO_rNnwOE",
-    //     authDomain: "real-d8692.firebaseapp.com",
-    //     databaseURL: "https://real-d8692.firebaseio.com",
-    //     projectId: "real-d8692",
-    //     storageBucket: "real-d8692.appspot.com",
-    //     messagingSenderId: "76860271192",
-    //     appId: "1:76860271192:web:24ed8527ea696ad092b82d",
-    //     measurementId: "G-QYBWB0RNYR"
-    // };
-    // Initialize Firebase
-
-    // firebase.initializeApp(firebaseConfig);
-    function submitPhoneNumberAuth() {
-        var phoneNumber = "+84967900801";
-        var appVerifier = window.recaptchaVerifier;
-        firebase
-            .auth()
-            .signInWithPhoneNumber(phoneNumber, appVerifier)
-            .then(function (confirmationResult) {
-                window.confirmationResult = confirmationResult;
-                                   alert("Đa gửi code to phone: "+ phoneNumber)
-            })
-            .catch(function (error) {
-                console.log("Khong the gui code den so dien thoai tren");
-                console.log(error);
-            });
-    }
-
-    // firebase.analytics();
-    function loadFirebase() {
-        var firebaseConfig = {
-            apiKey: "AIzaSyCFYD5UslCuc_ lKDrBGqxWDp4UO_rNnwOE",
-            authDomain: "real-d8692.firebaseapp.com",
-            databaseURL: "https://real-d8692.firebaseio.com",
-            projectId: "real-d8692",
-            storageBucket: "real-d8692.appspot.com",
-            messagingSenderId: "76860271192",
-            appId: "1:76860271192:web:24ed8527ea696ad092b82d",
-            measurementId: "G-QYBWB0RNYR"
+        // These variables are used to store the form data
+        const text = document.getElementById( "theText" );
+        const file = {
+            dom    : document.getElementById( "theFile" ),
+            binary : null
         };
-        firebase.initializeApp(firebaseConfig);
-        // firebase.analytics();
-        alert("chay capcha");
-        firebase.auth().useDeviceLanguage();
-        //@ts-ignore
-        window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier("recaptcha-container");
 
-        //@ts-ignore
-        window.recaptchaVerifier.render().then(function (widgetId) {
-            //@ts-ignore
-            window.recaptchaWidgetId = widgetId;
-        });
-        submitPhoneNumberAuth();
-        // window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier(
-        //     "recaptcha-container",
-        //     {
-        //                        // size: "normal",
-        //         size: "invisible",
-        //         callback: function (response) {
-        //                            alert("fdsfds");
-        //             submitPhoneNumberAuth();
-        //         }
-        //     }
-        // );
-    }
+        // Use the FileReader API to access file content
+        const reader = new FileReader();
 
-    function submitPhoneNumberAuthCode() {
+        // Because FileReader is asynchronous, store its
+        // result when it finishes to read the file
+        reader.addEventListener( "load", function () {
+            file.binary = reader.result;
+        } );
 
-        var codeFirebase = document.getElementById("my-code").value;
-        confirmationResult
-            .confirm(codeFirebase)
-            .then(function (result) {
-                var user = result.user;
-                if (user) {
-                    alert("dung code");
-                } else {
-                    alert("sai code");
-                }
-            })
-            .catch(function (error) {
-                alert("error");
-            });
-    }
+        // At page load, if a file is already selected, read it.
+        if( file.dom.files[0] ) {
+            reader.readAsBinaryString( file.dom.files[0] );
+        }
 
+        // If not, read the file once the user selects it.
+        file.dom.addEventListener( "change", function () {
+            if( reader.readyState === FileReader.LOADING ) {
+                reader.abort();
+            }
+
+            reader.readAsBinaryString( file.dom.files[0] );
+        } );
+
+        // sendData is our main function
+        function sendData() {
+            // If there is a selected file, wait it is read
+            // If there is not, delay the execution of the function
+            if( !file.binary && file.dom.files.length > 0 ) {
+                setTimeout( sendData, 10 );
+                return;
+            }
+
+            // To construct our multipart form data request,
+            // We need an XMLHttpRequest instance
+            const XHR = new XMLHttpRequest();
+
+            // We need a separator to define each part of the request
+            const boundary = "blob";
+
+            // Store our body request in a string.
+            let data = "";
+
+            // So, if the user has selected a file
+            if ( file.dom.files[0] ) {
+                // Start a new part in our body's request
+                data += "--" + boundary + "\r\n";
+
+                // Describe it as form data
+                data += 'content-disposition: form-data; '
+                    // Define the name of the form data
+                    + 'name="'         + file.dom.name          + '"; '
+                    // Provide the real name of the file
+                    + 'filename="'     + file.dom.files[0].name + '"\r\n';
+                // And the MIME type of the file
+                data += 'Content-Type: ' + file.dom.files[0].type + '\r\n';
+
+                // There's a blank line between the metadata and the data
+                data += '\r\n';
+
+                // Append the binary data to our body's request
+                data += file.binary + '\r\n';
+            }
+
+            // Text data is simpler
+            // Start a new part in our body's request
+            data += "--" + boundary + "\r\n";
+
+            // Say it's form data, and name it
+            data += 'content-disposition: form-data; name="' + text.name + '"\r\n';
+            // There's a blank line between the metadata and the data
+            data += '\r\n';
+
+            // Append the text data to our body's request
+            data += text.value + "\r\n";
+
+            // Once we are done, "close" the body's request
+            data += "--" + boundary + "--";
+
+            // Define what happens on successful data submission
+            XHR.addEventListener( 'load', function( event ) {
+                console.log( 'Yeah! Data sent and response loaded.' );
+            } );
+
+            // Define what happens in case of error
+            XHR.addEventListener( 'error', function( event ) {
+                alert( 'Oops! Something went wrong.' );
+            } );
+
+            // Set up our request
+            XHR.open( 'POST', 'http://localhost:8084/api/account/update/image' );
+
+            // Add the required HTTP header to handle a multipart form data POST request
+            XHR.setRequestHeader( 'Content-Type','multipart/form-data; boundary=' + boundary );
+
+            // And finally, send our data.
+            XHR.send( data );
+        }
+
+        // Access our form...
+        const form = document.getElementById( "theForm" );
+
+        // ...to take over the submit event
+        form.addEventListener( 'submit', function ( event ) {
+            event.preventDefault();
+            sendData();
+        } );
+    } );
 </script>
 </body>
 </html>

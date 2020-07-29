@@ -1,10 +1,7 @@
 package com.estate.real.controller;
 
 import com.estate.real.contanst.Session;
-import com.estate.real.document.Account;
-import com.estate.real.document.Land;
 import com.estate.real.model.enums.Role;
-import com.estate.real.service.impl.LandServiceImpl;
 import com.estate.real.service.inf.AccountService;
 import com.estate.real.service.inf.LandService;
 import com.estate.real.utils.MyFile;
@@ -13,11 +10,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.*;
+import java.util.HashSet;
 
 @Controller
 public class LocationController {
@@ -41,7 +37,7 @@ public class LocationController {
             for (String i : hsetSession) {
                 if (i.contains(Session.ACCOUNT_LOGIN)) {
                     String[] arrTemp = i.split("-");
-                    if (arrTemp.length == 3) {
+                    if (arrTemp.length >= 3) {
                         String role = arrTemp[2];
                         if (role.contains(Role.admin.toString())) {
                             model.addAttribute("listLands", landService.getAllLand());
@@ -97,7 +93,7 @@ public class LocationController {
             for (String i : hsetSession) {
                 if (i.contains(Session.ACCOUNT_LOGIN)) {
                     String[] arrTemp = i.split("-");
-                    if (arrTemp.length == 3) {
+                    if (arrTemp.length >= 3) {
                         String role = arrTemp[2];
                         if (role.contains(Role.member.toString())) {
                             model.addAttribute("listLands", landService.getAllLand());
@@ -112,9 +108,31 @@ public class LocationController {
     }
 
     @RequestMapping(value = {"/accounts/detail"}, method = RequestMethod.GET)
-    public String detailInfo(Model model) {
-//        model.addAttribute("listLands", landService.getAllLand());
-        return "DetailInfo";
+    public String detailInfo(Model model,HttpServletRequest request) {
+        @SuppressWarnings("unchecked")
+        HashSet<String> hsetSession = (HashSet<String>) request.getSession().getAttribute("MY_SESSION");
+        if (hsetSession == null) {
+            return "redirect:/login";
+        } else {
+            for (String i : hsetSession) {
+                if (i.contains(Session.ACCOUNT_LOGIN)) {
+                    String[] arrTemp = i.split("-");
+                    if (arrTemp.length >= 3) {
+                        String role = arrTemp[2];
+                        if (role.contains(Role.member.toString())) {
+                            model.addAttribute("listLands", landService.getAllLand());
+                            return "DetailInfo";
+                        }
+                        if (role.contains(Role.admin.toString())) {
+                            model.addAttribute("listLands", landService.getAllLand());
+                            return "DetailInfo";
+                        }
+                    }
+                    return "redirect:/not-found";
+                }
+            }
+            return "redirect:/not-found";
+        }
     }
 
     @RequestMapping(value = {"/help"}, method = RequestMethod.GET)
@@ -173,7 +191,7 @@ public class LocationController {
             for (String i : hsetSession) {
                 if (i.contains(Session.ACCOUNT_LOGIN)) {
                     String[] arrTemp = i.split("-");
-                    if (arrTemp.length == 3) {
+                    if (arrTemp.length >= 3) {
                         String role = arrTemp[2];
                         if (role.contains(Role.admin.toString())) {
                             model.addAttribute("listLands", landService.getAllLand());

@@ -4,18 +4,14 @@ import com.estate.real.document.Account;
 import com.estate.real.model.enums.StatusLogin;
 import com.estate.real.model.request.AccountLoginRequest;
 import com.estate.real.model.request.AccountRequest;
-import com.estate.real.model.response.AccountResponse;
 import com.estate.real.model.response.GeneralResponse;
 import com.estate.real.service.inf.AccountService;
 import com.estate.real.service.inf.IPFSService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @RestController
@@ -65,11 +61,13 @@ public class RestAccountController {
     }
 
     @RequestMapping(value = "/update/image", method = RequestMethod.POST)
-    public GeneralResponse updateImage(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) {
-        if (file.isEmpty()) {
-            redirectAttributes.addFlashAttribute("message", "Vui lòng chọn một hình ảnh để cập nhật");
-            return new GeneralResponse(false);
+    public GeneralResponse updateImage(@RequestParam("myImage") MultipartFile myImage,
+                                       @RequestParam("myAccount") String myAccount) {
+
+        if (myAccount.isEmpty() && myImage == null) {
+            return new GeneralResponse(false,"Lỗi không thể cập nhật hình ảnh, vui lòng chọn ảnh khác" +
+                    ".");
         }
-        return ipfsService.uploadImageInfo(file);
+        return ipfsService.uploadImageInfo(myImage, myAccount);
     }
 }

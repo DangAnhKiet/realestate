@@ -1,6 +1,10 @@
 body a{
     text-decoration: none!important;
 }
+.lock-button{
+    pointer-events: none;
+    background-color: #ddd!important;
+}
 .button {
     font-weight: 600!important;
     width: 200px!important;
@@ -487,8 +491,8 @@ width: 340px;
 .wrap-icon-photograph img{
     z-index: 1;
     position: absolute;
-    top: 133%;
-    left: 53%;
+    top: 141%;
+    left: 52%;
     background-color: #dddddd96;
     border-radius: 50%;
     text-align: center;
@@ -515,6 +519,8 @@ width: 340px;
     position: absolute;
     top: 34%;
     border: 2px outset #EEA738;
+    width: 200px;
+    height: 200px;
 }
 /*END DETAIL INFO*/
 
@@ -726,6 +732,15 @@ section .section-title {
     .my-input-login{
         width: 60%;
         display: inline-flex;
+    }
+
+    .wrap-img-detail .avatar {
+        border-radius: 50%;
+        position: absolute;
+        top: 34%;
+        border: 2px outset #EEA738;
+        width: 80px;
+        height: 80px;
     }
 
 }

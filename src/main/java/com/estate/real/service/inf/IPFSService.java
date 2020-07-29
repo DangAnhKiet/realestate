@@ -10,6 +10,6 @@ public interface IPFSService {
 
     public String uploadImageNew(MultipartFile file);
 
-    public GeneralResponse uploadImageInfo(MultipartFile file);
+    public GeneralResponse uploadImageInfo(MultipartFile file, String account);
 
 }
