@@ -7,11 +7,11 @@ import lombok.Data;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.Date;
+import java.io.Serializable;
 
 @Document(collection = CollectionName.ACCOUNT)
 @Data
-public class Account {
+public class Account implements Serializable {
     @Indexed(unique = true)
     private String nameLogin; // chung minh nhan dan
     private String password;

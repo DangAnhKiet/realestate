@@ -82,6 +82,7 @@
             },
             error: function (objResult) {
                 console.log(objResult.responseText);
+                console.log(objResult);
                 if(objResult.responseText.includes("admin")){
                     window.location.href = "http://localhost:8084/admin/home";
                 }else if(objResult.responseText.includes("member")){

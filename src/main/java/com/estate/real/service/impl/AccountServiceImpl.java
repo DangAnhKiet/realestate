@@ -1,8 +1,6 @@
 package com.estate.real.service.impl;
 
 import com.estate.real.Repository.inf.AccountRepository;
-import com.estate.real.contanst.AttributeAccount;
-import com.estate.real.contanst.Session;
 import com.estate.real.document.Account;
 import com.estate.real.model.enums.AccountStatus;
 import com.estate.real.model.enums.Role;
@@ -16,12 +14,15 @@ import com.estate.real.model.response.GeneralResponse;
 import com.estate.real.service.inf.AccountService;
 import com.estate.real.utils.MyDate;
 import com.estate.real.utils.MyFile;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import java.util.*;
+import java.util.Base64;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class AccountServiceImpl implements AccountService {
@@ -41,6 +42,8 @@ public class AccountServiceImpl implements AccountService {
         account.setPrivateKey(request.getAddress());
         account.setFullName(request.getFullName());
         account.setNameLogin(request.getNameLogin());
+        account.setEmail(request.getEmail());
+        account.setGender(request.getGender());
         String password = Base64.getEncoder().encodeToString(request.getPassword().getBytes());
         account.setPassword(password);
         account.setRole(request.getRole());
@@ -71,16 +74,13 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public String login(HttpServletRequest httpServletRequest,AccountLoginRequest request) {
-        if (httpServletRequest.getSession() != null) {
-            httpServletRequest.getSession().invalidate();
-        } 
-
-        Account account = accountRepository.findByNameLogin(request.getNameLogin(), AccountStatus.active.toString());
+    public String login(HttpServletRequest httpServletRequest, AccountLoginRequest accountLoginRequest) {
+        System.out.println("++++++++++++++++++++return \"api/account/login");
+        Account account = accountRepository.findByNameLogin(accountLoginRequest.getNameLogin(), AccountStatus.active.toString());
         if (account == null) {
             return StatusLogin.EXIST_ACCOUNT.toString();
         }
-        String passwordRequest = Base64.getEncoder().encodeToString(request.getPassword().getBytes());
+        String passwordRequest = Base64.getEncoder().encodeToString(accountLoginRequest.getPassword().getBytes());
         if (!account.getPassword().equals(passwordRequest)) {
             return StatusLogin.ERROR_PASSWORD.toString();
         }
@@ -93,30 +93,46 @@ public class AccountServiceImpl implements AccountService {
         accountResponse.setPhoneNumber(account.getPhoneNumber());
         accountResponse.setRole(account.getRole());
         accountResponse.setStatus(account.getStatus());
+        accountResponse.setWalletAddress((account.getAddress() == null) ? "update" : account.getAddress());
 
-        HashSet<String>  hsetSession = (HashSet<String>) httpServletRequest.getSession().getAttribute("MY_SESSION");
-        if(hsetSession == null){
-           hsetSession = new HashSet<>();
+        JSONObject jsonAccount = new JSONObject();
+        jsonAccount.put("email", accountResponse.getEmail());
+        jsonAccount.put("userLogin", accountResponse.getNameLogin());
+        jsonAccount.put("fullName", accountResponse.getFullName());
+        jsonAccount.put("numberPhone", accountResponse.getPhoneNumber());
+        jsonAccount.put("walletAddress", accountResponse.getWalletAddress());
+        jsonAccount.put("imgPath", accountResponse.getImg());
+        jsonAccount.put("role",accountResponse.getRole().toString());
+
+        @SuppressWarnings("unchecked")
+        JSONObject jsonSession = (JSONObject) httpServletRequest.getSession().getAttribute(
+                "MY_SESSION");
+        if(jsonSession == null){
+            jsonSession = new JSONObject();
         }
-            hsetSession.add(Session.ACCOUNT_LOGIN+"-"+accountResponse.getNameLogin()+"-"+accountResponse.getRole()+"-"+accountResponse.getImg());
-            httpServletRequest.getSession().setAttribute("MY_SESSION",hsetSession);
-            if(null != accountResponse.getRole() && Role.admin.toString().contains(accountResponse.getRole().toString())){
-                return "admin";
-            }
-            if(null != accountResponse.getRole() && Role.member.toString().contains(accountResponse.getRole().toString())){
-                return "member";
-            }
+        jsonSession = jsonAccount;
+        if (null != accountResponse.getRole() && Role.admin.toString().contains(accountResponse.getRole().toString())) {
+            httpServletRequest.getSession().setAttribute("MY_SESSION", jsonSession.toString());
+            return "admin";
+        }
+        if (null != accountResponse.getRole() && Role.member.toString().contains(accountResponse.getRole().toString())) {
+            httpServletRequest.getSession().setAttribute("MY_SESSION", jsonSession.toString());
+            System.out.println("++++++++++++++++++++return \"member\";");
+            return "member";
+        }
+        System.out.println("++++++++++++++++++++returnLOCK_ACCOUNT.toString();");
+        httpServletRequest.getSession().invalidate();
         return StatusLogin.LOCK_ACCOUNT.toString();
     }
 
     @Override
     public Account getAccountByNameLogin(String nameLogin) {
-        return accountRepository.findByNameLogin(nameLogin,AccountStatus.active.toString());
+        return accountRepository.findByNameLogin(nameLogin, AccountStatus.active.toString());
     }
 
     @Override
     public GeneralResponse updateImage(ImageRequest request) {
-        Account account = accountRepository.findByNameLogin(request.getNameLogin(),AccountStatus.active.toString());
+        Account account = accountRepository.findByNameLogin(request.getNameLogin(), AccountStatus.active.toString());
         if (account == null) {
             return new GeneralResponse(false);
         }
@@ -129,7 +145,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public GeneralResponse register(AccountRegisterRequest registerRequest) {
-        Account account = accountRepository.findByNameLogin(registerRequest.getNameLogin(),AccountStatus.active.toString());
+        Account account = accountRepository.findByNameLogin(registerRequest.getNameLogin(), AccountStatus.active.toString());
         if (account != null) {
             return new GeneralResponse(false, "Tài khoản đã tồn tại!");
         }

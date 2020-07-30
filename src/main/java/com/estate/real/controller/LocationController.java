@@ -5,6 +5,7 @@ import com.estate.real.model.enums.Role;
 import com.estate.real.service.inf.AccountService;
 import com.estate.real.service.inf.LandService;
 import com.estate.real.utils.MyFile;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,43 +24,36 @@ public class LocationController {
     AccountService accountService;
 
     @RequestMapping(value = {"/logout"}, method = RequestMethod.GET)
-    public String logout(HttpServletRequest servletRequest){
+    public String logout(HttpServletRequest servletRequest) {
         servletRequest.getSession().invalidate();
         return "redirect:/";
     }
+
     @RequestMapping(value = {"/login"}, method = RequestMethod.GET)
     public String login(Model model, HttpSession session) {
+        System.out.println("++++++++++++++++++++vao /login location");
         @SuppressWarnings("unchecked")
-        HashSet<String> hsetSession = (HashSet<String>) session.getAttribute("MY_SESSION");
-        if (hsetSession == null) {
-            hsetSession = new HashSet<>();
+        JSONObject jsonSession = (JSONObject) session.getAttribute("MY_SESSION");
+        if (jsonSession == null) {
+            jsonSession = new JSONObject();
         } else {
-            for (String i : hsetSession) {
-                if (i.contains(Session.ACCOUNT_LOGIN)) {
-                    String[] arrTemp = i.split("-");
-                    if (arrTemp.length >= 3) {
-                        String role = arrTemp[2];
-                        if (role.contains(Role.admin.toString())) {
-                            model.addAttribute("listLands", landService.getAllLand());
-                            model.addAttribute("MY_SESSION", hsetSession);
-                            return "redirect:/admin/home";
-                        }
-                        if (role.contains(Role.member.toString())) {
-                            model.addAttribute("listLands", landService.getAllLand());
-                            model.addAttribute("MY_SESSION", hsetSession);
-                            return "redirect:/member/home";
-                        }
+            if (jsonSession != null) {
+                if (jsonSession.has("role")) {
+                    if (jsonSession.getString("role").contains(Role.admin.toString())) {
+                        return "redirect:/admin/home";
                     }
-                    return "redirect:/not-found";
+                    if (jsonSession.getString("role").contains(Role.member.toString())) {
+                        return "redirect:/member/home";
+                    }
                 }
             }
-            model.addAttribute("MY_SESSION", hsetSession);
         }
+        System.out.println("++++++++++++++++++++return \"Login\";");
         return "Login";
     }
 
-    @RequestMapping(value={"/"}, method = RequestMethod.GET)
-    public String home(){
+    @RequestMapping(value = {"/"}, method = RequestMethod.GET)
+    public String home() {
         return "Home";
     }
 
@@ -73,42 +67,8 @@ public class LocationController {
         return "NotFound";
     }
 
-    @RequestMapping(value = {"/member/home"}, method = RequestMethod.GET)
-    public String member(Model model, HttpServletRequest request) {
-        @SuppressWarnings("unchecked")
-        HashSet<String> hsetSession = (HashSet<String>) request.getSession().getAttribute("MY_SESSION");
-
-        if (hsetSession != null) {
-            System.out.println("===list session");
-            for (String i : hsetSession) {
-                System.out.println(i);
-            }
-            System.out.println(request.getSession().getId());
-            System.out.println("======");
-        }
-
-        if (hsetSession == null) {
-            return "redirect:/login";
-        } else {
-            for (String i : hsetSession) {
-                if (i.contains(Session.ACCOUNT_LOGIN)) {
-                    String[] arrTemp = i.split("-");
-                    if (arrTemp.length >= 3) {
-                        String role = arrTemp[2];
-                        if (role.contains(Role.member.toString())) {
-                            model.addAttribute("listLands", landService.getAllLand());
-                            return "MemberHome";
-                        }
-                    }
-                    return "redirect:/not-found";
-                }
-            }
-            return "redirect:/not-found";
-        }
-    }
-
     @RequestMapping(value = {"/accounts/detail"}, method = RequestMethod.GET)
-    public String detailInfo(Model model,HttpServletRequest request) {
+    public String detailInfo(Model model, HttpServletRequest request) {
         @SuppressWarnings("unchecked")
         HashSet<String> hsetSession = (HashSet<String>) request.getSession().getAttribute("MY_SESSION");
         if (hsetSession == null) {
@@ -142,9 +102,23 @@ public class LocationController {
     }
 
     @RequestMapping(value = {"/admin/manage/land"}, method = RequestMethod.GET)
-    public String manageRealOfAdmin(Model model) {
-        model.addAttribute("listLands", landService.getAllLand());
-        return "AdminManageLand";
+    public String manageRealOfAdmin(Model model, HttpServletRequest httpServletRequest) {
+        String strSession  = (String) httpServletRequest.getSession().getAttribute("MY_SESSION");
+        if (strSession == null || strSession.isEmpty()) {
+            return "redirect:/login";
+        } else {
+            JSONObject jsonSession  = new JSONObject(strSession);
+            if (jsonSession.has("role")) {
+                if (jsonSession.getString("role").contains(Role.admin.toString())) {
+                    model.addAttribute("role",Role.admin.toString());
+//                    model.addAttribute("listLands", landService.getAllLand());
+                    return "AdminManageLand";
+                }
+            }
+            httpServletRequest.getSession().invalidate();
+            return "redirect:/not-found";
+        }
+
     }
 
     @RequestMapping(value = {"/admin/land/list"}, method = RequestMethod.GET)
@@ -172,35 +146,57 @@ public class LocationController {
         return "AdminRegistry";
     }
 
-    @RequestMapping(value = {"/admin/home"}, method = RequestMethod.GET)
-    public String homeAdmin(Model model, HttpServletRequest request) {
+    @RequestMapping(value = {"/member/home"}, method = RequestMethod.GET)
+    public String member(Model model, HttpServletRequest request) {
         @SuppressWarnings("unchecked")
-        HashSet<String> hsetSession = (HashSet<String>) request.getSession().getAttribute("MY_SESSION");
-        if (hsetSession != null) {
-            System.out.println("===list session");
-            for (String i : hsetSession) {
-                System.out.println(i);
-            }
-            System.out.println(request.getSession().getId());
-            System.out.println("======");
-        }
-
-        if (hsetSession == null) {
+        String strSession  = (String) request.getSession().getAttribute("MY_SESSION");
+        if (strSession == null || strSession.isEmpty()) {
             return "redirect:/login";
         } else {
-            for (String i : hsetSession) {
-                if (i.contains(Session.ACCOUNT_LOGIN)) {
-                    String[] arrTemp = i.split("-");
-                    if (arrTemp.length >= 3) {
-                        String role = arrTemp[2];
-                        if (role.contains(Role.admin.toString())) {
-                            model.addAttribute("listLands", landService.getAllLand());
-                            return "AdminHome";
-                        }
-                    }
-                    return "redirect:/not-found";
+            JSONObject jsonSession  = new JSONObject(strSession);
+            if (jsonSession.has("role")) {
+                if (jsonSession.getString("role").contains(Role.member.toString())) {
+                    model.addAttribute("role",Role.member.toString());
+                    return "MemberHome";
                 }
             }
+            request.getSession().invalidate();
+            return "redirect:/not-found";
+        }
+    }
+
+    @RequestMapping(value = {"/admin/exchanges"}, method = RequestMethod.GET)
+    public String exchangeForAdmin(Model model, HttpServletRequest request) {
+        String strSession  = (String) request.getSession().getAttribute("MY_SESSION");
+        if (strSession == null || strSession.isEmpty()) {
+            return "redirect:/login";
+        } else {
+            JSONObject jsonSession  = new JSONObject(strSession);
+            if (jsonSession.has("role")) {
+                if (jsonSession.getString("role").contains(Role.admin.toString())) {
+                    model.addAttribute("role",Role.admin.toString());
+                    return "AdminExchanges";
+                }
+            }
+            request.getSession().invalidate();
+            return "redirect:/not-found";
+        }
+    }
+
+    @RequestMapping(value = {"/admin/home"}, method = RequestMethod.GET)
+    public String homeAdmin(Model model, HttpServletRequest request) {
+        String strSession  = (String) request.getSession().getAttribute("MY_SESSION");
+        if (strSession == null || strSession.isEmpty()) {
+            return "redirect:/login";
+        } else {
+            JSONObject jsonSession  = new JSONObject(strSession);
+            if (jsonSession.has("role")) {
+                if (jsonSession.getString("role").contains(Role.admin.toString())) {
+                    model.addAttribute("role",Role.admin.toString());
+                    return "AdminHome";
+                }
+            }
+            request.getSession().invalidate();
             return "redirect:/not-found";
         }
     }

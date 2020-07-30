@@ -17,6 +17,7 @@ public class AccountResponse {
 //    private String privateKey;
     private String phoneNumber;
     private String img;
+    private String walletAddress;
 
 
     public AccountResponse() {
@@ -33,5 +34,6 @@ public class AccountResponse {
 //        this.privateKey = account.getPrivateKey();
         this.phoneNumber = account.getPhoneNumber();
         this.img = account.getImg();
+        this.walletAddress = account.getAddress();
     }
 }

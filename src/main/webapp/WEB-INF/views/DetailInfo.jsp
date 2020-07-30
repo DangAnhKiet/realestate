@@ -22,11 +22,12 @@
                 </div>
                 <div class="card-body">
                     <h5 class="card-title">Thông tin cá nhân</h5>
-                    <p class="card-text">Tên:</p>
-                    <p class="card-text">Tài khoản đăng :</p>
+                    <p class="card-text">Họ tên:</p>
+                    <p class="card-text">Tài khoản đăng nhập:</p>
                     <p class="card-text">Mật khẩu:</p>
                     <p class="card-text">Điện thoại:</p>
                     <p class="card-text">Địa chỉ ví tiền:</p>
+                    <p class="card-text">Địa chỉ email:</p>
 <%--                    <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>--%>
                 </div>
             </div>
