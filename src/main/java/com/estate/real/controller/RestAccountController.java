@@ -4,6 +4,7 @@ import com.estate.real.document.Account;
 import com.estate.real.model.enums.StatusLogin;
 import com.estate.real.model.request.AccountLoginRequest;
 import com.estate.real.model.request.AccountRequest;
+import com.estate.real.model.request.ChangePrivateKeyRequest;
 import com.estate.real.model.response.GeneralResponse;
 import com.estate.real.service.inf.AccountService;
 import com.estate.real.service.inf.IPFSService;
@@ -48,7 +49,7 @@ public class RestAccountController {
         }
     }
 
-    @RequestMapping(value = "/get/name", method = RequestMethod.POST)
+    @RequestMapping(value = "/get/name", method = RequestMethod.GET)
     public String getAccountByNameLogin(@RequestParam String name) {
         Account account = accountService.getAccountByNameLogin(name);
         if(account != null){
@@ -65,9 +66,14 @@ public class RestAccountController {
                                        @RequestParam("myAccount") String myAccount) {
 
         if (myAccount.isEmpty() && myImage == null) {
-            return new GeneralResponse(false,"Lỗi không thể cập nhật hình ảnh, vui lòng chọn ảnh khác" +
+            return new GeneralResponse(false, "Lỗi không thể cập nhật hình ảnh, vui lòng chọn ảnh khác" +
                     ".");
         }
         return ipfsService.uploadImageInfo(myImage, myAccount);
+    }
+
+    @RequestMapping(value = "/privateKey/update", method = RequestMethod.POST)
+    public GeneralResponse updatePrivateKey(@RequestBody ChangePrivateKeyRequest request) {
+        return accountService.updatePrivateKey(request);
     }
 }

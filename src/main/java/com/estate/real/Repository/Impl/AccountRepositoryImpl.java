@@ -18,7 +18,7 @@ public class AccountRepositoryImpl implements AccountRepositoryExtend {
     MongoTemplate mongoTemplate;
 
     @Override
-    public void updateImage(String nameLogin, Map<String, Object> updateValues) {
+    public void updateInformation(String nameLogin, Map<String, Object> updateValues) {
         Query query = new Query();
         query.addCriteria(Criteria.where("nameLogin").is(nameLogin));
         Update update = new Update();

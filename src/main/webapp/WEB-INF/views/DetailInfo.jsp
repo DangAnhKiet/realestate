@@ -15,20 +15,22 @@
             <div class="card mb-3">
                 <div class="wrap-img-detail">
                     <img class="card-img-top" src="/imgs/item-real/metro-background.png" alt="Card image cap">
-                        <img id="i-main-avatar" class="avatar" src="/imgs/item-real/avatar-default.png"
-                             alt="Avatar">
+                    <img id="i-main-avatar" class="avatar" src="/imgs/item-real/avatar-default.png"
+                         alt="Avatar">
                     <div id="openUpload" class="wrap-icon-photograph">
                         <div class="img"><img src="/imgs/icons/photograph.png" alt=""></div>
                     </div>
                 </div>
                 <div class="card-body">
                     <h5 class="card-title">Thông tin cá nhân</h5>
-                    <p class="card-text">Họ tên:</p>
-                    <p class="card-text">Tài khoản đăng nhập:</p>
-                    <p class="card-text">Mật khẩu:</p>
-                    <p class="card-text">Điện thoại:</p>
-                    <p class="card-text">Địa chỉ ví tiền:</p>
-                    <p class="card-text">Địa chỉ email:</p>
+                    <p class="card-text">Họ tên: <span id="name"></span></p>
+                    <p class="card-text">Tài khoản đăng nhập:<span id="login"></span></p>
+                    <p class="card-text">Mật khẩu: <span id="pass"></span></p>
+                    <p class="card-text">Điện thoại: <span id="phone"></span></p>
+                    <p class="card-text">Địa chỉ ví tiền:<span id="address"></span>
+                        <button id="i-btn-update" class="button">CẬP NHẬT</button>
+                    </p>
+                    <p class="card-text">Địa chỉ email: <span id="email"></span></p>
 <%--                    <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>--%>
                 </div>
             </div>
@@ -75,11 +77,69 @@
                 </div>
             </div>
             <%--            end popup update img--%>
+            <%--            Modal update private key--%>
+            <div class="w3-container">
+                <div id="i-modal" class="w3-modal">
+                    <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:800px">
+                        <div id="i-status-success">
+                            <div class="w3-center"><br>
+                                <h3>Đăng kí tài khoản thành công</h3>
+                                <%--                           <span onclick="document.getElementById('i-view-detail').style.display='none'"--%>
+                                <%--                                 class="w3-button w3-xlarge w3-hover-red w3-display-topright" title="Close Modal">&times;</span>--%>
+                                <img style="width: 30%; padding: 14px;" id="i-img-uploaded"
+                                     src="/imgs/item-real/status-success.png">
+                            </div>
+                        </div>
+                        <div id="i-status-fail" style="display: none">
+                            <div class="w3-center"><br>
+                                <%--                           <span onclick="document.getElementById('i-modal').style.display='none'"--%>
+                                <%--                                 class="w3-button w3-xlarge w3-hover-red w3-display-topright" title="Close Modal">&times;</span>--%>
+                                <img style="width: 100px;" src="/imgs/item-real/alert.png">
+                            </div>
+                            <div class="w3-section w3-center">
+                                <p>Lỗi <span id="i-error-content" style="font-weight: 600;"></span></p>
+                            </div>
+                        </div>
+                        <div class="w3-section">
+                            <div style="display: flex; justify-content: flex-end; padding-right: 10px;">
+                                <hr>
+                                <button style="display: none;" id="i-close-modal"
+                                        onclick="document.getElementById('i-modal').style.display='none'"
+                                        type="button"
+                                        class="button">Đóng
+                                </button>
+                                <a style="display: none" id="i-redirect-reinput" href="/admin/account/registry">
+                                    <button style="margin-right: 3px;"
+                                            onclick="document.getElementById('i-modal').style.display='none'"
+                                            type="button"
+                                            class="button">Nhập lại
+                                    </button>
+                                </a>
+                                <hr>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <%--        End popup--%>
             <jsp:include page="Footer.jsp"/>
         </div>
     </div>
 </div>
 <script type="text/javascript">
+
+    let stringSession = ${sessionScope.MY_SESSION};
+
+    window.addEventListener(('load'), function () {
+        document.getElementById('name').innerText = stringSession.userLogin;
+        document.getElementById('login').innerText = stringSession.userLogin;
+        document.getElementById('pass').innerText = stringSession.userLogin;
+        document.getElementById('address').innerText = stringSession.walletAddress;
+        document.getElementById('phone').innerText = stringSession.numberPhone;
+        document.getElementById('email').innerText = stringSession.email;
+
+
+    });
     window.addEventListener(('load'), function () {
         let objOpenUpload = document.getElementById('openUpload');
         let objInputUpload = document.getElementById('imgUpload');
@@ -250,14 +310,17 @@
             } );
 
             // Set up our request
-            XHR.open( 'POST', 'http://localhost:8084/api/account/update/image' );
+            XHR.open('POST', 'http://localhost:8084/api/account/update/image');
 
             // Add the required HTTP header to handle a multipart form data POST request
-            XHR.setRequestHeader( 'Content-Type','multipart/form-data; boundary=' + boundary );
+            XHR.setRequestHeader('Content-Type', 'multipart/form-data; boundary=' + boundary);
 
             // And finally, send our data.
-            XHR.send( data );
+            XHR.send(data);
         }
+    });
+    document.getElementById("i-btn-update").addEventListener("click", function () {
+        document.getElementById("i-modal").style.display = "block";
     });
 
 </script>

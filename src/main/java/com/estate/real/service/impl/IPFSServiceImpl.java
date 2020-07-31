@@ -89,7 +89,7 @@ public class IPFSServiceImpl implements IPFSService {
             Map<String, Object> map = new HashMap<>();
             System.out.println("Pin hash thanh cong");
             map.put("img", pathHashImg);
-            accountRepository.updateImage(account, map);
+            accountRepository.updateInformation(account, map);
             System.out.println("Upload anh thanh cong cho member: " + account);
         } catch (IOException e) {
             e.printStackTrace();

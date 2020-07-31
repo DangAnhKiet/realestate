@@ -65,7 +65,7 @@
     objHomePage.addEventListener('click', function () {
         window.location.href = "http://localhost:8084";
     })
-    document.getElementById("i-btn-login").addEventListener("click", function () {
+    document.getElementById("i-`btn`-login").addEventListener("click", function () {
         objErrorLogin.style.display = "none";
         $.ajax({
             type: 'POST',

@@ -5,10 +5,7 @@ import com.estate.real.document.Account;
 import com.estate.real.model.enums.AccountStatus;
 import com.estate.real.model.enums.Role;
 import com.estate.real.model.enums.StatusLogin;
-import com.estate.real.model.request.AccountLoginRequest;
-import com.estate.real.model.request.AccountRegisterRequest;
-import com.estate.real.model.request.AccountRequest;
-import com.estate.real.model.request.ImageRequest;
+import com.estate.real.model.request.*;
 import com.estate.real.model.response.AccountResponse;
 import com.estate.real.model.response.GeneralResponse;
 import com.estate.real.service.inf.AccountService;
@@ -139,7 +136,7 @@ public class AccountServiceImpl implements AccountService {
         Map<String, Object> map = new HashMap<>();
 
         map.put("image", request.getImage());
-        accountRepository.updateImage(request.getNameLogin(), map);
+        accountRepository.updateInformation(request.getNameLogin(), map);
         return new GeneralResponse(true);
     }
 
@@ -159,5 +156,19 @@ public class AccountServiceImpl implements AccountService {
         accountNew.setRole(Role.member);
         accountRepository.save(accountNew);
         return new GeneralResponse(true, "success");
+    }
+
+    @Override
+    public GeneralResponse updatePrivateKey(ChangePrivateKeyRequest request) {
+        Account account = accountRepository.findByNameLogin(request.getNameLogin(), Role.member.toString());
+        if (account == null) {
+            return new GeneralResponse(false, "error-password");
+        }
+        Map<String, Object> updateValues = new HashMap<>();
+        if (request.getPrivateKey() != null) {
+            updateValues.put("privateKey", request.getPrivateKey());
+        }
+        accountRepository.updateInformation(request.getNameLogin(), updateValues);
+        return new GeneralResponse(true);
     }
 }
