@@ -319,6 +319,7 @@
                             "email": objEmail.value,
                             "phoneNumber": objPhonenumber.value,
                             "privateKey": "update",
+                            "address":"update",
                             "gender": checkedGender,
                             "status": "active",
                             "role": "member",

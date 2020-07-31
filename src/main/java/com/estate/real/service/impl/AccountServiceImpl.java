@@ -47,6 +47,7 @@ public class AccountServiceImpl implements AccountService {
         account.setStatus(AccountStatus.active);
         account.setPhoneNumber(request.getPhoneNumber());
         account.setPrivateKey(request.getPrivateKey());
+        account.setAddress(request.getAddress());
         account.setCreatedBy(request.getCreatedBy());
         account.setUpdatedBy(request.getUpdatedBy());
         account.setCreatedDate(MyDate.getNow());
@@ -112,7 +113,7 @@ public class AccountServiceImpl implements AccountService {
             httpServletRequest.getSession().setAttribute("MY_SESSION", jsonSession.toString());
             return "admin";
         }
-        if (null != accountResponse.getRole() && Role.member.toString().contains(accountResponse.getRole().toString())) {
+        if (null != accountResponse.getRole () && Role.member.toString().contains(accountResponse.getRole().toString())) {
             httpServletRequest.getSession().setAttribute("MY_SESSION", jsonSession.toString());
             System.out.println("++++++++++++++++++++return \"member\";");
             return "member";

@@ -175,9 +175,22 @@ public class LocationController {
     }
 
     @RequestMapping(value = {"/admin/land/list"}, method = RequestMethod.GET)
-    public String showListLand(Model model) {
-//        model.addAttribute("listLands",landService.getAllLand());
-        return "AdminListLand";
+    public String showListLand(Model model, HttpServletRequest httpServletRequest) {
+        String strSession  = (String) httpServletRequest.getSession().getAttribute("MY_SESSION");
+        if (strSession == null || strSession.isEmpty()) {
+            return "redirect:/login";
+        } else {
+            JSONObject jsonSession  = new JSONObject(strSession);
+            if (jsonSession.has("role")) {
+                if (jsonSession.getString("role").contains(Role.admin.toString())) {
+                    model.addAttribute("role",Role.admin.toString());
+//                    model.addAttribute("listLands", landService.getAllLand());
+                    return "AdminListLand";
+                }
+            }
+            httpServletRequest.getSession().invalidate();
+            return "redirect:/not-found";
+        }
     }
 
     @RequestMapping(value = {"/admin/manage/account"}, method = RequestMethod.GET)
@@ -292,8 +305,20 @@ public class LocationController {
     }
 
     @RequestMapping(value = {"/admin/land/add"}, method = RequestMethod.GET)
-    public String adminAddLand() {
-//        List<Land> listLands = landService.getLandsByAddress(address);
-        return "AdminAddLand";
+    public String adminAddLand(Model model, HttpServletRequest httpServletRequest) {
+        String strSession  = (String) httpServletRequest.getSession().getAttribute("MY_SESSION");
+        if (strSession == null || strSession.isEmpty()) {
+            return "redirect:/login";
+        } else {
+            JSONObject jsonSession  = new JSONObject(strSession);
+            if (jsonSession.has("role")) {
+                if (jsonSession.getString("role").contains(Role.admin.toString())) {
+                    model.addAttribute("role",Role.admin.toString());
+                    return "AdminAddLand";
+                }
+            }
+            httpServletRequest.getSession().invalidate();
+            return "redirect:/not-found";
+        }
     }
 }

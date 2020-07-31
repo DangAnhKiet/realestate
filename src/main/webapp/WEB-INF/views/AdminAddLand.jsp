@@ -30,7 +30,7 @@
                         <div class="wrap-buyer-address">
                             <label>Đại chỉ chủ đất</label>
                             <br/>
-                            <input id="i-seller-address" type="text" placeholder="0x000000000000000">
+                            <input style="pointer-events: none;" id="i-seller-address" type="text" placeholder="0x000000000000000">
                         </div>
                         <div class="wrap-select-city">
                             <select id="city" class="ui dropdown select-city" required>
@@ -182,6 +182,36 @@
     </div>
 </div>
 <%--End modal land detail--%>
+<%--            Modal view alert--%>
+<div class="w3-container">
+    <div id="i-modal" class="w3-modal">
+        <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:800px">
+            <div id="i-status-success">
+            </div>
+            <div id="i-status-fail" style="display: none">
+                <div class="w3-center"><br>
+                    <%--                           <span onclick="document.getElementById('i-modal').style.display='none'"--%>
+                    <%--                                 class="w3-button w3-xlarge w3-hover-red w3-display-topright" title="Close Modal">&times;</span>--%>
+                    <img style="width: 100px;" src="/imgs/item-real/alert.png">
+                </div>
+                <div class="w3-section w3-center">
+                    <p><span id="i-error-content" style="font-weight: 600;"></span></p>
+                </div>
+            </div>
+            <div class="w3-section">
+                <div style="display: flex; justify-content: flex-end; padding-right: 10px;">
+                    <hr>
+                    <button id="i-close-modal" onclick="document.getElementById('i-modal').style.display='none'"
+                            type="button"
+                            class="button">Đóng
+                    </button>
+                    <hr>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<%--        End popup--%>
 <script type="text/javascript">
     document.addEventListener("DOMContentLoaded", () => {
         turnOffAllAlert();
@@ -213,6 +243,8 @@
     let objUpdatingLand = document.getElementById('i-updating-land');
 
     function turnOffAllAlert() {
+        document.getElementById('i-status-fail').style.display = "none";
+        document.getElementById('i-modal').style.display='none'
         objAlertUsername.style.display = "none";
         objAlertFullfill.style.display = "none";
         objAlertUploadImg.style.display = "none";
@@ -329,12 +361,17 @@
                 url: 'http://localhost:8084/api/account/get/name',
                 data: {name: username},
                 success: function (objResponse) {
-                    if (objResponse !== "") {
+                    if (objResponse.toString() == 'update') {
+                        document.getElementById('i-error-content').innerText = "Tài khoản chưa cập nhật địa chỉ ví";
+                        document.getElementById('i-status-fail').style.display = "block";
+                        document.getElementById('i-modal').style.display='block';
+                    } else if (objResponse !== "") {
                         objHolderAddress.value = objResponse;
                     } else {
                         objAlertUsernameContent.innerText = "Tài khoản đăng nhập không tồn tại";
                         objAlertUsername.style.display = "block";
                     }
+
                 }
             });
         } else {

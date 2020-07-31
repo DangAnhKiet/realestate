@@ -7,6 +7,19 @@ body a {
     background-color: #ddd !important;
 }
 
+.button-inside{
+    background-color: #EEA738;
+    border: none;
+    color: #000000;
+    cursor: pointer;
+    transition: .2s;
+    width: 120px;
+}
+.button-inside:hover{
+    color: #ffffff;
+    background-color: #000000;
+}
+
 .button {
     font-weight: 600 !important;
     width: 200px !important;
@@ -525,6 +538,10 @@ body a {
 /*END REGISTRY*/
 
 /*MANAGE ACCOUNT*/
+.my-card-text{
+    margin-right: 20px;
+    text-decoration: underline;
+}
 .list-account {
     transition: .3s;
 }

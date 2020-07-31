@@ -22,12 +22,12 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <h5 class="card-title">Thông tin cá nhân</h5>
-                    <p class="card-text">Họ tên: <span id="name"></span></p>
-                    <p class="card-text">Tài khoản đăng nhập:<span id="login"></span></p>
-                    <p class="card-text">Mật khẩu: <span id="pass"></span></p>
-                    <p class="card-text">Điện thoại: <span id="phone"></span></p>
-                    <p class="card-text">Địa chỉ ví tiền:<span id="address"></span>
+                    <h5 class="card-title">Thông tin cá nhân: <span></span></h5>
+                    <p class="card-text"><span class="my-card-text">Họ tên:</span> <span id="name"></span></p>
+                    <p class="card-text"><span class="my-card-text">Tài khoản đăng nhập:</span><span id="login"></span></p>
+                    <p class="card-text"><span class="my-card-text">Mật khẩu: </span><span id="pass"></span></p>
+                    <p class="card-text"><span class="my-card-text">Điện thoại:</span> <span id="phone"></span></p>
+                    <p class="card-text"><span class="my-card-text">Địa chỉ ví tiền:</span><span class="alert alert-warning" id="address"></span>
                         <button id="i-btn-update" class="button">CẬP NHẬT</button>
                     </p>
                     <p class="card-text">Địa chỉ email: <span id="email"></span></p>
@@ -84,16 +84,12 @@
                         <div id="i-status-success">
                             <div class="w3-center"><br>
                                 <h3>Đăng kí tài khoản thành công</h3>
-                                <%--                           <span onclick="document.getElementById('i-view-detail').style.display='none'"--%>
-                                <%--                                 class="w3-button w3-xlarge w3-hover-red w3-display-topright" title="Close Modal">&times;</span>--%>
                                 <img style="width: 30%; padding: 14px;" id="i-img-uploaded"
                                      src="/imgs/item-real/status-success.png">
                             </div>
                         </div>
                         <div id="i-status-fail" style="display: none">
                             <div class="w3-center"><br>
-                                <%--                           <span onclick="document.getElementById('i-modal').style.display='none'"--%>
-                                <%--                                 class="w3-button w3-xlarge w3-hover-red w3-display-topright" title="Close Modal">&times;</span>--%>
                                 <img style="width: 100px;" src="/imgs/item-real/alert.png">
                             </div>
                             <div class="w3-section w3-center">
@@ -131,9 +127,13 @@
     let stringSession = ${sessionScope.MY_SESSION};
 
     window.addEventListener(('load'), function () {
-        document.getElementById('name').innerText = stringSession.userLogin;
+        document.getElementById('name').innerText = stringSession.fullName.toUpperCase();
         document.getElementById('login').innerText = stringSession.userLogin;
-        document.getElementById('pass').innerText = stringSession.userLogin;
+        document.getElementById('i-account-form').value = stringSession.userLogin;
+        document.getElementById('pass').innerText = "******";
+        if(stringSession.walletAddress == 'update'){
+            document.getElementById('address').innerText = "Bạn cần cập nhật địa chỉ ví để có thể giao dịch mua bán.";
+        }
         document.getElementById('address').innerText = stringSession.walletAddress;
         document.getElementById('phone').innerText = stringSession.numberPhone;
         document.getElementById('email').innerText = stringSession.email;
@@ -185,16 +185,6 @@
             objPopupUpdateImg.style.display = "block";
         });
         objAgreeUpload.addEventListener('click', function () {
-            console.log("chay ham dong y");
-            if(arrSesson != null) {
-                let pos = 0;
-                arrSesson.forEach(element => {
-                    if(pos == 1){
-                        objInputAccountForm.value = element;
-                    }
-                    pos++;
-                });
-            }
             document.getElementById('btnSubmit').click();
         });
 
