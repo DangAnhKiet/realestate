@@ -98,4 +98,8 @@ public class IPFSServiceImpl implements IPFSService {
         }
         return new GeneralResponse(true, pathHashImg);
     }
+
+    public static void main(String[] args) {
+        
+    }
 }

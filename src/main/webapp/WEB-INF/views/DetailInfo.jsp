@@ -28,10 +28,10 @@
                     <p class="card-text"><span class="my-card-text">Mật khẩu: </span><span id="pass"></span></p>
                     <p class="card-text"><span class="my-card-text">Điện thoại:</span> <span id="phone"></span></p>
                     <p class="card-text"><span class="my-card-text">Địa chỉ ví tiền:</span><span class="alert alert-warning" id="address"></span>
-                        <button id="i-btn-update" class="button">CẬP NHẬT</button>
+                        <button id="i-btn-update" class="button-spec">CẬP NHẬT</button>
                     </p>
                     <p class="card-text">Địa chỉ email: <span id="email"></span></p>
-<%--                    <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>--%>
+                    <%--                    <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>--%>
                 </div>
             </div>
             <%--            Popup update img--%>
@@ -81,9 +81,18 @@
             <div class="w3-container">
                 <div id="i-modal" class="w3-modal">
                     <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:800px">
-                        <div id="i-status-success">
+                        <div id="i-content-update">
                             <div class="w3-center"><br>
-                                <h3>Đăng kí tài khoản thành công</h3>
+                                <h3>Cập nhật địa chỉ ví</h3> <br>
+                                <strong>Nhập khóa riêng tư của ví</strong>
+                                <input style="width: 66%; margin-bottom: 2px;" id="i-private-key-input" type="text"
+                                       placeholder="a443868280953e8......">
+                                <p style="display: none" id="i-p-alert-private-key" class="alert alert-danger"></p>
+                            </div>
+                        </div>
+                        <div id="i-status-success" style="display: none">
+                            <div class="w3-center"><br>
+                                <h3>Cập nhật địa chỉ ví thành công</h3>
                                 <img style="width: 30%; padding: 14px;" id="i-img-uploaded"
                                      src="/imgs/item-real/status-success.png">
                             </div>
@@ -99,18 +108,15 @@
                         <div class="w3-section">
                             <div style="display: flex; justify-content: flex-end; padding-right: 10px;">
                                 <hr>
-                                <button style="display: none;" id="i-close-modal"
+                                <button id="i-close-modal"
                                         onclick="document.getElementById('i-modal').style.display='none'"
                                         type="button"
                                         class="button">Đóng
                                 </button>
-                                <a style="display: none" id="i-redirect-reinput" href="/admin/account/registry">
-                                    <button style="margin-right: 3px;"
-                                            onclick="document.getElementById('i-modal').style.display='none'"
-                                            type="button"
-                                            class="button">Nhập lại
-                                    </button>
-                                </a>
+                                <button id="i-update-private-key" style="margin-right: 3px;"
+                                        type="button"
+                                        class="button">Cập nhật
+                                </button>
                                 <hr>
                             </div>
                         </div>
@@ -127,18 +133,55 @@
     let stringSession = ${sessionScope.MY_SESSION};
 
     window.addEventListener(('load'), function () {
+
         document.getElementById('name').innerText = stringSession.fullName.toUpperCase();
         document.getElementById('login').innerText = stringSession.userLogin;
         document.getElementById('i-account-form').value = stringSession.userLogin;
         document.getElementById('pass').innerText = "******";
-        if(stringSession.walletAddress == 'update'){
+        if (stringSession.walletAddress == 'update') {
             document.getElementById('address').innerText = "Bạn cần cập nhật địa chỉ ví để có thể giao dịch mua bán.";
         }
-        document.getElementById('address').innerText = stringSession.walletAddress;
         document.getElementById('phone').innerText = stringSession.numberPhone;
         document.getElementById('email').innerText = stringSession.email;
 
+        //Update private key
+        let objButtonUpdatePrivateKey = document.getElementById('i-update-private-key');
+        objButtonUpdatePrivateKey.addEventListener('click', function () {
+            document.getElementById('i-p-alert-private-key').style.display = "none";
+            if(document.getElementById('i-private-key-input').value.length != 64){
+               document.getElementById('i-p-alert-private-key').innerText ="Khóa riêng tư không đúng. Vui lòng nhập lại";
+               document.getElementById('i-p-alert-private-key').style.display = "block";
 
+            }else{
+                $.ajax({
+                    type: "POST",
+                    contentType: "application/json",
+                    url: 'http://localhost:8084/api/account/privateKey/update',
+                    data: JSON.stringify({
+                        "nameLogin":stringSession.userLogin,
+                        "privateKey": document.getElementById('i-private-key-input').value.toLowerCase()
+                    }),
+                    success: function (objResponse) {
+                        if (objResponse.success === false && objResponse.strResult.includes("error-exist")) {
+                            objErrorContent.innerText = "Tài khoản đã tồn tại. Vui lòng chọn một tên khác";
+                            objStatusSuccess.style.display = "none";
+                            objReInput.style.display = "none";
+                            objCloseModal.style.display = "block";
+                            objStatusFail.style.display = "block";
+                            objModal.style.display = "block";
+                        }else{
+                            objStatusSuccess.style.display = "block";
+                            objStatusFail.style.display = "none";
+                            objCloseModal.style.display = "block";
+                            objReInput.style.display = "none";
+                            objModal.style.display = "block";
+                        }
+
+                    }
+                });
+            }
+        });
+        //End update private key
     });
     window.addEventListener(('load'), function () {
         let objOpenUpload = document.getElementById('openUpload');
@@ -162,20 +205,21 @@
             objAlertUploadImg.style.display = "none";
 
         }
-// Access our form...
-        const formUploadImage = document.getElementById( "fileUploadForm" );
-        // ...to take over the submit event
-        formUploadImage.addEventListener( 'submit', function ( event ) {
-            event.preventDefault();
-            console.log("chayj sendData");
-            sendData();
-        } );
 
-        function getAvatar(){
-            if(objImgIpfs != null){
+// Access our form...
+        const formUploadImage = document.getElementById("fileUploadForm");
+        // ...to take over the submit event
+        formUploadImage.addEventListener('submit', function (event) {
+            event.preventDefault();
+            sendData();
+        });
+
+        function getAvatar() {
+            if (objImgIpfs != null) {
                 objMainAvatar.src = objImgIpfs.src;
             }
         }
+
         objHiddenFile.addEventListener('change', function (e) {
             let fileName = e.target.files[0].name;
             document.getElementById('span-choose-image').innerText = fileName;
@@ -189,127 +233,31 @@
         });
 
         getAvatar();
-        const file = {
-            dom    : objHiddenFile,
-            binary : null
-        };
-        const reader = new FileReader();
-        reader.addEventListener( "load", function () {
-            file.binary = reader.result;
-        } );
-        // At page load, if a file is already selected, read it.
-        if( file.dom.files[0] ) {
-            reader.readAsBinaryString( file.dom.files[0] );
-        }
 
-        // If not, read the file once the user selects it.
-        file.dom.addEventListener( "change", function () {
-            if( reader.readyState === FileReader.LOADING ) {
-                reader.abort();
-            }
 
-            reader.readAsBinaryString( file.dom.files[0] );
-        } );
         function sendData() {
-            // reset alert
-            objUpdatingLand.style.display = "block";
-            objAgreeUpload.classList.add("lock-button");
-            // objAgreeUpload.classList.remove("lock-button");
-            resetAllAlert();
-            // If there is a selected file, wait it is read
-            // If there is not, delay the execution of the function
-            if( !file.binary && file.dom.files.length > 0 ) {
-                setTimeout( sendData, 10 );
-                return;
-            }
-
-            // To construct our multipart form data request,
-            // We need an XMLHttpRequest instance
-            const XHR = new XMLHttpRequest();
-
-            // We need a separator to define each part of the request
-            const boundary = "blob";
-
-            // Store our body request in a string.
-            let data = "";
-
-            // So, if the user has selected a file
-            if ( file.dom.files[0] ) {
-                // Start a new part in our body's request
-                data += "--" + boundary + "\r\n";
-
-                // Describe it as form data
-                data += 'content-disposition: form-data; '
-                    // Define the name of the form data
-                    + 'name="'         + file.dom.name          + '"; '
-                    // Provide the real name of the file
-                    + 'filename="'     + file.dom.files[0].name + '"\r\n';
-                // And the MIME type of the file
-                data += 'Content-Type: ' + file.dom.files[0].type + '\r\n';
-
-                // There's a blank line between the metadata and the data
-                data += '\r\n';
-
-                // Append the binary data to our body's request
-                data += file.binary + '\r\n';
-            }
-
-            // Text data is simpler
-            // Start a new part in our body's request
-            data += "--" + boundary + "\r\n";
-
-            // Say it's form data, and name it
-            data += 'content-disposition: form-data; name="' + objInputAccountForm.name + '"\r\n';
-            // There's a blank line between the metadata and the data
-            data += '\r\n';
-
-            // Append the text data to our body's request
-            data += objInputAccountForm.value + "\r\n";
-
-            // Once we are done, "close" the body's request
-            data += "--" + boundary + "--";
-
-            // Define what happens on successful data submission
-            XHR.addEventListener( 'load', function( event ) {
-                let json = JSON.parse(XHR.responseText);
-               if(json.success === false && json.strResult != ""){
-                   objUpdatingLand.style.display = "none";
-                   objAgreeUpload.classList.remove("lock-button");
-                   objAlertUploadImg.innerText = json.strResult;
-                   objAlertUploadImg.style.display = "initial";
-               }else if(json.success === true){
-                   if(json.strResult != ""){
-                       objUpdatingLand.style.display = "none";
-                       objAgreeUpload.classList.remove("lock-button");
-                       objMainAvatar.src = json.strResult;
-                       document.getElementById('i-img-ipfs').src = json.strResult;
-                       document.getElementById('i-view-detail').style.display='none';
-                   }else{
-                       objUpdatingLand.style.display = "none";
-                       objAgreeUpload.classList.remove("lock-button");
-                       objMainAvatar.src = "imgs/item-real/avatar-default.png";
-                       document.getElementById('i-img-ipfs').src = "imgs/item-real/avatar-default.png";
-                       document.getElementById('i-view-detail').style.display='none';
-                   }
-               }
-            } );
-
-            // Define what happens in case of error
-            XHR.addEventListener( 'error', function( event ) {
-                console.log( 'Oops! Something went wrong.' +  JSON.stringify(event) );
-            } );
-
-            // Set up our request
-            XHR.open('POST', 'http://localhost:8084/api/account/update/image');
-
-            // Add the required HTTP header to handle a multipart form data POST request
-            XHR.setRequestHeader('Content-Type', 'multipart/form-data; boundary=' + boundary);
-
-            // And finally, send our data.
-            XHR.send(data);
+            var form = $('#fileUploadForm')[0];
+            var data = new FormData(form);
+            $.ajax({
+                type: "POST",
+                enctype: 'multipart/form-data',
+                url: "http://localhost:8084/api/account/update/image",
+                data: data,
+                processData: false,
+                contentType: false,
+                cache: false,
+                timeout: 600000,
+                success: function (data) {
+                    console.log("SUCCESS : ", data);
+                },
+                error: function (e) {
+                    console.log("ERROR : ", e);
+                }
+            });
         }
     });
     document.getElementById("i-btn-update").addEventListener("click", function () {
+        document.getElementById('i-p-alert-private-key').style.display = "none";
         document.getElementById("i-modal").style.display = "block";
     });
 
