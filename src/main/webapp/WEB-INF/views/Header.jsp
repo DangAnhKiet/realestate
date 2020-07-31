@@ -23,7 +23,7 @@
             </c:if>
             <c:if test="${requestScope.role == 'member'}">
                 <li style="border-left: 1px dashed #fff;"><a class="nav-hover"
-                                                             id="i-member-exchanges" href="#">Sàn
+                                                             id="i-member-exchanges" href="/member/exchanges">Sàn
                     giao dịch</a></li>
                 <li style="border-left: 1px dashed #fff;"><a class="nav-hover" id="i-member-land"
                                                              href="/member/manage/land">Quản lí

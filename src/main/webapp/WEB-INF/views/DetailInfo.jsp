@@ -11,6 +11,7 @@
     <div class="row">
         <div class="col-sm-12">
             <jsp:include page="Header.jsp"/>
+
             <div class="card mb-3">
                 <div class="wrap-img-detail">
                     <img class="card-img-top" src="/imgs/item-real/metro-background.png" alt="Card image cap">

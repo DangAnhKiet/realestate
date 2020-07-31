@@ -5,6 +5,7 @@ import com.estate.real.model.enums.Role;
 import com.estate.real.service.inf.AccountService;
 import com.estate.real.service.inf.LandService;
 import com.estate.real.utils.MyFile;
+import com.fasterxml.jackson.annotation.JsonAlias;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -33,16 +34,17 @@ public class LocationController {
     public String login(Model model, HttpSession session) {
         System.out.println("++++++++++++++++++++vao /login location");
         @SuppressWarnings("unchecked")
-        JSONObject jsonSession = (JSONObject) session.getAttribute("MY_SESSION");
-        if (jsonSession == null) {
-            jsonSession = new JSONObject();
+        String strSession = (String) session.getAttribute("MY_SESSION");
+        if (strSession == null) {
+            strSession = "";
         } else {
-            if (jsonSession != null) {
-                if (jsonSession.has("role")) {
-                    if (jsonSession.getString("role").contains(Role.admin.toString())) {
+            if (!strSession.isEmpty()) {
+                JSONObject jsonObject = new JSONObject(strSession);
+                if (jsonObject.has("role")) {
+                    if (jsonObject.getString("role").contains(Role.admin.toString())) {
                         return "redirect:/admin/home";
                     }
-                    if (jsonSession.getString("role").contains(Role.member.toString())) {
+                    if (jsonObject.getString("role").contains(Role.member.toString())) {
                         return "redirect:/member/home";
                     }
                 }
@@ -81,6 +83,11 @@ public class LocationController {
 //                    model.addAttribute("listLands", landService.getAllLand());
                     return "DetailInfo";
                 }
+                if (jsonSession.getString("role").contains(Role.member.toString())) {
+                    model.addAttribute("role",Role.member.toString());
+//                    model.addAttribute("listLands", landService.getAllLand());
+                    return "DetailInfo";
+                }
             }
             httpServletRequest.getSession().invalidate();
             return "redirect:/not-found";
@@ -107,6 +114,26 @@ public class LocationController {
 
     }
 
+    @RequestMapping(value = {"/member/help"}, method = RequestMethod.GET)
+    public String memberHelp(Model model, HttpServletRequest httpServletRequest) {
+        String strSession  = (String) httpServletRequest.getSession().getAttribute("MY_SESSION");
+        if (strSession == null || strSession.isEmpty()) {
+            return "redirect:/login";
+        } else {
+            JSONObject jsonSession  = new JSONObject(strSession);
+            if (jsonSession.has("role")) {
+                if (jsonSession.getString("role").contains(Role.member.toString())) {
+                    model.addAttribute("role",Role.member.toString());
+//                    model.addAttribute("listLands", landService.getAllLand());
+                    return "MemberHelp";
+                }
+            }
+            httpServletRequest.getSession().invalidate();
+            return "redirect:/not-found";
+        }
+
+    }
+
     @RequestMapping(value = {"/admin/manage/land"}, method = RequestMethod.GET)
     public String manageRealOfAdmin(Model model, HttpServletRequest httpServletRequest) {
         String strSession  = (String) httpServletRequest.getSession().getAttribute("MY_SESSION");
@@ -119,6 +146,26 @@ public class LocationController {
                     model.addAttribute("role",Role.admin.toString());
 //                    model.addAttribute("listLands", landService.getAllLand());
                     return "AdminManageLand";
+                }
+            }
+            httpServletRequest.getSession().invalidate();
+            return "redirect:/not-found";
+        }
+
+    }
+
+    @RequestMapping(value = {"/member/manage/land"}, method = RequestMethod.GET)
+    public String manageRealOfMember(Model model, HttpServletRequest httpServletRequest) {
+        String strSession  = (String) httpServletRequest.getSession().getAttribute("MY_SESSION");
+        if (strSession == null || strSession.isEmpty()) {
+            return "redirect:/login";
+        } else {
+            JSONObject jsonSession  = new JSONObject(strSession);
+            if (jsonSession.has("role")) {
+                if (jsonSession.getString("role").contains(Role.member.toString())) {
+                    model.addAttribute("role",Role.member.toString());
+//                    model.addAttribute("listLands", landService.getAllLand());
+                    return "MemberManageLand";
                 }
             }
             httpServletRequest.getSession().invalidate();
@@ -195,6 +242,24 @@ public class LocationController {
                 if (jsonSession.getString("role").contains(Role.admin.toString())) {
                     model.addAttribute("role",Role.admin.toString());
                     return "AdminExchanges";
+                }
+            }
+            request.getSession().invalidate();
+            return "redirect:/not-found";
+        }
+    }
+
+    @RequestMapping(value = {"/member/exchanges"}, method = RequestMethod.GET)
+    public String exchangeForMember(Model model, HttpServletRequest request) {
+        String strSession  = (String) request.getSession().getAttribute("MY_SESSION");
+        if (strSession == null || strSession.isEmpty()) {
+            return "redirect:/login";
+        } else {
+            JSONObject jsonSession  = new JSONObject(strSession);
+            if (jsonSession.has("role")) {
+                if (jsonSession.getString("role").contains(Role.member.toString())) {
+                    model.addAttribute("role",Role.member.toString());
+                    return "MemberExchanges";
                 }
             }
             request.getSession().invalidate();
