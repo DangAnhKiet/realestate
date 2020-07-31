@@ -18,7 +18,7 @@
             <div class="wrap-address">
                 <span><strong>Tài khoản đăng nhập của chủ đất:</strong>
                 </span>
-                <input style="margin: 0px 0px 5px 14px; border-radius: 6px; padding: 5px;" id="i-username" type="text" placeholder="phamvana...">
+                <input style="border: 1px solid #ddd;margin: 0px 0px 5px 14px; padding: 5px;" id="i-username" type="text" placeholder="phamvana...">
                 <input type="button" id="i-btn-update-address" class="button" value="Lấy địa chỉ ví">
                 <div id="i-alert-username" style="display: none" class="alert alert-danger" role="alert">
                     <span id="i-alert-username-content"></span>

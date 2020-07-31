@@ -3,7 +3,7 @@
 <html>
 <jsp:include page="head_tag.jsp">
     <jsp:param name="title" value="Quản lí tài khoản"/>
-    <jsp:param name="link-css-this-page" value="../css/manage-real.css"/>
+    <jsp:param name="link-css-this-page" value="/css/manage-real.css"/>
 </jsp:include>
 
 <body>
@@ -65,6 +65,7 @@
                    </div>
                </a>
            </div>
+           <jsp:include page="Footer.jsp"/>
        </div>
     </div>
 </div>

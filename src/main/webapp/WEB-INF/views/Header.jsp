@@ -3,7 +3,7 @@
 <div class="sticky-top">
     <c:if test="${not empty sessionScope.MY_SESSION}">
         <ul class="nav-home-admin">
-            <a href="/">
+            <a id="i-a-logo-home" href="/">
                 <li><img src="/imgs/item-real/LOGO.png" id="i-logo-dapp" alt="logo-dapp"></li>
             </a>
             <c:if test="${requestScope.role == 'admin'}">
@@ -19,7 +19,7 @@
                         class="nav-hover" id="i-admin-account"
                         href="/admin/manage/account">Quản lí tài khoản</a></li>
                 <li style="border-left: 1px dashed #fff;"><a class="nav-hover" id="i-admin-help"
-                                                             href="/help">Trợ giúp</a></li>
+                                                             href="/admin/help">Trợ giúp</a></li>
             </c:if>
             <c:if test="${requestScope.role == 'member'}">
                 <li style="border-left: 1px dashed #fff;"><a class="nav-hover"
@@ -30,7 +30,7 @@
                     đất</a>
                 </li>
                 <li style="border-left: 1px dashed #fff;"><a class="nav-hover" id="i-member-help"
-                                                             href="/help">Trợ giúp</a></li>
+                                                             href="/member/help">Trợ giúp</a></li>
             </c:if>
             <li class="avatar">
                 <img id="i-img-ipfs" src="https://i.pravatar.cc/300" alt="Avatar">
@@ -59,22 +59,27 @@
     </c:if>
 </div>
 <script type="text/javascript">
-    console.log("vao script header");
-    <%--const regex1 = /\[/;--%>
-    <%--const regex2 = /\]/;--%>
-
     let objImgIpfs = document.getElementById('i-img-ipfs');
     let objHome = document.getElementById("i-home");
+    let objUrlToAdminHome = document.getElementById('i-a-logo-home');
     let url = window.location.href;
+
+    objUrlToAdminHome.addEventListener('click',function () {
+        if(${requestScope.role == 'admin'}){
+            objUrlToAdminHome.href = "/admin/home";
+        }else if(${requestScope.role == 'member'}){
+            objUrlToAdminHome.href = "/member/home";
+        }
+    });
     if (typeof url == 'string') {
         document.getElementById('i-logo-dapp').style.cssText = "border-bottom: none;";
         let listLi = document.getElementsByClassName("nav-hover");
         for (let j = 0; j < listLi.length; j++) {
-            console.log("+++++++++++remove++++++:"+j);
+            console.log("+++++++++++remove++++++:" + j);
             listLi[j].classList.remove("tab-current");
         }
         for (let i = 0; i < listLi.length; i++) {
-            if(url.includes(listLi[i].href)){
+            if (url.includes(listLi[i].href)) {
                 listLi[i].classList.add("tab-current");
                 break;
             }

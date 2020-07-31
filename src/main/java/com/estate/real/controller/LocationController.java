@@ -68,37 +68,43 @@ public class LocationController {
     }
 
     @RequestMapping(value = {"/accounts/detail"}, method = RequestMethod.GET)
-    public String detailInfo(Model model, HttpServletRequest request) {
+    public String detailInfo(Model model, HttpServletRequest httpServletRequest) {
         @SuppressWarnings("unchecked")
-        HashSet<String> hsetSession = (HashSet<String>) request.getSession().getAttribute("MY_SESSION");
-        if (hsetSession == null) {
+        String strSession  = (String) httpServletRequest.getSession().getAttribute("MY_SESSION");
+        if (strSession == null || strSession.isEmpty()) {
             return "redirect:/login";
         } else {
-            for (String i : hsetSession) {
-                if (i.contains(Session.ACCOUNT_LOGIN)) {
-                    String[] arrTemp = i.split("-");
-                    if (arrTemp.length >= 3) {
-                        String role = arrTemp[2];
-                        if (role.contains(Role.member.toString())) {
-                            model.addAttribute("listLands", landService.getAllLand());
-                            return "DetailInfo";
-                        }
-                        if (role.contains(Role.admin.toString())) {
-                            model.addAttribute("listLands", landService.getAllLand());
-                            return "DetailInfo";
-                        }
-                    }
-                    return "redirect:/not-found";
+            JSONObject jsonSession  = new JSONObject(strSession);
+            if (jsonSession.has("role")) {
+                if (jsonSession.getString("role").contains(Role.admin.toString())) {
+                    model.addAttribute("role",Role.admin.toString());
+//                    model.addAttribute("listLands", landService.getAllLand());
+                    return "DetailInfo";
                 }
             }
+            httpServletRequest.getSession().invalidate();
             return "redirect:/not-found";
         }
     }
 
-    @RequestMapping(value = {"/help"}, method = RequestMethod.GET)
-    public String help(Model model) {
-//        model.addAttribute("listLands", landService.getAllLand());
-        return "Help";
+    @RequestMapping(value = {"/admin/help"}, method = RequestMethod.GET)
+    public String help(Model model, HttpServletRequest httpServletRequest) {
+        String strSession  = (String) httpServletRequest.getSession().getAttribute("MY_SESSION");
+        if (strSession == null || strSession.isEmpty()) {
+            return "redirect:/login";
+        } else {
+            JSONObject jsonSession  = new JSONObject(strSession);
+            if (jsonSession.has("role")) {
+                if (jsonSession.getString("role").contains(Role.admin.toString())) {
+                    model.addAttribute("role",Role.admin.toString());
+//                    model.addAttribute("listLands", landService.getAllLand());
+                    return "AdminHelp";
+                }
+            }
+            httpServletRequest.getSession().invalidate();
+            return "redirect:/not-found";
+        }
+
     }
 
     @RequestMapping(value = {"/admin/manage/land"}, method = RequestMethod.GET)
@@ -128,9 +134,22 @@ public class LocationController {
     }
 
     @RequestMapping(value = {"/admin/manage/account"}, method = RequestMethod.GET)
-    public String manageAccount(Model model) {
-//        model.addAttribute("listLands",landService.getAllLand());
-        return "AdminManageAccount";
+    public String manageAccount(Model model, HttpServletRequest httpServletRequest) {
+        String strSession  = (String) httpServletRequest.getSession().getAttribute("MY_SESSION");
+        if (strSession == null || strSession.isEmpty()) {
+            return "redirect:/login";
+        } else {
+            JSONObject jsonSession  = new JSONObject(strSession);
+            if (jsonSession.has("role")) {
+                if (jsonSession.getString("role").contains(Role.admin.toString())) {
+                    model.addAttribute("role",Role.admin.toString());
+//                    model.addAttribute("listLands", landService.getAllLand());
+                    return "AdminManageAccount";
+                }
+            }
+            httpServletRequest.getSession().invalidate();
+            return "redirect:/not-found";
+        }
     }
 
     @RequestMapping(value = {"/admin/account/registry"}, method = RequestMethod.GET)
