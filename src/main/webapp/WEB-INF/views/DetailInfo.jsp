@@ -249,7 +249,10 @@
                 timeout: 600000,
                 success: function (data) {
                     console.log("SUCCESS : ", data);
-                },
+                    document.getElementById('i-main-avatar').src = data.strResult;
+                    document.getElementById('i-view-detail').style.display = "none";
+
+                    },
                 error: function (e) {
                     console.log("ERROR : ", e);
                 }
