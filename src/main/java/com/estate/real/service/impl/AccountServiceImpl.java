@@ -74,7 +74,6 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public String login(HttpServletRequest httpServletRequest, AccountLoginRequest accountLoginRequest) {
-        System.out.println("++++++++++++++++++++return \"api/account/login");
         Account account = accountRepository.findByNameLoginAndStatus(accountLoginRequest.getNameLogin(), AccountStatus.active.toString());
         if (account == null) {
             return StatusLogin.EXIST_ACCOUNT.toString();
@@ -166,14 +165,24 @@ public class AccountServiceImpl implements AccountService {
         if (account == null) {
             return new GeneralResponse(false, "error-nameLogin");
         }
+        String address = "";
         Map<String, Object> updateValues = new HashMap<>();
         if (request.getPrivateKey() != null) {
-            String address = MyWeb3j.getAddress(request.getPrivateKey());
+            try{
+                address = MyWeb3j.getAddress(request.getPrivateKey());
+            }catch (Exception e){
+                System.out.println("Loi update private key, de set address cua member");
+                e.printStackTrace();
+                address = "";
+            }
+            if(address.isEmpty()){
+                return new GeneralResponse(false, "error-private-key");
+            }
             updateValues.put("address", address);
             updateValues.put("privateKey", request.getPrivateKey());
         }
         accountRepository.updateInformation(request.getNameLogin(), updateValues);
-        return new GeneralResponse(true);
+        return new GeneralResponse(true, address);
     }
 
     @Override
@@ -194,9 +203,5 @@ public class AccountServiceImpl implements AccountService {
         }
         accountRepository.updateInformation(request.getNameLogin(), updateValues);
         return new GeneralResponse(true);
-    }
-
-    public static void main(String[] args) {
-        String address = "0xB8c77482e45F1F44dE1745F52C74426C631bDD52";
     }
 }

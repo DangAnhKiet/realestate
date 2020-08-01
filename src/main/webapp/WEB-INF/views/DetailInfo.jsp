@@ -102,7 +102,7 @@
                                 <img style="width: 100px;" src="/imgs/item-real/alert.png">
                             </div>
                             <div class="w3-section w3-center">
-                                <p>Lỗi <span id="i-error-content" style="font-weight: 600;"></span></p>
+                                <p><span id="i-error-content" style="font-weight: 600;"></span></p>
                             </div>
                         </div>
                         <div class="w3-section">
@@ -140,6 +140,8 @@
         document.getElementById('pass').innerText = "******";
         if (stringSession.walletAddress == 'update') {
             document.getElementById('address').innerText = "Bạn cần cập nhật địa chỉ ví để có thể giao dịch mua bán.";
+        }else{
+            document.getElementById('address').innerText = stringSession.walletAddress;
         }
         document.getElementById('phone').innerText = stringSession.numberPhone;
         document.getElementById('email').innerText = stringSession.email;
@@ -148,35 +150,32 @@
         let objButtonUpdatePrivateKey = document.getElementById('i-update-private-key');
         objButtonUpdatePrivateKey.addEventListener('click', function () {
             document.getElementById('i-p-alert-private-key').style.display = "none";
-            if(document.getElementById('i-private-key-input').value.length != 64){
-               document.getElementById('i-p-alert-private-key').innerText ="Khóa riêng tư không đúng. Vui lòng nhập lại";
-               document.getElementById('i-p-alert-private-key').style.display = "block";
+            if (document.getElementById('i-private-key-input').value.length != 64) {
+                document.getElementById('i-p-alert-private-key').innerText = "Khóa riêng tư không đúng. Vui lòng nhập lại";
+                document.getElementById('i-p-alert-private-key').style.display = "block";
 
-            }else{
+            } else {
                 $.ajax({
                     type: "POST",
                     contentType: "application/json",
                     url: 'http://localhost:8084/api/account/privateKey/update',
                     data: JSON.stringify({
-                        "nameLogin":stringSession.userLogin,
-                        "privateKey": document.getElementById('i-private-key-input').value.toLowerCase()
+                        "nameLogin": ""+stringSession.userLogin,
+                        "privateKey": document.getElementById('i-private-key-input').value
                     }),
                     success: function (objResponse) {
-                        if (objResponse.success === false && objResponse.strResult.includes("error-exist")) {
-                            objErrorContent.innerText = "Tài khoản đã tồn tại. Vui lòng chọn một tên khác";
-                            objStatusSuccess.style.display = "none";
-                            objReInput.style.display = "none";
-                            objCloseModal.style.display = "block";
-                            objStatusFail.style.display = "block";
-                            objModal.style.display = "block";
-                        }else{
-                            objStatusSuccess.style.display = "block";
-                            objStatusFail.style.display = "none";
-                            objCloseModal.style.display = "block";
-                            objReInput.style.display = "none";
-                            objModal.style.display = "block";
-                        }
+                        if (objResponse.success === true && objResponse.strResult.includes("0x")) {
+                            document.getElementById('address').innerText = objResponse.strResult;
+                            document.getElementById('i-update-private-key').style.display = "none";
+                            document.getElementById('i-status-success').style.display ="block";
+                        } else {
+                            document.getElementById('i-error-content').innerText =
+                                "Lỗi không thể cập nhật địa chỉ. Xin thử lại một khóa riêng tư khác.";
+                            document.getElementById('i-content-update').style.display = "none";
+                            document.getElementById('i-status-fail').style.display = "block";
+                            document.getElementById('i-update-private-key').style.display = "none";
 
+                        }
                     }
                 });
             }
@@ -204,6 +203,24 @@
             objAlertUploadImg.innerText = "";
             objAlertUploadImg.style.display = "none";
 
+        }
+
+        function updateSession() {
+            $.ajax({
+                type: "POST",
+                enctype: 'multipart/form-data',
+                url: "http://localhost:8084/api/session/update",
+                processData: false,
+                contentType: false,
+                cache: false,
+                timeout: 600000,
+                success: function (data) {
+                    console.log("SUCCESS : ", data);
+                },
+                error: function (e) {
+                    console.log("ERROR : ", e);
+                }
+            });
         }
 
 // Access our form...
@@ -241,7 +258,7 @@
             $.ajax({
                 type: "POST",
                 enctype: 'multipart/form-data',
-                url: "http://localhost:8084/api/account/update/image",
+                url: "\"http://localhost:8084/api/account/update/image",
                 data: data,
                 processData: false,
                 contentType: false,
@@ -250,18 +267,26 @@
                 success: function (data) {
                     console.log("SUCCESS : ", data);
                     document.getElementById('i-main-avatar').src = data.strResult;
+                    document.getElementById('i-img-ipfs').src = data.strResult;
                     document.getElementById('i-view-detail').style.display = "none";
-
-                    },
+                    //Updating current session
+                    updateSession();
+                },
                 error: function (e) {
                     console.log("ERROR : ", e);
                 }
             });
         }
     });
+
     document.getElementById("i-btn-update").addEventListener("click", function () {
         document.getElementById('i-p-alert-private-key').style.display = "none";
+        document.getElementById('i-content-update').style.display = "block";
+        document.getElementById('i-status-fail').style.display = "none";
+        document.getElementById('i-status-success').style.display ="none";
         document.getElementById("i-modal").style.display = "block";
+        document.getElementById('i-update-private-key').style.display = "block";
+
     });
 
 </script>

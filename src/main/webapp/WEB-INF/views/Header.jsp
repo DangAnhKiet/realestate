@@ -33,7 +33,7 @@
                                                              href="/member/help">Trợ giúp</a></li>
             </c:if>
             <li class="avatar">
-                <img id="i-img-ipfs" src="https://i.pravatar.cc/300" alt="Avatar">
+                <img id="i-img-ipfs" src="/imgs/item-real/avatar-default.png" alt="Avatar">
                 <ul class="avatar-detail">
                     <li><a href="/accounts/detail">Thông tin cá nhân</a></li>
                     <li style="border-top: 1px dashed #fff;"><a href="/logout" methods="GET">Đăng
@@ -64,6 +64,13 @@
     let objUrlToAdminHome = document.getElementById('i-a-logo-home');
     let url = window.location.href;
 
+    window.addEventListener('load',function () {
+        if(${not empty sessionScope.MY_SESSION}){
+            let objSession = ${sessionScope.MY_SESSION};
+            objImgIpfs.src = objSession.imgPath;
+            console.log(objSession.imgPath);
+        }
+    });
     objUrlToAdminHome.addEventListener('click',function () {
         if(${requestScope.role == 'admin'}){
             objUrlToAdminHome.href = "/admin/home";

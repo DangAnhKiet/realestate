@@ -15,56 +15,21 @@
 //import java.util.ArrayList;
 //import java.util.List;
 //
-//@Controller
+////@Controller
 ////@RestController
+//
+//@RestController
+//@RequestMapping(value = "api/session")
 //public class SessionController {
-//    @RequestMapping(value = "/", method = RequestMethod.GET)
-//    public String  login(Model model, HttpSession session){
+//    @RequestMapping(value = "/update", method = RequestMethod.GET)
+//    public String  updateSession(Model model, HttpSession session){
 //        @SuppressWarnings("unchecked")
-//        List<String> listUsers = (List<String>) session.getAttribute("MY_SESSION_ACCOUNTS");
-//
-//        if (listUsers == null) {
-//            System.out.println("list null");
-//            listUsers = new ArrayList<>();
+//       HttpSession newSession = session;
+//        if(newSession != null){
+//            String strTemp = (String) newSession.getAttribute("MY_SESSION");
+//            System.out.println(strTemp);
 //        }
-//        System.out.println("chay vao get session");
-//        for (int i = 0; i < listUsers.size(); i++){
-//
-//            System.out.println("thanh vien: "+i+" : "+listUsers.get(i) +"-------"+session.getId());
-//        }
-//        System.out.println("+++++++++++");
-//        model.addAttribute("listUsers", listUsers);
-//        model.addAttribute("sessionId", session.getId());
-////        DefaultRedisMap.entrySet();
-//
-//        model.addAttribute("role", "admin");
 //        return "TestLoginSession";
 //    }
-//    @RequestMapping(value = "/persistMessage", method = RequestMethod.POST)
-//    public String persistMessage(@RequestParam("username") String username,@RequestParam("password") String password, HttpServletRequest request) {
-//        @SuppressWarnings("unchecked")
-//        List<String> listUsers = (List<String>) request.getSession().getAttribute("MY_SESSION_ACCOUNTS");
-//        if (listUsers == null) {
-//            listUsers = new ArrayList<>();
-//            request.getSession().setAttribute("MY_SESSION_MESSAGES", listUsers);
-//        }
-//        listUsers.add(username +"--"+password);
-//        request.getSession().setAttribute("MY_SESSION_ACCOUNTS", listUsers);
-//        System.out.println("chay vao post session");
-//        for (int i = 0; i < listUsers.size(); i++){
 //
-//            System.out.println("thanh vien: "+i+" : "+listUsers.get(i) +"-------"+request.getSession().getId());
-//        }
-//        System.out.println("+++++++++++");
-//        return "redirect:/";
-//    }
-//
-//    @RequestMapping(value = "/destroy", method = RequestMethod.POST)
-//
-//    public String destroySession(HttpServletRequest request){
-//
-//        request.getSession().invalidate();
-//        System.out.println("chay vao destroy session");
-//        return "redirect:/";
-//    }
 //}
