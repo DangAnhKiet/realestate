@@ -72,19 +72,19 @@ public class LocationController {
     @RequestMapping(value = {"/accounts/detail"}, method = RequestMethod.GET)
     public String detailInfo(Model model, HttpServletRequest httpServletRequest) {
         @SuppressWarnings("unchecked")
-        String strSession  = (String) httpServletRequest.getSession().getAttribute("MY_SESSION");
+        String strSession = (String) httpServletRequest.getSession().getAttribute("MY_SESSION");
         if (strSession == null || strSession.isEmpty()) {
             return "redirect:/login";
         } else {
-            JSONObject jsonSession  = new JSONObject(strSession);
+            JSONObject jsonSession = new JSONObject(strSession);
             if (jsonSession.has("role")) {
                 if (jsonSession.getString("role").contains(Role.admin.toString())) {
-                    model.addAttribute("role",Role.admin.toString());
+                    model.addAttribute("role", Role.admin.toString());
 //                    model.addAttribute("listLands", landService.getAllLand());
                     return "DetailInfo";
                 }
                 if (jsonSession.getString("role").contains(Role.member.toString())) {
-                    model.addAttribute("role",Role.member.toString());
+                    model.addAttribute("role", Role.member.toString());
 //                    model.addAttribute("listLands", landService.getAllLand());
                     return "DetailInfo";
                 }
@@ -96,14 +96,14 @@ public class LocationController {
 
     @RequestMapping(value = {"/admin/help"}, method = RequestMethod.GET)
     public String help(Model model, HttpServletRequest httpServletRequest) {
-        String strSession  = (String) httpServletRequest.getSession().getAttribute("MY_SESSION");
+        String strSession = (String) httpServletRequest.getSession().getAttribute("MY_SESSION");
         if (strSession == null || strSession.isEmpty()) {
             return "redirect:/login";
         } else {
-            JSONObject jsonSession  = new JSONObject(strSession);
+            JSONObject jsonSession = new JSONObject(strSession);
             if (jsonSession.has("role")) {
                 if (jsonSession.getString("role").contains(Role.admin.toString())) {
-                    model.addAttribute("role",Role.admin.toString());
+                    model.addAttribute("role", Role.admin.toString());
 //                    model.addAttribute("listLands", landService.getAllLand());
                     return "AdminHelp";
                 }
@@ -116,14 +116,14 @@ public class LocationController {
 
     @RequestMapping(value = {"/member/help"}, method = RequestMethod.GET)
     public String memberHelp(Model model, HttpServletRequest httpServletRequest) {
-        String strSession  = (String) httpServletRequest.getSession().getAttribute("MY_SESSION");
+        String strSession = (String) httpServletRequest.getSession().getAttribute("MY_SESSION");
         if (strSession == null || strSession.isEmpty()) {
             return "redirect:/login";
         } else {
-            JSONObject jsonSession  = new JSONObject(strSession);
+            JSONObject jsonSession = new JSONObject(strSession);
             if (jsonSession.has("role")) {
                 if (jsonSession.getString("role").contains(Role.member.toString())) {
-                    model.addAttribute("role",Role.member.toString());
+                    model.addAttribute("role", Role.member.toString());
 //                    model.addAttribute("listLands", landService.getAllLand());
                     return "MemberHelp";
                 }
@@ -136,14 +136,14 @@ public class LocationController {
 
     @RequestMapping(value = {"/admin/manage/land"}, method = RequestMethod.GET)
     public String manageRealOfAdmin(Model model, HttpServletRequest httpServletRequest) {
-        String strSession  = (String) httpServletRequest.getSession().getAttribute("MY_SESSION");
+        String strSession = (String) httpServletRequest.getSession().getAttribute("MY_SESSION");
         if (strSession == null || strSession.isEmpty()) {
             return "redirect:/login";
         } else {
-            JSONObject jsonSession  = new JSONObject(strSession);
+            JSONObject jsonSession = new JSONObject(strSession);
             if (jsonSession.has("role")) {
                 if (jsonSession.getString("role").contains(Role.admin.toString())) {
-                    model.addAttribute("role",Role.admin.toString());
+                    model.addAttribute("role", Role.admin.toString());
 //                    model.addAttribute("listLands", landService.getAllLand());
                     return "AdminManageLand";
                 }
@@ -156,14 +156,14 @@ public class LocationController {
 
     @RequestMapping(value = {"/member/manage/land"}, method = RequestMethod.GET)
     public String manageRealOfMember(Model model, HttpServletRequest httpServletRequest) {
-        String strSession  = (String) httpServletRequest.getSession().getAttribute("MY_SESSION");
+        String strSession = (String) httpServletRequest.getSession().getAttribute("MY_SESSION");
         if (strSession == null || strSession.isEmpty()) {
             return "redirect:/login";
         } else {
-            JSONObject jsonSession  = new JSONObject(strSession);
+            JSONObject jsonSession = new JSONObject(strSession);
             if (jsonSession.has("role")) {
                 if (jsonSession.getString("role").contains(Role.member.toString())) {
-                    model.addAttribute("role",Role.member.toString());
+                    model.addAttribute("role", Role.member.toString());
 //                    model.addAttribute("listLands", landService.getAllLand());
                     return "MemberManageLand";
                 }
@@ -176,14 +176,14 @@ public class LocationController {
 
     @RequestMapping(value = {"/admin/land/list"}, method = RequestMethod.GET)
     public String showListLand(Model model, HttpServletRequest httpServletRequest) {
-        String strSession  = (String) httpServletRequest.getSession().getAttribute("MY_SESSION");
+        String strSession = (String) httpServletRequest.getSession().getAttribute("MY_SESSION");
         if (strSession == null || strSession.isEmpty()) {
             return "redirect:/login";
         } else {
-            JSONObject jsonSession  = new JSONObject(strSession);
+            JSONObject jsonSession = new JSONObject(strSession);
             if (jsonSession.has("role")) {
                 if (jsonSession.getString("role").contains(Role.admin.toString())) {
-                    model.addAttribute("role",Role.admin.toString());
+                    model.addAttribute("role", Role.admin.toString());
 //                    model.addAttribute("listLands", landService.getAllLand());
                     return "AdminListLand";
                 }
@@ -195,14 +195,14 @@ public class LocationController {
 
     @RequestMapping(value = {"/admin/manage/account"}, method = RequestMethod.GET)
     public String manageAccount(Model model, HttpServletRequest httpServletRequest) {
-        String strSession  = (String) httpServletRequest.getSession().getAttribute("MY_SESSION");
+        String strSession = (String) httpServletRequest.getSession().getAttribute("MY_SESSION");
         if (strSession == null || strSession.isEmpty()) {
             return "redirect:/login";
         } else {
-            JSONObject jsonSession  = new JSONObject(strSession);
+            JSONObject jsonSession = new JSONObject(strSession);
             if (jsonSession.has("role")) {
                 if (jsonSession.getString("role").contains(Role.admin.toString())) {
-                    model.addAttribute("role",Role.admin.toString());
+                    model.addAttribute("role", Role.admin.toString());
 //                    model.addAttribute("listLands", landService.getAllLand());
                     return "AdminManageAccount";
                 }
@@ -213,29 +213,41 @@ public class LocationController {
     }
 
     @RequestMapping(value = {"/admin/account/registry"}, method = RequestMethod.GET)
-    public String registry(Model model) {
-        //Get api key firebase
-        String apiKeyFirebase = MyFile.RealFromFile(MyFile.API_KEY_FIREBASE);
-//        List<Account> listAccounts = accountService.getAllByStatus()
-        if (apiKeyFirebase != null && !apiKeyFirebase.isEmpty()) {
-            model.addAttribute("apiKeyFirebase", apiKeyFirebase);
+    public String registry(Model model, HttpServletRequest httpServletRequest) {
+        String strSession = (String) httpServletRequest.getSession().getAttribute("MY_SESSION");
+        if (strSession == null || strSession.isEmpty()) {
+            return "redirect:/login";
         } else {
-            model.addAttribute("apiKeyFirebase", "");
+            JSONObject jsonSession = new JSONObject(strSession);
+            if (jsonSession.has("role")) {
+                if (jsonSession.getString("role").contains(Role.admin.toString())) {
+                    model.addAttribute("role", Role.admin.toString());
+                    //Get api key firebase
+                    String apiKeyFirebase = MyFile.RealFromFile(MyFile.API_KEY_FIREBASE);
+                    if (apiKeyFirebase != null && !apiKeyFirebase.isEmpty()) {
+                        model.addAttribute("apiKeyFirebase", apiKeyFirebase);
+                    } else {
+                        model.addAttribute("apiKeyFirebase", "");
+                    }
+                    return "AdminRegistry";
+                }
+            }
+            httpServletRequest.getSession().invalidate();
+            return "redirect:/not-found";
         }
-        return "AdminRegistry";
     }
 
     @RequestMapping(value = {"/member/home"}, method = RequestMethod.GET)
     public String member(Model model, HttpServletRequest request) {
         @SuppressWarnings("unchecked")
-        String strSession  = (String) request.getSession().getAttribute("MY_SESSION");
+        String strSession = (String) request.getSession().getAttribute("MY_SESSION");
         if (strSession == null || strSession.isEmpty()) {
             return "redirect:/login";
         } else {
-            JSONObject jsonSession  = new JSONObject(strSession);
+            JSONObject jsonSession = new JSONObject(strSession);
             if (jsonSession.has("role")) {
                 if (jsonSession.getString("role").contains(Role.member.toString())) {
-                    model.addAttribute("role",Role.member.toString());
+                    model.addAttribute("role", Role.member.toString());
                     return "MemberHome";
                 }
             }
@@ -246,14 +258,14 @@ public class LocationController {
 
     @RequestMapping(value = {"/admin/exchanges"}, method = RequestMethod.GET)
     public String exchangeForAdmin(Model model, HttpServletRequest request) {
-        String strSession  = (String) request.getSession().getAttribute("MY_SESSION");
+        String strSession = (String) request.getSession().getAttribute("MY_SESSION");
         if (strSession == null || strSession.isEmpty()) {
             return "redirect:/login";
         } else {
-            JSONObject jsonSession  = new JSONObject(strSession);
+            JSONObject jsonSession = new JSONObject(strSession);
             if (jsonSession.has("role")) {
                 if (jsonSession.getString("role").contains(Role.admin.toString())) {
-                    model.addAttribute("role",Role.admin.toString());
+                    model.addAttribute("role", Role.admin.toString());
                     return "AdminExchanges";
                 }
             }
@@ -264,14 +276,14 @@ public class LocationController {
 
     @RequestMapping(value = {"/member/exchanges"}, method = RequestMethod.GET)
     public String exchangeForMember(Model model, HttpServletRequest request) {
-        String strSession  = (String) request.getSession().getAttribute("MY_SESSION");
+        String strSession = (String) request.getSession().getAttribute("MY_SESSION");
         if (strSession == null || strSession.isEmpty()) {
             return "redirect:/login";
         } else {
-            JSONObject jsonSession  = new JSONObject(strSession);
+            JSONObject jsonSession = new JSONObject(strSession);
             if (jsonSession.has("role")) {
                 if (jsonSession.getString("role").contains(Role.member.toString())) {
-                    model.addAttribute("role",Role.member.toString());
+                    model.addAttribute("role", Role.member.toString());
                     return "MemberExchanges";
                 }
             }
@@ -282,14 +294,14 @@ public class LocationController {
 
     @RequestMapping(value = {"/admin/home"}, method = RequestMethod.GET)
     public String homeAdmin(Model model, HttpServletRequest request) {
-        String strSession  = (String) request.getSession().getAttribute("MY_SESSION");
+        String strSession = (String) request.getSession().getAttribute("MY_SESSION");
         if (strSession == null || strSession.isEmpty()) {
             return "redirect:/login";
         } else {
-            JSONObject jsonSession  = new JSONObject(strSession);
+            JSONObject jsonSession = new JSONObject(strSession);
             if (jsonSession.has("role")) {
                 if (jsonSession.getString("role").contains(Role.admin.toString())) {
-                    model.addAttribute("role",Role.admin.toString());
+                    model.addAttribute("role", Role.admin.toString());
                     return "AdminHome";
                 }
             }
@@ -306,14 +318,14 @@ public class LocationController {
 
     @RequestMapping(value = {"/admin/land/add"}, method = RequestMethod.GET)
     public String adminAddLand(Model model, HttpServletRequest httpServletRequest) {
-        String strSession  = (String) httpServletRequest.getSession().getAttribute("MY_SESSION");
+        String strSession = (String) httpServletRequest.getSession().getAttribute("MY_SESSION");
         if (strSession == null || strSession.isEmpty()) {
             return "redirect:/login";
         } else {
-            JSONObject jsonSession  = new JSONObject(strSession);
+            JSONObject jsonSession = new JSONObject(strSession);
             if (jsonSession.has("role")) {
                 if (jsonSession.getString("role").contains(Role.admin.toString())) {
-                    model.addAttribute("role",Role.admin.toString());
+                    model.addAttribute("role", Role.admin.toString());
                     return "AdminAddLand";
                 }
             }

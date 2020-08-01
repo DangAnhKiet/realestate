@@ -25,7 +25,7 @@
                                    type="button"><span style="margin-left: 3px">Tìm</span></button>
                        </div>
                </div>
-              <div> <a href="/admin/registry"><button type="button" class="btn btn-primary btn-lg">Đăng kí mới</button></a></div>
+              <div> <a href="/admin/account/registry"><button type="button" class="button">Đăng kí mới</button></a></div>
            </nav>
            <div class="list-group list-account">
                <a href="#" class="list-group-item list-group-item-action flex-column align-items-start item-active">

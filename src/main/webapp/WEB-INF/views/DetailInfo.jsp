@@ -258,7 +258,7 @@
             $.ajax({
                 type: "POST",
                 enctype: 'multipart/form-data',
-                url: "\"http://localhost:8084/api/account/update/image",
+                url: "http://localhost:8084/api/account/update/image",
                 data: data,
                 processData: false,
                 contentType: false,
