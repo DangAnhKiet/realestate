@@ -201,7 +201,13 @@ public class AccountServiceImpl implements AccountService {
             String passwordNew = Base64.getEncoder().encodeToString(request.getNewPass().getBytes());
             updateValues.put("password", passwordNew);
         }
+
+        String pass = updateValues.get("password").toString();
+        byte[] bytes = Base64.getDecoder().decode(pass.getBytes());
+
+        String passRaw = new String(bytes);
+
         accountRepository.updateInformation(request.getNameLogin(), updateValues);
-        return new GeneralResponse(true, updateValues.get("password").toString());
+        return new GeneralResponse(true, passRaw);
     }
 }

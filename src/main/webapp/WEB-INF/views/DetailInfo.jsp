@@ -242,7 +242,7 @@
         let objButtonUpdatePassword = document.getElementById('i-update-password');
         objButtonUpdatePassword.addEventListener('click', function () {
             document.getElementById('i-p-alert-password-key').style.display = "none";
-            if (document.getElementById('i-password-key-input').value.length > 20) {
+            if (document.getElementById('i-password-key-input-new').value.length > 20) {
                 document.getElementById('i-p-alert-password-key').innerText = "Mật khẩu quá dài. Vui lòng nhập lại";
                 document.getElementById('i-p-alert-password-key').style.display = "block";
 
@@ -263,7 +263,7 @@
                             document.getElementById('i-status-success-password').style.display = "block";
                         } else {
                             document.getElementById('i-error-content-password').innerText =
-                                "Lỗi không thể cập nhật mật khẩu.Vui lòng xin thử lại.";
+                                "Mật khẩu cũ không khớp. Vui lòng xin thử lại.";
                             document.getElementById('i-content-update-password').style.display = "none";
                             document.getElementById('i-status-fail-password').style.display = "block";
                             document.getElementById('i-update-password').style.display = "none";
