@@ -11,4 +11,5 @@ import java.util.List;
 public interface LandRepository extends MongoRepository<Land, ObjectId>, LandRepositoryExtend {
     @Query(value = "{'addressHolder':?0}")
     public List<Land> getAllByAddressHolder(String addressHolder);
+
 }
