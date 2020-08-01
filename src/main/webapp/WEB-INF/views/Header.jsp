@@ -51,6 +51,7 @@
                                                     src="/imgs/item-real/logo2.png" alt="logo-dapp">
                 </div>
             </a>
+            <h2 style="color: #ffffff">KH REALESTATE BLOCKCHAIN</h2>
             <a style="margin-right: 1%;" href="/login">
                 <div><input type="button" class="button" value="ĐĂNG NHẬP"></div>
             </a>
@@ -68,7 +69,6 @@
         if(${not empty sessionScope.MY_SESSION}){
             let objSession = ${sessionScope.MY_SESSION};
             objImgIpfs.src = objSession.imgPath;
-            console.log(objSession.imgPath);
         }
     });
     objUrlToAdminHome.addEventListener('click',function () {

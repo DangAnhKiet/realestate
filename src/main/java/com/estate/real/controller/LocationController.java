@@ -2,6 +2,8 @@ package com.estate.real.controller;
 
 import com.estate.real.contanst.Session;
 import com.estate.real.model.enums.Role;
+import com.estate.real.model.request.LandRequest;
+import com.estate.real.model.response.LandResponse;
 import com.estate.real.service.inf.AccountService;
 import com.estate.real.service.inf.LandService;
 import com.estate.real.utils.MyFile;
@@ -15,7 +17,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 @Controller
 public class LocationController {
@@ -55,8 +59,27 @@ public class LocationController {
     }
 
     @RequestMapping(value = {"/"}, method = RequestMethod.GET)
-    public String home() {
+    public String home(Model model)
+    {
+        List<LandResponse> landResponseList = landService.getAllLand();
+        if(landResponseList != null && landResponseList.size() > 0){
+            model.addAttribute("landResponseList",landResponseList);
+        }else{
+            model.addAttribute("landResponseList","null");
+        }
         return "Home";
+    }
+
+    @RequestMapping(value = {"/land"}, method = RequestMethod.GET)
+    public String landDetail(Model model)
+    {
+//        List<LandResponse> landResponseList = landService.getAllLand();
+//        if(landResponseList != null && landResponseList.size() > 0){
+//            model.addAttribute("landResponseList",landResponseList);
+//        }else{
+//            model.addAttribute("landResponseList","null");
+//        }
+        return "LandDetail";
     }
 
     @RequestMapping(value = {"/test"}, method = RequestMethod.GET)

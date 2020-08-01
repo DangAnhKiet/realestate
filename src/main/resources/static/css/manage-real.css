@@ -6,7 +6,9 @@ body a {
     pointer-events: none;
     background-color: #ddd !important;
 }
-
+.my-card-home:hover{
+    border: 2px dashed #EEA738;
+}
 .button-spec{
     font-weight: 600 !important;
     background-color: #EEA738 !important;
@@ -33,6 +35,21 @@ body a {
 .button-inside:hover{
     color: #ffffff;
     background-color: #000000;
+}
+.button-inside-list{
+    text-align: center;
+    background-color: #EEA738;
+    border: none;
+    color: #000000;
+    cursor: pointer;
+    transition: .2s;
+    width: 120px;
+    padding: 0.5%;
+    margin: 0.5%;
+}
+.button-inside-list:hover{
+    color: #ffffff;
+    background-color: #000000!important;
 }
 
 .button {
@@ -222,7 +239,7 @@ body a {
 .textWithBlurredBg {
     display: inline-block;
     position: relative;
-    width: 261px;
+    width: 367px;
     margin-bottom: 4px;
 }
 
@@ -561,13 +578,18 @@ body a {
     transition: .3s;
 }
 
-.list-account a:hover {
-    background-color: #EEA738;
+.list-account div:hover {
+    /*background-color: #EEA738;*/
+    background-color: #dddddd;
 }
 
 .wrap-accounts .bg-image {
     height: 200px;
     background-image: url("/imgs/item-real/background-building5.png");
+}
+.wrap-accounts .home {
+    height: 200px;
+    background-image: url("/imgs/item-real/background-building8.png");
 }
 
 .wrap-accounts .title {

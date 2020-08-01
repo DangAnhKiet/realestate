@@ -50,7 +50,7 @@ public class RestAccountController {
         }
     }
 
-    @RequestMapping(value = "/get/name", method = RequestMethod.GET)
+    @RequestMapping(value = "/get/name", method = RequestMethod.POST)
     public String getAccountByNameLogin(@RequestParam String name) {
         Account account = accountService.getAccountByNameLogin(name);
         if(account != null){
