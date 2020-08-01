@@ -192,7 +192,7 @@ public class AccountServiceImpl implements AccountService {
             return new GeneralResponse(false, "error-nameLogin");
         }
         String passwordOld = Base64.getEncoder().encodeToString(request.getOldPass().getBytes());
-        if (account.getPassword().equals(passwordOld)) {
+        if (!account.getPassword().equals(passwordOld)) {
             return new GeneralResponse(false, "error-password");
         }
 
@@ -202,6 +202,6 @@ public class AccountServiceImpl implements AccountService {
             updateValues.put("password", passwordNew);
         }
         accountRepository.updateInformation(request.getNameLogin(), updateValues);
-        return new GeneralResponse(true);
+        return new GeneralResponse(true, updateValues.get("password").toString());
     }
 }

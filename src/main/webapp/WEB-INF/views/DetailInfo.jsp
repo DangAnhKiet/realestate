@@ -24,11 +24,17 @@
                 <div class="card-body">
                     <h5 class="card-title">Thông tin cá nhân: <span></span></h5>
                     <p class="card-text"><span class="my-card-text">Họ tên:</span> <span id="name"></span></p>
-                    <p class="card-text"><span class="my-card-text">Tài khoản đăng nhập:</span><span id="login"></span></p>
-                    <p class="card-text"><span class="my-card-text">Mật khẩu: </span><span id="pass"></span></p>
+                    <p class="card-text"><span class="my-card-text">Tài khoản đăng nhập:</span><span id="login"></span>
+                    </p>
+                    <p class="card-text"><span class="my-card-text">Mật khẩu: </span><span class="alert alert-warning"
+                                                                                           id="pass"></span>
+                        <button id="i-btn-update-password" class="button-spec">CẬP NHẬT MẬT KHẨU</button>
+
+                    </p>
                     <p class="card-text"><span class="my-card-text">Điện thoại:</span> <span id="phone"></span></p>
-                    <p class="card-text"><span class="my-card-text">Địa chỉ ví tiền:</span><span class="alert alert-warning" id="address"></span>
-                        <button id="i-btn-update" class="button-spec">CẬP NHẬT</button>
+                    <p class="card-text"><span class="my-card-text">Địa chỉ ví tiền:</span><span
+                            class="alert alert-warning" id="address"></span>
+                        <button id="i-btn-update" class="button-spec">CẬP NHẬT KHÓA</button>
                     </p>
                     <p class="card-text">Địa chỉ email: <span id="email"></span></p>
                     <%--                    <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>--%>
@@ -124,6 +130,57 @@
                 </div>
             </div>
             <%--        End popup--%>
+            <%--            Modal update password--%>
+            <div class="w3-container">
+                <div id="i-modal-password" class="w3-modal">
+                    <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:800px">
+                        <div id="i-content-update-password">
+                            <div class="w3-center"><br>
+                                <h3>Cập nhật mật khẩu</h3> <br>
+                                <strong>Nhập mật khẩu cũ</strong>
+                                <input style="width: 66%; margin-bottom: 2px;" id="i-password-key-input" type="text"
+                                       placeholder="mat khau cu...">
+                                <br/>
+                                <strong>Nhập mật Khẩu mới</strong>
+                                <input style="width: 66%; margin-bottom: 2px;" id="i-password-key-input-new" type="text"
+                                       placeholder="mat khau moi...">
+                                <p style="display: none" id="i-p-alert-password-key" class="alert alert-danger"></p>
+                            </div>
+                        </div>
+                        <div id="i-status-success-password" style="display: none">
+                            <div class="w3-center"><br>
+                                <h3>Cập nhật mật khẩu thành công</h3>
+                                <img style="width: 30%; padding: 14px;" id="i-img-uploaded-password"
+                                     src="/imgs/item-real/status-success.png">
+                            </div>
+                        </div>
+                        <div id="i-status-fail-password" style="display: none">
+                            <div class="w3-center"><br>
+                                <img style="width: 100px;" src="/imgs/item-real/alert.png">
+                            </div>
+                            <div class="w3-section w3-center">
+                                <p><span id="i-error-content-password" style="font-weight: 600;"></span></p>
+                            </div>
+                        </div>
+                        <div class="w3-section">
+                            <div style="display: flex; justify-content: flex-end; padding-right: 10px;">
+                                <hr>
+                                <button id="i-close-modal-password"
+                                        onclick="document.getElementById('i-modal-password').style.display='none'"
+                                        type="button"
+                                        class="button">Đóng
+                                </button>
+                                <button id="i-update-password" style="margin-right: 3px;"
+                                        type="button"
+                                        class="button">Cập nhật
+                                </button>
+                                <hr>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <%--        End popup--%>
             <jsp:include page="Footer.jsp"/>
         </div>
     </div>
@@ -181,7 +238,43 @@
             }
         });
         //End update private key
+        //Update password
+        let objButtonUpdatePassword = document.getElementById('i-update-password');
+        objButtonUpdatePassword.addEventListener('click', function () {
+            document.getElementById('i-p-alert-password-key').style.display = "none";
+            if (document.getElementById('i-password-key-input').value.length > 20) {
+                document.getElementById('i-p-alert-password-key').innerText = "Mật khẩu quá dài. Vui lòng nhập lại";
+                document.getElementById('i-p-alert-password-key').style.display = "block";
+
+            } else {
+                $.ajax({
+                    type: "POST",
+                    contentType: "application/json",
+                    url: 'http://localhost:8084/api/account/password/change',
+                    data: JSON.stringify({
+                        "nameLogin": "" + stringSession.userLogin,
+                        "oldPass": document.getElementById('i-password-key-input').value,
+                        "newPass": document.getElementById('i-password-key-input-new').value
+                    }),
+                    success: function (objResponse) {
+                        if (objResponse.success === true) {
+                            document.getElementById('pass').innerText = objResponse.strResult;
+                            document.getElementById('i-update-password').style.display = "none";
+                            document.getElementById('i-status-success-password').style.display = "block";
+                        } else {
+                            document.getElementById('i-error-content-password').innerText =
+                                "Lỗi không thể cập nhật mật khẩu.Vui lòng xin thử lại.";
+                            document.getElementById('i-content-update-password').style.display = "none";
+                            document.getElementById('i-status-fail-password').style.display = "block";
+                            document.getElementById('i-update-password').style.display = "none";
+
+                        }
+                    }
+                });
+            }
+        });
     });
+    // end update password
     window.addEventListener(('load'), function () {
         let objOpenUpload = document.getElementById('openUpload');
         let objInputUpload = document.getElementById('imgUpload');
@@ -283,10 +376,19 @@
         document.getElementById('i-p-alert-private-key').style.display = "none";
         document.getElementById('i-content-update').style.display = "block";
         document.getElementById('i-status-fail').style.display = "none";
-        document.getElementById('i-status-success').style.display ="none";
+        document.getElementById('i-status-success').style.display = "none";
         document.getElementById("i-modal").style.display = "block";
         document.getElementById('i-update-private-key').style.display = "block";
 
+    });
+
+    document.getElementById("i-btn-update-password").addEventListener("click", function () {
+        document.getElementById('i-p-alert-password-key').style.display = "none";
+        document.getElementById('i-content-update-password').style.display = "block";
+        document.getElementById('i-status-fail-password').style.display = "none";
+        document.getElementById('i-status-success-password').style.display = "none";
+        document.getElementById("i-modal-password").style.display = "block";
+        document.getElementById('i-update-password').style.display = "block";
     });
 
 </script>
