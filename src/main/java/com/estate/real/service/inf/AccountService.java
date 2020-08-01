@@ -22,4 +22,6 @@ public interface AccountService {
     public GeneralResponse register(AccountRegisterRequest registerRequest);
 
     public GeneralResponse updatePrivateKey(ChangePrivateKeyRequest request);
+
+    public GeneralResponse changePassword(ChangePasswordRequest request);
 }

@@ -11,6 +11,7 @@ import com.estate.real.model.response.GeneralResponse;
 import com.estate.real.service.inf.AccountService;
 import com.estate.real.utils.MyDate;
 import com.estate.real.utils.MyFile;
+import com.estate.real.utils.MyWeb3j;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -163,11 +164,33 @@ public class AccountServiceImpl implements AccountService {
     public GeneralResponse updatePrivateKey(ChangePrivateKeyRequest request) {
         Account account = accountRepository.findByNameLogin(request.getNameLogin(), Role.member.toString());
         if (account == null) {
-            return new GeneralResponse(false, "error-password");
+            return new GeneralResponse(false, "error-nameLogin");
         }
         Map<String, Object> updateValues = new HashMap<>();
         if (request.getPrivateKey() != null) {
+            String address = MyWeb3j.getAddress(request.getPrivateKey());
+            updateValues.put("address", address);
             updateValues.put("privateKey", request.getPrivateKey());
+        }
+        accountRepository.updateInformation(request.getNameLogin(), updateValues);
+        return new GeneralResponse(true);
+    }
+
+    @Override
+    public GeneralResponse changePassword(ChangePasswordRequest request) {
+        Account account = accountRepository.findByNameLogin(request.getNameLogin(), Role.member.toString());
+        if (account == null) {
+            return new GeneralResponse(false, "error-nameLogin");
+        }
+        String passwordOld = Base64.getEncoder().encodeToString(request.getOldPass().getBytes());
+        if (account.getPassword().equals(passwordOld)) {
+            return new GeneralResponse(false, "error-password");
+        }
+
+        Map<String, Object> updateValues = new HashMap<>();
+        if (request.getNewPass() != null) {
+            String passwordNew = Base64.getEncoder().encodeToString(request.getNewPass().getBytes());
+            updateValues.put("password", passwordNew);
         }
         accountRepository.updateInformation(request.getNameLogin(), updateValues);
         return new GeneralResponse(true);

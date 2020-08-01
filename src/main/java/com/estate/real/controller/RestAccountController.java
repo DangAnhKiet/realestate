@@ -4,6 +4,7 @@ import com.estate.real.document.Account;
 import com.estate.real.model.enums.StatusLogin;
 import com.estate.real.model.request.AccountLoginRequest;
 import com.estate.real.model.request.AccountRequest;
+import com.estate.real.model.request.ChangePasswordRequest;
 import com.estate.real.model.request.ChangePrivateKeyRequest;
 import com.estate.real.model.response.GeneralResponse;
 import com.estate.real.service.inf.AccountService;
@@ -75,5 +76,10 @@ public class RestAccountController {
     @RequestMapping(value = "/privateKey/update", method = RequestMethod.POST)
     public GeneralResponse updatePrivateKey(@RequestBody ChangePrivateKeyRequest request) {
         return accountService.updatePrivateKey(request);
+    }
+
+    @RequestMapping(value = "/password/change", method = RequestMethod.POST)
+    public GeneralResponse changePassword(@RequestBody ChangePasswordRequest request) {
+        return accountService.changePassword(request);
     }
 }
