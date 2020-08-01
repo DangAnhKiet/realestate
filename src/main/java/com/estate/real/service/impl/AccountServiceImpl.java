@@ -32,7 +32,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public GeneralResponse addAccount(AccountRequest request) {
-        Account accountTemp = accountRepository.findByNameLogin(request.getNameLogin(), AccountStatus.active.toString());
+        Account accountTemp = accountRepository.findByNameLoginAndStatus(request.getNameLogin(), AccountStatus.active.toString());
         if (accountTemp != null) {
             return new GeneralResponse(false, "error-exist");
         }
@@ -75,7 +75,7 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public String login(HttpServletRequest httpServletRequest, AccountLoginRequest accountLoginRequest) {
         System.out.println("++++++++++++++++++++return \"api/account/login");
-        Account account = accountRepository.findByNameLogin(accountLoginRequest.getNameLogin(), AccountStatus.active.toString());
+        Account account = accountRepository.findByNameLoginAndStatus(accountLoginRequest.getNameLogin(), AccountStatus.active.toString());
         if (account == null) {
             return StatusLogin.EXIST_ACCOUNT.toString();
         }
@@ -126,12 +126,12 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Account getAccountByNameLogin(String nameLogin) {
-        return accountRepository.findByNameLogin(nameLogin, AccountStatus.active.toString());
+        return accountRepository.findByNameLoginAndStatus(nameLogin, AccountStatus.active.toString());
     }
 
     @Override
     public GeneralResponse updateImage(ImageRequest request) {
-        Account account = accountRepository.findByNameLogin(request.getNameLogin(), AccountStatus.active.toString());
+        Account account = accountRepository.findByNameLoginAndStatus(request.getNameLogin(), AccountStatus.active.toString());
         if (account == null) {
             return new GeneralResponse(false);
         }
@@ -144,7 +144,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public GeneralResponse register(AccountRegisterRequest registerRequest) {
-        Account account = accountRepository.findByNameLogin(registerRequest.getNameLogin(), AccountStatus.active.toString());
+        Account account = accountRepository.findByNameLoginAndStatus(registerRequest.getNameLogin(), AccountStatus.active.toString());
         if (account != null) {
             return new GeneralResponse(false, "Tài khoản đã tồn tại!");
         }
@@ -162,7 +162,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public GeneralResponse updatePrivateKey(ChangePrivateKeyRequest request) {
-        Account account = accountRepository.findByNameLogin(request.getNameLogin(), Role.member.toString());
+        Account account = accountRepository.findByNameLoginAndRole(request.getNameLogin(), Role.member.toString());
         if (account == null) {
             return new GeneralResponse(false, "error-nameLogin");
         }
@@ -178,7 +178,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public GeneralResponse changePassword(ChangePasswordRequest request) {
-        Account account = accountRepository.findByNameLogin(request.getNameLogin(), Role.member.toString());
+        Account account = accountRepository.findByNameLoginAndRole(request.getNameLogin(), Role.member.toString());
         if (account == null) {
             return new GeneralResponse(false, "error-nameLogin");
         }
@@ -194,5 +194,9 @@ public class AccountServiceImpl implements AccountService {
         }
         accountRepository.updateInformation(request.getNameLogin(), updateValues);
         return new GeneralResponse(true);
+    }
+
+    public static void main(String[] args) {
+        String address = "0xB8c77482e45F1F44dE1745F52C74426C631bDD52";
     }
 }
