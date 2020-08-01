@@ -2,7 +2,6 @@ package com.estate.real.Repository.inf;
 
 import com.estate.real.Repository.extend.AccountRepositoryExtend;
 import com.estate.real.document.Account;
-import com.estate.real.model.enums.AccountStatus;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
@@ -16,4 +15,7 @@ public interface AccountRepository extends MongoRepository<Account, ObjectId>, A
 
     @Query(value = "{'nameLogin':?0,'status':?1}")
     public Account findByNameLogin(String nameLogin, String status);
+
+    @Query(value = "{'address':?0}")
+    public Account findByAddress(String address);
 }

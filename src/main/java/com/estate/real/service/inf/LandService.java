@@ -17,4 +17,6 @@ public interface LandService {
     public List<LandResponse> getAllLand();
 
     public List<LandResponse> getFilterLand(LandFilterRequest request);
+
+    public List<Land> getAllLandByAddressHolder(String addressHolder);
 }

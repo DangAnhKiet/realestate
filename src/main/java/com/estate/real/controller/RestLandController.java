@@ -1,17 +1,14 @@
 package com.estate.real.controller;
 
+import com.estate.real.document.Land;
 import com.estate.real.model.request.LandFilterRequest;
 import com.estate.real.model.request.LandPagingRequest;
 import com.estate.real.model.request.LandRequest;
 import com.estate.real.model.response.GeneralResponse;
 import com.estate.real.model.response.LandResponse;
 import com.estate.real.service.inf.LandService;
-import com.estate.real.utils.LandUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -34,5 +31,10 @@ public class RestLandController {
     @RequestMapping(value = "/filter", method = RequestMethod.POST)
     public List<LandResponse> add(@RequestBody LandFilterRequest request) {
         return landService.getFilterLand(request);
+    }
+
+    @RequestMapping(value = "/address", method = RequestMethod.POST)
+    public List<Land> add(@RequestParam String address) {
+        return landService.getAllLandByAddressHolder(address);
     }
 }

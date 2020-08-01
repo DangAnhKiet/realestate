@@ -1,7 +1,9 @@
 package com.estate.real.service.impl;
 
+import com.estate.real.Repository.inf.AccountRepository;
 import com.estate.real.Repository.inf.LandRepository;
 import com.estate.real.contract.ManageRealEsate;
+import com.estate.real.document.Account;
 import com.estate.real.document.Land;
 import com.estate.real.model.enums.LandStatus;
 import com.estate.real.model.request.LandFilterRequest;
@@ -14,10 +16,9 @@ import com.estate.real.utils.MyWeb3j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.web3j.protocol.core.DefaultBlockParameterName;
-import org.web3j.protocol.core.methods.response.*;
+import org.web3j.protocol.core.methods.response.TransactionReceipt;
 
 import java.math.BigInteger;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,6 +28,9 @@ public class LandServiceImpl implements LandService {
 
     @Autowired
     LandRepository landRepository;
+
+    @Autowired
+    AccountRepository accountRepository;
 
     @Override
     public GeneralResponse addLand(LandRequest request) {
@@ -101,5 +105,14 @@ public class LandServiceImpl implements LandService {
             return lands.stream().map(LandResponse::new).collect(Collectors.toList());
         }
         return landResponses;
+    }
+
+    @Override
+    public List<Land> getAllLandByAddressHolder(String addressHolder) {
+        Account account = accountRepository.findByAddress(addressHolder);
+        if (account == null) {
+            return null;
+        }
+        return landRepository.getAllByAddressHolder(addressHolder);
     }
 }
