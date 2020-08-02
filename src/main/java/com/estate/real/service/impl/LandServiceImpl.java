@@ -9,6 +9,7 @@ import com.estate.real.model.enums.LandStatus;
 import com.estate.real.model.request.LandFilterRequest;
 import com.estate.real.model.request.LandPagingRequest;
 import com.estate.real.model.request.LandRequest;
+import com.estate.real.model.request.TransactionRequest;
 import com.estate.real.model.response.GeneralResponse;
 import com.estate.real.model.response.LandResponse;
 import com.estate.real.service.inf.LandService;
@@ -19,7 +20,6 @@ import org.springframework.stereotype.Service;
 import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -136,6 +136,11 @@ public class LandServiceImpl implements LandService {
 
             return landResponse;
         }
+        return null;
+    }
+
+    @Override
+    public GeneralResponse handleTransaction(TransactionRequest request) {
         return null;
     }
 }

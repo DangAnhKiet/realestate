@@ -4,6 +4,7 @@ import com.estate.real.document.Land;
 import com.estate.real.model.request.LandFilterRequest;
 import com.estate.real.model.request.LandPagingRequest;
 import com.estate.real.model.request.LandRequest;
+import com.estate.real.model.request.TransactionRequest;
 import com.estate.real.model.response.GeneralResponse;
 import com.estate.real.model.response.LandResponse;
 import com.estate.real.service.inf.LandService;
@@ -36,5 +37,10 @@ public class RestLandController {
     @RequestMapping(value = "/address", method = RequestMethod.POST)
     public List<Land> getAllLandByAddressHolder(@RequestParam String address) {
         return landService.getAllLandByAddressHolder(address);
+    }
+
+    @RequestMapping(value = "/transaction", method = RequestMethod.POST)
+    public GeneralResponse getAllLandByAddressHolder(@RequestBody TransactionRequest request) {
+        return landService.handleTransaction(request);
     }
 }
