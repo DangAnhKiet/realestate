@@ -12,6 +12,6 @@ public interface LandRepository extends MongoRepository<Land, ObjectId>, LandRep
     @Query(value = "{'addressHolder':?0}")
     public List<Land> getAllByAddressHolder(String addressHolder);
 
-    @Query(value = "{'landId':?0}")
-    public Land getByLandId(int landId);
+    @Query(value = "{'landId':?0, 'status':?1}")
+    public Land getByLandId(int landId,String status);
 }

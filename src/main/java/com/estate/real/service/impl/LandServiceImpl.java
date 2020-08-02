@@ -12,6 +12,7 @@ import com.estate.real.model.request.LandRequest;
 import com.estate.real.model.response.GeneralResponse;
 import com.estate.real.model.response.LandResponse;
 import com.estate.real.service.inf.LandService;
+import com.estate.real.utils.MyDate;
 import com.estate.real.utils.MyWeb3j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -40,9 +41,11 @@ public class LandServiceImpl implements LandService {
         land.setPathImage(request.getPathImage());
         land.setPrice(request.getPrice());
         land.setStreet(request.getStreet());
-        land.setStatus(LandStatus.active.ordinal());
+        land.setStatus(LandStatus.active.toString());
         land.setWard(request.getWard());
         land.setDescription(request.getDescription());
+        land.setCreatedBy("admin");
+        land.setCreatedDate(MyDate.getNow());
         //Mac dinh gan landId = -1,trong trường hợp không thể get from ethereum
         land.setLandId(-1);
 
@@ -51,7 +54,7 @@ public class LandServiceImpl implements LandService {
             ManageRealEsate manageRealEsate = MyWeb3j.LoadSmartContract();
             if (manageRealEsate != null) {
                 TransactionReceipt transactionReceipt = manageRealEsate.addLand(land.getDistrict(), land.getStreet(),
-                        land.getPathImage(), land.getPrice(),land.getWard(), land.getDescription(), BigInteger.valueOf(land.getStatus())).send();
+                        land.getPathImage(), land.getPrice(),land.getWard(), land.getDescription()).send();
                 System.out.println("Trạng thái của quá trình thêm land vào blockchain: " + transactionReceipt.isStatusOK());
                 if (transactionReceipt.isStatusOK()) {
                     //Get event để thêm landId vào db
@@ -63,6 +66,7 @@ public class LandServiceImpl implements LandService {
                                 land.setLandId(landId);
                             });
                     //Them land vao database
+
                     landRepository.save(land);
                     return new GeneralResponse(true);
                 } else {
@@ -114,5 +118,24 @@ public class LandServiceImpl implements LandService {
             return null;
         }
         return landRepository.getAllByAddressHolder(addressHolder);
+    }
+
+    @Override
+    public LandResponse getLandById(int idLand) {
+        Land landNative = landRepository.getByLandId(idLand, LandStatus.active.toString());
+        if(landNative != null){
+            LandResponse landResponse = new LandResponse(landNative);
+            landResponse.setAddressSeller(landNative.getAddressHolder());
+            landResponse.setDescription(landNative.getDescription());
+            landResponse.setDistrict(landNative.getDistrict());
+            landResponse.setImage(landNative.getPathImage());
+            landResponse.setStreet(landNative.getStreet());
+            landResponse.setPrice(landNative.getPrice());
+            landResponse.setWard(landNative.getWard());
+            landResponse.setCreatedDate(landNative.getCreatedDate());
+
+            return landResponse;
+        }
+        return null;
     }
 }

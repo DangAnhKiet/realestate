@@ -40,7 +40,7 @@ public class LandRepositoryImpl implements LandRepositoryExtend {
     @Override
     public List<Land> getAllLands() {
         Query query = new Query();
-        query.addCriteria(Criteria.where("status").lt(LandStatus.deleted.ordinal()));
+        query.addCriteria(Criteria.where("status").lt(LandStatus.delete.toString()));
         return mongoTemplate.find(query, Land.class);
     }
 

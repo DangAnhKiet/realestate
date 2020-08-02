@@ -10,10 +10,14 @@ public class LandResponse {
     private String street;
     private String price;
     private String image;
-    private int status;
+    private String status;
     private int landId;
     private String ward;
     private String description;
+    private String createdDate;
+//    private String updatedDate;
+//    private String createdBy;
+//    private String updatedBy;
 
     public LandResponse() {
     }
@@ -28,5 +32,6 @@ public class LandResponse {
         this.landId = land.getLandId();
         this.description = land.getDescription();
         this.ward = land.getWard();
+        this.createdDate = land.getCreatedDate();
     }
 }

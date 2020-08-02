@@ -13,7 +13,6 @@ contract ManageRealEsate {
         string description;
         uint landID;
         string pathImage;
-        Status status;
     }
 
     address public owner;   // government who creates the contract
@@ -40,7 +39,7 @@ contract ManageRealEsate {
     //1. FIRST OPERATION
     //Nhân viên sở tài nguyên sẽ thêm bds bằng hàm này
     function addLand(string memory _district, string memory _street, string memory _pathImage, string memory _cost, string memory _ward,
-        string memory _description, Status _status)
+        string memory _description)
     public isOwner
     {
         totalLandsCounter = totalLandsCounter + 1;
@@ -53,7 +52,6 @@ contract ManageRealEsate {
             ward : _ward,
             description : _description,
             pathImage : _pathImage,
-            status : _status,
             landID : totalLandsCounter
             });
         __ownedLands[msg.sender].push(myLand);
@@ -80,7 +78,6 @@ contract ManageRealEsate {
                     ward : __ownedLands[msg.sender][i].ward,
                     description : __ownedLands[msg.sender][i].description,
                     pathImage : __ownedLands[msg.sender][i].pathImage,
-                    status : __ownedLands[msg.sender][i].status,
                     landID : __ownedLands[msg.sender][i].landID
                     });
                 __ownedLands[_landBuyer].push(myLand);
@@ -101,7 +98,7 @@ contract ManageRealEsate {
     //3. GET A LAND OF AN ACCOUNT
     function getLandByAddress(address _landHolder, uint _index) public view returns (address, string memory, string
         memory,
-        string memory,string memory, string memory, string memory, Status, uint){
+        string memory,string memory, string memory, string memory, uint){
         Land memory land = Land(
             {
             ownerAddress : __ownedLands[_landHolder][_index].ownerAddress,
@@ -111,7 +108,6 @@ contract ManageRealEsate {
             ward : __ownedLands[_landHolder][_index].ward,
             description : __ownedLands[_landHolder][_index].description,
             pathImage : __ownedLands[_landHolder][_index].pathImage,
-            status : __ownedLands[_landHolder][_index].status,
             landID : __ownedLands[_landHolder][_index].landID
             });
         return (land.ownerAddress,
@@ -121,7 +117,6 @@ contract ManageRealEsate {
         land.ward,
         land.description,
         land.pathImage,
-        land.status,
         land.landID);
     }
     //4. GET ALL LAND FOR ADMIN

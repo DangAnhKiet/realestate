@@ -19,18 +19,11 @@ public class Land {
     private String pathImage;
     private String street;
     private String price;
-    private int status;
+    private String status;
     private String createdDate;
     private String updatedDate;
     private String createdBy;
     private String updatedBy;
-
-    // 0
-    // 1
-    // 2
-//    active,
-//    pending,
-//    deleted
     public Land() {
     }
 }

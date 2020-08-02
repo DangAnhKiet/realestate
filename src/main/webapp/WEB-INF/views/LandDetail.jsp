@@ -11,125 +11,47 @@
     <div class="row">
         <div class="col-sm-12">
             <jsp:include page="Header.jsp"/>
-            <div class="card text-center">
+            <div style="margin-top: 2%;" class="card text-center">
                 <div class="card-header">
-                    Featured
+                   Thông tin chi tiết
                 </div>
-                <div class="card-body">
-                    <h5 class="card-title">Special title treatment</h5>
-                    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                    <a href="#" class="btn btn-primary">Go somewhere</a>
-                </div>
-                <div class="card-footer text-muted">
-                    2 days ago
-                </div>
+                <c:if test="${requestScope.isNull == true}">
+                    <div class="card-body">
+                        <h5 class="card-title">Không tìm thấy sản phẩm</h5>
+                        <a href="/" class="button">Trang chủ</a>
+                    </div>
+                </c:if>
+                <c:if test="${requestScope.isNull == false}">
+                    <div class="card-body">
+                        <img src="${requestScope.landResponse.image}" alt="img-detail-land-${requestScope.landResponse.landId}">
+                        <h5 style="padding-top: 2%; font-size: xx-large;" class="card-title">Đường ${requestScope.landResponse.street},
+                            Phường: ${requestScope.landResponse.ward},
+                                 Quận: ${requestScope.landResponse.district}</h5>
+                        <p  style="text-align: justify;" class="card-text">
+                            <span style="text-decoration: underline">Giá bán:
+                            </span><span><strong id="i-price">${requestScope.landResponse.price}</strong> VNĐ</span> <br/>
+                            <span style="text-decoration: underline">Mô tả chi tiết: <br/> <br>
+                            </span><span>${requestScope.landResponse.description}</span> <br/>
+                        </p>
+                        <a href="/" class="button">Trang chủ</a>
+                        <a href="#" class="button">Mua</a>
+                    </div>
+                    <div class="card-footer text-muted">
+                        Ngày đăng: ${requestScope.landResponse.createdDate}
+                    </div>
+                </c:if>
+
             </div>
             <jsp:include page="Footer.jsp"/>
-            <%--            Popup update img--%>
-            <div class="w3-container">
-                <div id="i-view-detail" class="w3-modal">
-                    <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:800px">
-
-                        <div class="w3-center"><br>
-                            <span onclick="document.getElementById('i-view-detail').style.display='none'"
-                                  class="w3-button w3-xlarge w3-hover-red w3-display-topright" title="Close Modal">&times;</span>
-                            <img style="width: 100px;" src="/imgs/item-real/alert.png">
-                        </div>
-                        <div class="w3-section w3-center">
-                            <h3>Cập nhật ảnh đại diện <span id="img-title" style="font-weight: 600;"></span></h3>
-                            <form id="fileUploadForm" method="post" enctype="multipart/form-data">
-                                <input style="margin-bottom: 12px;" type="button" id="imgUpload" value="Chọn ảnh"
-                                       onclick="document.getElementById('i-file').click();"/>
-                                <input type="file" style="display:none;" id="i-file" name="file" accept="image/*"/>
-                                <input type="submit" style="display: none" id="btnSubmit">
-                            </form>
-                            <p id="i-choose-image" style="font-weight: 600; display: none;">Ảnh đã chọn: <span id="span-choose-image"></span></p>
-                        </div>
-                        <div style="text-align: right; padding-right: 10px;">
-                            <hr>
-                            <button onclick="document.getElementById('i-view-detail').style.display='none'"
-                                    type="button"
-                                    class="btn btn-danger">Đóng
-                            </button>
-                            <button id="btn-agree-update-img" style="margin-right: 3px;"
-                                    onclick="document.getElementById('i-view-detail').style.display='none'"
-                                    type="button"
-                                    class="btn btn-primary">Đồng ý
-                            </button>
-                            <hr>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <%--            end popup update img--%>
         </div>
     </div>
 </div>
 <script type="text/javascript">
-    var objOpenUpload = document.getElementById('openUpload');
-    var objInputUpload = document.getElementById('imgUpload');
-    var objSubmitUpload = document.getElementById('submit-upload-img');
-    var objHiddenFile = document.getElementById('i-file');
-    var objPopupUpdateImg = document.getElementById('i-view-detail');
-    var objChooseImge = document.getElementById('i-choose-image');
-    var objAgreeUpload = document.getElementById('btn-agree-update-img');
-    var objNameChooseFileToUpload = document.getElementById('span-choose-image');
-
-    objHiddenFile.addEventListener('change', function (e) {
-        let fileName = e.target.files[0].name;
-        document.getElementById('span-choose-image').innerText = fileName;
-        objChooseImge.style.display = "block";
-    });
-    objOpenUpload.addEventListener('click', function () {
-        objPopupUpdateImg.style.display = "block";
-    });
-    objAgreeUpload.addEventListener('click', function () {
-        if (objNameChooseFileToUpload.innerText != "") {
-            let thisText = objHiddenFile.value;
-            let thisImage = objHiddenFile.files[0];
-            let formdata = new FormData();
-            formdata.append("thisText", thisText);
-            formdata.append("thisImage", thisImage);
-            // document.getElementById('btnSubmit').click();
-            //stop submit the form, we will post it manually.
-            // event.preventDefault();
-
-            // Get form
-            var form = $('#fileUploadForm')[0];
-
-            // Create an FormData object
-            var data = new FormData(form);
-
-            // If you want to add an extra field for the FormData
-            data.append("CustomField", "This is some extra data, testing");
-
-            // disabled the submit button
-            // $("#btnSubmit").prop("disabled", true);
-            $.ajax({
-                type: "POST",
-                enctype: 'multipart/form-data',
-                url: "http://localhost:8084/account/update/image",
-                data: data,
-                processData: false,
-                contentType: false,
-                cache: false,
-                timeout: 600000,
-                success: function (data) {
-
-                    // $("#result").text(data);
-                    console.log("SUCCESS : ", data);
-                    // $("#btnSubmit").prop("disabled", false);
-
-                },
-                error: function (e) {
-
-                    // $("#result").text(e.responseText);
-                    console.log("ERROR : ", e);
-                    // $("#btnSubmit").prop("disabled", false);
-
-                }
-            });
-        }
+    window.addEventListener('load',function () {
+        let objPrice = document.getElementById('i-price');
+            if (objPrice.textContent != "" && !(isNaN(objPrice.textContent))) {
+                objPrice.innerText  = new Intl.NumberFormat('vi-VN', {maximumSignificantDigits: 3}).format(objPrice.textContent);
+            }
     });
 </script>
 </body>

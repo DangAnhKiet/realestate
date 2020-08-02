@@ -6,8 +6,13 @@ body a {
     pointer-events: none;
     background-color: #ddd !important;
 }
+.land-view-detail:hover{
+    background-color: #000000!important;
+    color:white!important;
+}
 .my-card-home:hover{
     border: 2px dashed #EEA738;
+    cursor: pointer;
 }
 .button-spec{
     font-weight: 600 !important;

@@ -12,6 +12,7 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -64,21 +65,21 @@ public class LocationController {
         List<LandResponse> landResponseList = landService.getAllLand();
         if(landResponseList != null && landResponseList.size() > 0){
             model.addAttribute("landResponseList",landResponseList);
-        }else{
-            model.addAttribute("landResponseList","null");
         }
         return "Home";
     }
 
-    @RequestMapping(value = {"/land"}, method = RequestMethod.GET)
-    public String landDetail(Model model)
+    @RequestMapping(value = {"/land/{id}"}, method = RequestMethod.GET)
+    public String landDetail(Model model,@PathVariable("id")int id)
     {
-//        List<LandResponse> landResponseList = landService.getAllLand();
-//        if(landResponseList != null && landResponseList.size() > 0){
-//            model.addAttribute("landResponseList",landResponseList);
-//        }else{
-//            model.addAttribute("landResponseList","null");
-//        }
+        LandResponse landResponse = landService.getLandById(id);
+        if(landResponse !=null){
+            model.addAttribute("isNull",false);
+            model.addAttribute("landResponse",landResponse);
+        }else{
+            model.addAttribute("isNull",true);
+        }
+
         return "LandDetail";
     }
 
