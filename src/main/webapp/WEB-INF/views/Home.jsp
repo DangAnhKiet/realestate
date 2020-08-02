@@ -17,13 +17,14 @@
             <div class="row">
                 <c:if test="${not empty requestScope.landResponseList}">
                     <c:forEach items="${requestScope.landResponseList}" var="i">
-                        <div class="col-sm-6">
+                        <div class="col-sm-12">
                             <div class="card my-card-home">
-                                <img class="card-img-top" src="${i.image}" alt="Card image cap">
+                                <img class="card-img-bottom-new" src="${i.image}" alt="Card image cap">
                                 <div class="card-body">
                                     <h5 class="card-title">Giá bán: <span class="i-price">${i.price}</span> VNĐ</h5>
                                     <p class="card-text">${i.street} | ${i.district}</p>
-                                    <a style="background-color: #EEA738; border-color: #EEA738;" href="/land/${i.landId}"
+                                    <a style="background-color: #EEA738; border-color: #EEA738;"
+                                       href="/land/${i.landId}"
                                        class="btn land-view-detail">Xem chi
                                         tiết</a>
                                 </div>

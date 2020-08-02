@@ -82,4 +82,9 @@ public class RestAccountController {
     public GeneralResponse changePassword(@RequestBody ChangePasswordRequest request) {
         return accountService.changePassword(request);
     }
+
+    @RequestMapping(value = "/eth/get", method = RequestMethod.GET)
+    public String getETHFromVND(@RequestParam String vnd) {
+        return accountService.getETHFromVND(vnd);
+    }
 }

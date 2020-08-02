@@ -1,6 +1,7 @@
 package com.estate.real.service.inf;
 
 import com.estate.real.document.Account;
+import com.estate.real.document.History;
 import com.estate.real.model.request.*;
 import com.estate.real.model.response.GeneralResponse;
 
@@ -24,4 +25,8 @@ public interface AccountService {
     public GeneralResponse updatePrivateKey(ChangePrivateKeyRequest request);
 
     public GeneralResponse changePassword(ChangePasswordRequest request);
+
+    public String getETHFromVND(String vnd);
+
+    public List<History> getListHistory(String nameLogin);
 }

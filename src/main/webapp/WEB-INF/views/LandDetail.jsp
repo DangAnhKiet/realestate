@@ -23,19 +23,30 @@
                 </c:if>
                 <c:if test="${requestScope.isNull == false}">
                     <div class="card-body">
-                        <img src="${requestScope.landResponse.image}" alt="img-detail-land-${requestScope.landResponse.landId}">
-                        <h5 style="padding-top: 2%; font-size: xx-large;" class="card-title">Đường ${requestScope.landResponse.street},
+                        <img src="${requestScope.landResponse.image}"
+                             alt="img-detail-land-${requestScope.landResponse.landId}">
+                        <h5 style="padding-top: 2%; font-size: xx-large;" class="card-title">
+                            Đường ${requestScope.landResponse.street},
                             Phường: ${requestScope.landResponse.ward},
                             Quận: ${requestScope.landResponse.district}</h5>
                         <p style="text-align: justify;" class="card-text">
+                            <span style="text-decoration: underline">Giá bán theo VND:
+                            </span><span><strong id="i-price">${requestScope.landResponse.price}</strong> VND</span>
+                            <br/>
+                            <span style="text-decoration: underline">Giá bán theo ETH:
+                            </span><span><strong id="i-price-eth">${requestScope.valueEth}</strong> ETH</span> <br/>
+                            Quận: ${requestScope.landResponse.district}</h5>
+                        <p style="text-align: justify;" class="card-text">
                             <span style="text-decoration: underline">Giá bán:
-                            </span><span><strong id="i-price">${requestScope.landResponse.price}</strong> VNĐ</span> <br/>
+                            </span><span><strong id="i-price">${requestScope.landResponse.price}</strong> VNĐ</span>
+                            <br/>
                             <span style="text-decoration: underline">Mô tả chi tiết: <br/> <br>
                             </span><span>${requestScope.landResponse.description}</span> <br/>
                         </p>
                         <a href="/" class="button">Trang chủ</a>
                         <input id="i-btn-buy" type="button" class="button" value="Mua">
-                        <div id="i-alert" style="display: none; font-weight: 600;" class="alert alert-danger" role="alert">
+                        <div id="i-alert" style="display: none; font-weight: 600;" class="alert alert-danger"
+                             role="alert">
                             <strong></strong>
                         </div>
                     </div>
@@ -105,8 +116,11 @@
                 document.getElementById('i-alert').innerText = "Đăng nhập để thực hiện giao dịch mua bán!";
                 document.getElementById('i-alert').style.display = "block";
             }
+            let objPriceEth = document.getElementById('i-price-eth');
+            // if (objPriceEth.textContent != "" && !(isNaN(objPriceEth.textContent))) {
+            //     objPriceEth.innerText  = new Intl.NumberFormat('vi-VN', {maximumSignificantDigits: 3}).format(objPriceEth.textContent);
+            // }
         });
-    });
 </script>
 </body>
 </html>

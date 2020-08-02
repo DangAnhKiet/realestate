@@ -9,7 +9,7 @@
             <c:if test="${requestScope.role == 'admin'}">
                 <li style="border-left: 1px dashed #fff;"><a class="nav-hover"
                                                              id="i-admin-exchanges"
-                                                             href="/admin/exchanges">Sàn giao
+                                                             href="/">Sàn giao
                     dịch</a></li>
                 <li style="border-left: 1px dashed #fff;"><a
                         class="nav-hover" id="i-admin-land" href="/admin/manage/land">Quản lí
@@ -23,7 +23,7 @@
             </c:if>
             <c:if test="${requestScope.role == 'member'}">
                 <li style="border-left: 1px dashed #fff;"><a class="nav-hover"
-                                                             id="i-member-exchanges" href="/member/exchanges">Sàn
+                                                             id="i-member-exchanges" href="/">Sàn
                     giao dịch</a></li>
                 <li style="border-left: 1px dashed #fff;"><a class="nav-hover" id="i-member-land"
                                                              href="/member/manage/land">Quản lí
@@ -76,10 +76,10 @@
         }
     });
     objUrlToAdminHome.addEventListener('click',function () {
-        if(${requestScope.role == 'admin'}){
-            objUrlToAdminHome.href = "/admin/home";
-        }else if(${requestScope.role == 'member'}){
-            objUrlToAdminHome.href = "/member/home";
+        if(${requestScope.role == 'admin'}) {
+            objUrlToAdminHome.href = "/";
+        } else if (${requestScope.role == 'member'}) {
+            objUrlToAdminHome.href = "/";
         }
     });
     if (typeof url == 'string') {
@@ -95,7 +95,7 @@
                 break;
             }
         }
-        if (url.includes("admin/home")) {
+        if (url.includes("/")) {
             document.getElementById('i-logo-dapp').style.cssText =
                 "border-bottom: 2px orange solid;";
         }

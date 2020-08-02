@@ -1,10 +1,12 @@
 package com.estate.real.service.impl;
 
 import com.estate.real.Repository.inf.AccountRepository;
+import com.estate.real.Repository.inf.HistoryRepository;
 import com.estate.real.Repository.inf.LandRepository;
 import com.estate.real.config.ContractInfo;
 import com.estate.real.contract.ManageRealEsate;
 import com.estate.real.document.Account;
+import com.estate.real.document.History;
 import com.estate.real.document.Land;
 import com.estate.real.model.enums.AccountStatus;
 import com.estate.real.model.enums.LandStatus;
@@ -12,10 +14,8 @@ import com.estate.real.model.request.LandFilterRequest;
 import com.estate.real.model.request.LandPagingRequest;
 import com.estate.real.model.request.LandRequest;
 import com.estate.real.model.request.TransactionRequest;
-import com.estate.real.model.response.AccountResponse;
 import com.estate.real.model.response.GeneralResponse;
 import com.estate.real.model.response.LandResponse;
-import com.estate.real.service.inf.AccountService;
 import com.estate.real.service.inf.LandService;
 import com.estate.real.utils.CurrencyConverter;
 import com.estate.real.utils.MyDate;
@@ -46,6 +46,9 @@ public class LandServiceImpl implements LandService {
 
     @Autowired
     AccountRepository accountRepository;
+
+    @Autowired
+    HistoryRepository historyRepository;
 
     @Override
     public GeneralResponse addLand(LandRequest request) {
@@ -202,5 +205,11 @@ public class LandServiceImpl implements LandService {
             }
         }
         return new GeneralResponse(false);
+    }
+
+    @Override
+    public GeneralResponse saveTransaction(History history) {
+        historyRepository.save(history);
+        return new GeneralResponse(true);
     }
 }

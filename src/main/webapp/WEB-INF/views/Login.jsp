@@ -83,11 +83,11 @@
             error: function (objResult) {
                 console.log(objResult.responseText);
                 console.log(objResult);
-                if(objResult.responseText.includes("admin")){
-                    window.location.href = "http://localhost:8084/admin/home";
-                }else if(objResult.responseText.includes("member")){
-                    window.location.href = "http://localhost:8084/member/home";
-                }else{
+                if (objResult.responseText.includes("admin")) {
+                    window.location.href = "http://localhost:8084/";
+                } else if (objResult.responseText.includes("member")) {
+                    window.location.href = "http://localhost:8084/";
+                } else {
                     objErrorLogin.innerText = objResult.responseText;
                     objErrorLogin.style.display = "block";
                 }

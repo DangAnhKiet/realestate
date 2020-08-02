@@ -1,5 +1,6 @@
 package com.estate.real.service.inf;
 
+import com.estate.real.document.History;
 import com.estate.real.document.Land;
 import com.estate.real.model.request.LandFilterRequest;
 import com.estate.real.model.request.LandPagingRequest;
@@ -24,4 +25,6 @@ public interface LandService {
     public LandResponse getLandById(int idLand);
 
     public GeneralResponse handleTransaction(TransactionRequest request);
+
+    public GeneralResponse saveTransaction(History history);
 }

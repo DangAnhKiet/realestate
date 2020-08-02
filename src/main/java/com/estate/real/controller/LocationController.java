@@ -1,5 +1,6 @@
 package com.estate.real.controller;
 
+import com.estate.real.document.History;
 import com.estate.real.document.Land;
 import com.estate.real.model.enums.Role;
 import com.estate.real.model.response.LandResponse;
@@ -43,10 +44,10 @@ public class LocationController {
                 JSONObject jsonObject = new JSONObject(strSession);
                 if (jsonObject.has("role")) {
                     if (jsonObject.getString("role").contains(Role.admin.toString())) {
-                        return "redirect:/admin/home";
+                        return "redirect:/";
                     }
                     if (jsonObject.getString("role").contains(Role.member.toString())) {
-                        return "redirect:/member/home";
+                        return "redirect:/";
                     }
                 }
             }
@@ -56,29 +57,61 @@ public class LocationController {
     }
 
     @RequestMapping(value = {"/"}, method = RequestMethod.GET)
-    public String home(Model model)
-    {
+    public String home(Model model, HttpServletRequest request) {
+        String strSession = (String) request.getSession().getAttribute("MY_SESSION");
+
         List<LandResponse> landResponseList = landService.getAllLand();
-        if(landResponseList != null && landResponseList.size() > 0){
-            model.addAttribute("landResponseList",landResponseList);
+        if (landResponseList != null && landResponseList.size() > 0) {
+            model.addAttribute("landResponseList", landResponseList);
         }
-        return "Home";
+        if (strSession == null || strSession.isEmpty()) {
+            return "Home";
+        } else {
+            JSONObject jsonSession = new JSONObject(strSession);
+            if (jsonSession.has("role")) {
+                if (jsonSession.getString("role").contains(Role.member.toString())) {
+                    model.addAttribute("role", Role.member.toString());
+                    return "Home";
+                }
+                if (jsonSession.getString("role").contains(Role.admin.toString())) {
+                    model.addAttribute("role", Role.admin.toString());
+                    return "Home";
+                }
+            }
+            request.getSession().invalidate();
+            return "redirect:/not-found";
+        }
     }
 
     @RequestMapping(value = {"/land/{id}"}, method = RequestMethod.GET)
     public String landDetail(Model model,@PathVariable("id")int id)
     {
         LandResponse landResponse = landService.getLandById(id);
-        if(landResponse !=null){
-            model.addAttribute("isNull",false);
-            model.addAttribute("landResponse",landResponse);
-            model.addAttribute("addressHolder",landResponse.getAddressSeller());
-            model.addAttribute("landId",landResponse.getLandId());
-        }else{
-            model.addAttribute("isNull",true);
+        if(landResponse !=null) {
+            model.addAttribute("isNull", false);
+            model.addAttribute("landResponse", landResponse);
+            String valueEth = accountService.getETHFromVND(landResponse.getPrice());
+            model.addAttribute("valueEth", valueEth);
+            model.addAttribute("addressHolder", landResponse.getAddressSeller());
+            model.addAttribute("landId", landResponse.getLandId());
+        } else {
+            model.addAttribute("isNull", true);
         }
 
         return "LandDetail";
+    }
+
+    @RequestMapping(value = {"/landn/{id}"}, method = RequestMethod.GET)
+    public String landDetailNew(Model model, @PathVariable("id") int id) {
+        LandResponse landResponse = landService.getLandById(id);
+        if (landResponse != null) {
+            model.addAttribute("isNull", false);
+            model.addAttribute("landResponse", landResponse);
+        } else {
+            model.addAttribute("isNull", true);
+        }
+
+        return "LandDetailNew";
     }
 
     @RequestMapping(value = {"/test"}, method = RequestMethod.GET)
@@ -190,7 +223,8 @@ public class LocationController {
             if (jsonSession.has("role")) {
                 if (jsonSession.getString("role").contains(Role.member.toString())) {
                     model.addAttribute("role", Role.member.toString());
-//                    model.addAttribute("listLands", landService.getAllLand());
+                    List<History> list = accountService.getListHistory(jsonSession.getString("userLogin"));
+                    model.addAttribute("listLands", list);
                     return "MemberManageHistory";
                 }
             }
@@ -315,7 +349,7 @@ public class LocationController {
             if (jsonSession.has("role")) {
                 if (jsonSession.getString("role").contains(Role.member.toString())) {
                     model.addAttribute("role", Role.member.toString());
-                    return "MemberHome";
+                    return "Home";
                 }
             }
             request.getSession().invalidate();
@@ -351,7 +385,7 @@ public class LocationController {
             if (jsonSession.has("role")) {
                 if (jsonSession.getString("role").contains(Role.member.toString())) {
                     model.addAttribute("role", Role.member.toString());
-                    return "MemberExchanges";
+                    return "Home";
                 }
             }
             request.getSession().invalidate();

@@ -11,12 +11,11 @@
         <div class="col-sm-12 wrap-help">
             <jsp:include page="Header.jsp"/>
             <div class="title">
-                <h2>HỎI & ĐÁP</h2>
+                <h2>Địa chỉ: 63 Lý Tự Trọng, Bến Nghé, Quận 1, Thành phố Hồ Chí Minh</h2>
             </div>
             <jsp:include page="Footer.jsp"/>
         </div>
     </div>
-
 </div>
 </body>
 </html>

@@ -1,7 +1,9 @@
 package com.estate.real.service.impl;
 
 import com.estate.real.Repository.inf.AccountRepository;
+import com.estate.real.Repository.inf.HistoryRepository;
 import com.estate.real.document.Account;
+import com.estate.real.document.History;
 import com.estate.real.model.enums.AccountStatus;
 import com.estate.real.model.enums.Role;
 import com.estate.real.model.enums.StatusLogin;
@@ -9,6 +11,7 @@ import com.estate.real.model.request.*;
 import com.estate.real.model.response.AccountResponse;
 import com.estate.real.model.response.GeneralResponse;
 import com.estate.real.service.inf.AccountService;
+import com.estate.real.utils.CurrencyConverter;
 import com.estate.real.utils.MyDate;
 import com.estate.real.utils.MyFile;
 import com.estate.real.utils.MyWeb3j;
@@ -27,8 +30,12 @@ public class AccountServiceImpl implements AccountService {
 
     @Autowired
     AccountRepository accountRepository;
+
     @Autowired
     IPFSServiceImpl ipfsService;
+
+    @Autowired
+    HistoryRepository historyRepository;
 
     @Override
     public GeneralResponse addAccount(AccountRequest request) {
@@ -210,5 +217,16 @@ public class AccountServiceImpl implements AccountService {
 
         accountRepository.updateInformation(request.getNameLogin(), updateValues);
         return new GeneralResponse(true, passRaw);
+    }
+
+    @Override
+    public String getETHFromVND(String vnd) {
+        return CurrencyConverter.VNDToETH(vnd);
+    }
+
+    @Override
+    public List<History> getListHistory(String nameLogin) {
+        List<History> list = historyRepository.getAllByBuyer(nameLogin);
+        return list;
     }
 }

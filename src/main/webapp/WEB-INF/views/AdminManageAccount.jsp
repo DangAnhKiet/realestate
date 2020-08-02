@@ -20,32 +20,34 @@
                       <div>
                           <input class="form-control" type="search" placeholder="Nhập tên hoặc địa chỉ tài khoản của chủ đất" aria-label="Search">
                       </div>
-                       <div>
-                           <button style="margin-left: 3px;font-weight: 600" class="btn btn-outline-success my-2 my-sm-0"
-                                   type="button"><span style="margin-left: 3px">Tìm</span></button>
-                       </div>
-               </div>
-              <div> <a href="/admin/account/registry"><button type="button" class="button">Đăng kí mới</button></a></div>
-           </nav>
-           <div class="list-group list-account">
-
-               <div class="list-group-item list-group-item-action flex-column align-items-start item-active">
-                   <div class="account-image">
-                       <img src="https://i.pravatar.cc/300" alt="Avatar">
-                   </div>
-                   <div class="account-info">
-                       <div class="d-flex w-100 justify-content-between">
-                           <h5 class="mb-1">List group item heading</h5>
-                       </div>
-                       <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
-                       <small>Donec id elit non mi porta.</small>
-                   </div>
                    <div>
-                       <input style="background-color: firebrick; color: white;" type="text" class="button-inside-list" value="Khóa tài khoản">
-                       <input type="text" class="button-inside-list" value="Xem chi tiết">
+                       <button style="margin-left: 3px;font-weight: 600" class="btn btn-outline-success my-2 my-sm-0"
+                               type="button"><span style="margin-left: 3px">Tìm</span></button>
                    </div>
                </div>
-           </div>
+               <div><a href="/admin/account/registry">
+                   <button type="button" class="button">Đăng kí mới</button>
+               </a></div>
+           </nav>
+           <%--           <div class="list-group list-account">--%>
+
+           <%--               <div class="list-group-item list-group-item-action flex-column align-items-start item-active">--%>
+           <%--                   <div class="account-image">--%>
+           <%--                       <img src="https://i.pravatar.cc/300" alt="Avatar">--%>
+           <%--                   </div>--%>
+           <%--                   <div class="account-info">--%>
+           <%--                       <div class="d-flex w-100 justify-content-between">--%>
+           <%--                           <h5 class="mb-1">List group item heading</h5>--%>
+           <%--                       </div>--%>
+           <%--                       <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>--%>
+           <%--                       <small>Donec id elit non mi porta.</small>--%>
+           <%--                   </div>--%>
+           <%--                   <div>--%>
+           <%--                       <input style="background-color: firebrick; color: white;" type="text" class="button-inside-list" value="Khóa tài khoản">--%>
+           <%--                       <input type="text" class="button-inside-list" value="Xem chi tiết">--%>
+           <%--                   </div>--%>
+           <%--               </div>--%>
+           <%--           </div>--%>
            <jsp:include page="Footer.jsp"/>
        </div>
     </div>
