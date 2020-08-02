@@ -1,10 +1,7 @@
 package com.estate.real.utils;
 
 import com.estate.real.config.ContractInfo;
-//import com.estate.real.contract.ContractReceive;
-//import com.estate.real.contract.ContractSend;
 import com.estate.real.contract.ManageRealEsate;
-import org.web3j.abi.datatypes.Function;
 import org.web3j.crypto.Credentials;
 import org.web3j.crypto.RawTransaction;
 import org.web3j.crypto.TransactionEncoder;
@@ -20,6 +17,9 @@ import org.web3j.utils.Numeric;
 
 import java.math.BigInteger;
 import java.util.Optional;
+
+//import com.estate.real.contract.ContractReceive;
+//import com.estate.real.contract.ContractSend;
 
 public class MyWeb3j {
 //    the value of ganache
@@ -40,7 +40,7 @@ public class MyWeb3j {
     public static BigInteger gasPrice =
             Convert.toWei("2000000", Convert.Unit.WEI).toBigInteger();
     public static BigInteger gasPriceDeploy =
-            Convert.toWei("2", Convert.Unit.WEI).toBigInteger();
+            Convert.toWei("1", Convert.Unit.WEI).toBigInteger();
     public static String addressContract = MyFile.RealFromFile(MyFile.ADDRESS_CONTRACT_FILE);
     // Value to transfer (in wei)
     public static BigInteger value = Convert.toWei("1", Convert.Unit.ETHER).toBigInteger();

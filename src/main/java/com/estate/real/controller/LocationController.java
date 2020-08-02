@@ -1,13 +1,11 @@
 package com.estate.real.controller;
 
-import com.estate.real.contanst.Session;
+import com.estate.real.document.Land;
 import com.estate.real.model.enums.Role;
-import com.estate.real.model.request.LandRequest;
 import com.estate.real.model.response.LandResponse;
 import com.estate.real.service.inf.AccountService;
 import com.estate.real.service.inf.LandService;
 import com.estate.real.utils.MyFile;
-import com.fasterxml.jackson.annotation.JsonAlias;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,8 +16,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 @Controller
@@ -158,6 +154,26 @@ public class LocationController {
 
     }
 
+    @RequestMapping(value = {"/member/manage/history"}, method = RequestMethod.GET)
+    public String memberManageHistory(Model model, HttpServletRequest httpServletRequest) {
+        String strSession = (String) httpServletRequest.getSession().getAttribute("MY_SESSION");
+        if (strSession == null || strSession.isEmpty()) {
+            return "redirect:/login";
+        } else {
+            JSONObject jsonSession = new JSONObject(strSession);
+            if (jsonSession.has("role")) {
+                if (jsonSession.getString("role").contains(Role.member.toString())) {
+                    model.addAttribute("role", Role.member.toString());
+//                    model.addAttribute("listLands", landService.getAllLand());
+                    return "MemberManageHistory";
+                }
+            }
+            httpServletRequest.getSession().invalidate();
+            return "redirect:/not-found";
+        }
+
+    }
+
     @RequestMapping(value = {"/admin/manage/land"}, method = RequestMethod.GET)
     public String manageRealOfAdmin(Model model, HttpServletRequest httpServletRequest) {
         String strSession = (String) httpServletRequest.getSession().getAttribute("MY_SESSION");
@@ -185,10 +201,11 @@ public class LocationController {
             return "redirect:/login";
         } else {
             JSONObject jsonSession = new JSONObject(strSession);
+            List<Land> lands = landService.getAllLandByAddressHolder(jsonSession.get("walletAddress").toString());
             if (jsonSession.has("role")) {
                 if (jsonSession.getString("role").contains(Role.member.toString())) {
                     model.addAttribute("role", Role.member.toString());
-//                    model.addAttribute("listLands", landService.getAllLand());
+                    model.addAttribute("listLands", lands);
                     return "MemberManageLand";
                 }
             }

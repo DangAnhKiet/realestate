@@ -29,6 +29,10 @@
                                                              href="/member/manage/land">Quản lí
                     đất</a>
                 </li>
+                <li style="border-left: 1px dashed #fff;"><a class="nav-hover" id="i-member-land-history"
+                                                             href="/member/manage/history">Lịch sử giao
+                    dịch</a>
+                </li>
                 <li style="border-left: 1px dashed #fff;"><a class="nav-hover" id="i-member-help"
                                                              href="/member/help">Trợ giúp</a></li>
             </c:if>

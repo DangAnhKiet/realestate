@@ -5,13 +5,12 @@ import lombok.Data;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.Date;
-
 @Document(collection = CollectionName.LAND)
 @Data
 public class Land {
     @Indexed(unique = true)
     private int landId;
+    @Indexed
     private String addressHolder;
     private String district;
     private String ward;

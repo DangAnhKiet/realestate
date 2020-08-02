@@ -170,16 +170,17 @@ public class AccountServiceImpl implements AccountService {
         if (request.getPrivateKey() != null) {
             try{
                 address = MyWeb3j.getAddress(request.getPrivateKey());
-            }catch (Exception e){
+            } catch (Exception e) {
                 System.out.println("Loi update private key, de set address cua member");
                 e.printStackTrace();
                 address = "";
             }
-            if(address.isEmpty()){
+            if (address.isEmpty()) {
                 return new GeneralResponse(false, "error-private-key");
             }
             updateValues.put("address", address);
-            updateValues.put("privateKey", request.getPrivateKey());
+            String privateUpdate = Base64.getEncoder().encodeToString(request.getPrivateKey().getBytes());
+            updateValues.put("privateKey", privateUpdate);
         }
         accountRepository.updateInformation(request.getNameLogin(), updateValues);
         return new GeneralResponse(true, address);

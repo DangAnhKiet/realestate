@@ -144,6 +144,11 @@
                                 <strong>Nhập mật Khẩu mới</strong>
                                 <input style="width: 66%; margin-bottom: 2px;" id="i-password-key-input-new" type="text"
                                        placeholder="mat khau moi...">
+                                <br/>
+                                <strong>Nhập lại mật Khẩu mới</strong>
+                                <input style="width: 66%; margin-bottom: 2px;" id="i-password-key-input-new-again"
+                                       type="text"
+                                       placeholder="mat lai khau moi...">
                                 <p style="display: none" id="i-p-alert-password-key" class="alert alert-danger"></p>
                             </div>
                         </div>
@@ -242,7 +247,7 @@
         let objButtonUpdatePassword = document.getElementById('i-update-password');
         objButtonUpdatePassword.addEventListener('click', function () {
             document.getElementById('i-p-alert-password-key').style.display = "none";
-            if (document.getElementById('i-password-key-input-new').value.length > 20) {
+            if (document.getElementById('i-password-key-input-new').value.length > 20 && document.getElementById('i-password-key-input-new-again').value.length > 20) {
                 document.getElementById('i-p-alert-password-key').innerText = "Mật khẩu quá dài. Vui lòng nhập lại";
                 document.getElementById('i-p-alert-password-key').style.display = "block";
 

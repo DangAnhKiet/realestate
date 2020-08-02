@@ -24,17 +24,17 @@ public class RestLandController {
     }
 
     @RequestMapping(value = "/get", method = RequestMethod.POST)
-    public List<LandResponse> add(@RequestBody LandPagingRequest request) {
+    public List<LandResponse> getLandPaging(@RequestBody LandPagingRequest request) {
         return landService.getLandPaging(request);
     }
 
     @RequestMapping(value = "/filter", method = RequestMethod.POST)
-    public List<LandResponse> add(@RequestBody LandFilterRequest request) {
+    public List<LandResponse> getFilterLand(@RequestBody LandFilterRequest request) {
         return landService.getFilterLand(request);
     }
 
     @RequestMapping(value = "/address", method = RequestMethod.POST)
-    public List<Land> add(@RequestParam String address) {
+    public List<Land> getAllLandByAddressHolder(@RequestParam String address) {
         return landService.getAllLandByAddressHolder(address);
     }
 }
