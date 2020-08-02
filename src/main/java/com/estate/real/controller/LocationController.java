@@ -72,6 +72,8 @@ public class LocationController {
         if(landResponse !=null){
             model.addAttribute("isNull",false);
             model.addAttribute("landResponse",landResponse);
+            model.addAttribute("addressHolder",landResponse.getAddressSeller());
+            model.addAttribute("landId",landResponse.getLandId());
         }else{
             model.addAttribute("isNull",true);
         }
@@ -107,6 +109,30 @@ public class LocationController {
                     model.addAttribute("role", Role.member.toString());
 //                    model.addAttribute("listLands", landService.getAllLand());
                     return "DetailInfo";
+                }
+            }
+            httpServletRequest.getSession().invalidate();
+            return "redirect:/not-found";
+        }
+    }
+
+    @RequestMapping(value = {"/transaction"}, method = RequestMethod.POST)
+    public String transactionBuy(Model model, HttpServletRequest httpServletRequest) {
+        @SuppressWarnings("unchecked")
+        String strSession = (String) httpServletRequest.getSession().getAttribute("MY_SESSION");
+        if (strSession == null || strSession.isEmpty()) {
+            return "redirect:/login";
+        } else {
+            JSONObject jsonSession = new JSONObject(strSession);
+            if (jsonSession.has("role")) {
+                if (jsonSession.getString("role").contains(Role.admin.toString())) {
+                    httpServletRequest.getSession().invalidate();
+                    return "redirect:/login";
+                }
+                if (jsonSession.getString("role").contains(Role.member.toString())) {
+                    model.addAttribute("role", Role.member.toString());
+//                    model.addAttribute("listLands", landService.getAllLand());
+                    return "Transaction";
                 }
             }
             httpServletRequest.getSession().invalidate();

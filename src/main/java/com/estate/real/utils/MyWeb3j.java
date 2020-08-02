@@ -30,6 +30,7 @@ public class MyWeb3j {
     public static final String CONTRACT_MANAGE_REAL_ESTATE = "ManageRealEsate";
 
     public static Web3j web3j = Web3j.build(new HttpService(ContractInfo.locationEthereum));
+
     public static Credentials credentials = Credentials.create(ContractInfo.pkDeploy);
     //3.Configure gas parameters
     public static BigInteger gasLimitTransfer = BigInteger.valueOf(6721975);
@@ -46,10 +47,33 @@ public class MyWeb3j {
     public static BigInteger value = Convert.toWei("1", Convert.Unit.ETHER).toBigInteger();
     // Recipient address
     public static String recipientAddress = "0x0766FaA541B484De87dbFEce64fb206e8601B450";
+
+
     public static ManageRealEsate LoadSmartContract(){
+        try{
+            Web3j web3j = Web3j.build(new HttpService(ContractInfo.locationEthereum));
+            System.out.println("gas limit: "+MyWeb3j.gasLimit);
+            System.out.println("gas price: "+MyWeb3j.gasPrice);
+            ManageRealEsate manageRealEsate = ManageRealEsate.load(addressContract, web3j, credentials,
+                    gasLimit, gasPrice);
+            if(manageRealEsate.isValid()){
+                return manageRealEsate;
+            }else{
+                System.out.println("Loi load smart contract trong ham LoadSmartContract");
+                return null;
+            }
+        }catch(Exception e){
+            System.out.println("Loi Load smart contract trong catch");
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static ManageRealEsate LoadSmartContractByPricvate(String privateKey){
         try{
             System.out.println("gas limit: "+MyWeb3j.gasLimit);
             System.out.println("gas price: "+MyWeb3j.gasPrice);
+            Credentials credentials = Credentials.create(privateKey);
             ManageRealEsate manageRealEsate = ManageRealEsate.load(addressContract, web3j, credentials,
                     gasLimit, gasPrice);
             if(manageRealEsate.isValid()){
@@ -125,10 +149,10 @@ public class MyWeb3j {
         return false;
     }
 
-    public boolean transferEth(String priKey, Web3j web3,String recipientAddress, String strETH){
+    public static boolean transferEth(String priKeyCaller, Web3j web3,String recipientAddress, String strETH){
         boolean result = false;
         try{
-            Credentials credentials = Credentials.create(priKey);
+            Credentials credentials = Credentials.create(priKeyCaller);
             EthGetTransactionCount ethGetTransactionCount = web3.ethGetTransactionCount(credentials.getAddress(), DefaultBlockParameterName.LATEST).send();
             BigInteger nonce = ethGetTransactionCount.getTransactionCount();
             BigInteger valueEth = Convert.toWei(strETH, Convert.Unit.ETHER).toBigInteger();
@@ -182,7 +206,7 @@ public class MyWeb3j {
 
     public static void main(String[] args) {
         MyWeb3j myWeb3j = new MyWeb3j();
-        System.out.println("test transfer: "+myWeb3j.transferEth("86c34319763fde16254eb4a1fbaf94d6bf4b8c502e31d2750bc4721883f444cc",
-                MyWeb3j.web3j,"0x0766FaA541B484De87dbFEce64fb206e8601B450","15"));
+        System.out.println("test transfer: "+myWeb3j.transferEth("5719e3b78604d376742b1b63020c59dcdad7271d0ab84cebd6982273ae96e7af",
+                MyWeb3j.web3j,"0x0766FaA541B484De87dbFEce64fb206e8601B450","50"));
     }
 }

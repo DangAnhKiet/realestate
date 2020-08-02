@@ -2,24 +2,38 @@ package com.estate.real.service.impl;
 
 import com.estate.real.Repository.inf.AccountRepository;
 import com.estate.real.Repository.inf.LandRepository;
+import com.estate.real.config.ContractInfo;
 import com.estate.real.contract.ManageRealEsate;
 import com.estate.real.document.Account;
 import com.estate.real.document.Land;
+import com.estate.real.model.enums.AccountStatus;
 import com.estate.real.model.enums.LandStatus;
 import com.estate.real.model.request.LandFilterRequest;
 import com.estate.real.model.request.LandPagingRequest;
 import com.estate.real.model.request.LandRequest;
 import com.estate.real.model.request.TransactionRequest;
+import com.estate.real.model.response.AccountResponse;
 import com.estate.real.model.response.GeneralResponse;
 import com.estate.real.model.response.LandResponse;
+import com.estate.real.service.inf.AccountService;
 import com.estate.real.service.inf.LandService;
+import com.estate.real.utils.CurrencyConverter;
 import com.estate.real.utils.MyDate;
+import com.estate.real.utils.MyFile;
 import com.estate.real.utils.MyWeb3j;
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.web3j.crypto.Credentials;
+import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameterName;
+import org.web3j.protocol.core.methods.response.EthGetBalance;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
+import org.web3j.protocol.http.HttpService;
+import org.web3j.utils.Convert;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -54,7 +68,7 @@ public class LandServiceImpl implements LandService {
             ManageRealEsate manageRealEsate = MyWeb3j.LoadSmartContract();
             if (manageRealEsate != null) {
                 TransactionReceipt transactionReceipt = manageRealEsate.addLand(land.getDistrict(), land.getStreet(),
-                        land.getPathImage(), land.getPrice(),land.getWard(), land.getDescription()).send();
+                        land.getPathImage(), land.getPrice(), land.getWard(), land.getDescription()).send();
                 System.out.println("Trạng thái của quá trình thêm land vào blockchain: " + transactionReceipt.isStatusOK());
                 if (transactionReceipt.isStatusOK()) {
                     //Get event để thêm landId vào db
@@ -123,7 +137,7 @@ public class LandServiceImpl implements LandService {
     @Override
     public LandResponse getLandById(int idLand) {
         Land landNative = landRepository.getByLandId(idLand, LandStatus.active.toString());
-        if(landNative != null){
+        if (landNative != null) {
             LandResponse landResponse = new LandResponse(landNative);
             landResponse.setAddressSeller(landNative.getAddressHolder());
             landResponse.setDescription(landNative.getDescription());
@@ -141,6 +155,52 @@ public class LandServiceImpl implements LandService {
 
     @Override
     public GeneralResponse handleTransaction(TransactionRequest request) {
-        return null;
+        Account account = accountRepository.findByNameLoginAndStatus(request.getAddress(), AccountStatus.active.toString());
+        byte[] byteArray = Base64.decodeBase64(account.getPrivateKey().getBytes());
+        String privateTemp =  new String(byteArray);
+        Land land = landRepository.getByLandId(request.getLandId(), LandStatus.active.toString());
+        if (account == null || land == null) {
+            return new GeneralResponse(false);
+        } else {
+            try {
+                Web3j web3j = Web3j.build(new HttpService(ContractInfo.locationEthereum));
+                Credentials credentials = Credentials.create(privateTemp);
+                String addressContract = MyFile.RealFromFile(MyFile.ADDRESS_CONTRACT_FILE);
+                BigInteger gasLimit = BigInteger.valueOf(672197500);
+                BigInteger gasPrice =
+                        Convert.toWei("2000000", Convert.Unit.WEI).toBigInteger();
+                ManageRealEsate manageRealEsate = ManageRealEsate.load(addressContract, web3j, credentials,
+                        gasLimit, gasPrice);
+                EthGetBalance balanceResult = MyWeb3j.web3j.ethGetBalance(account.getAddress(),
+                        DefaultBlockParameterName.LATEST).send();
+//Obtain the BigInteger balance representation, in the wei unit.
+                BigInteger balanceInWei = balanceResult.getBalance();
+                System.out.println(Convert.toWei(new BigDecimal(land.getPrice()), Convert.Unit.ETHER));
+                System.out.println(Convert.toWei(new BigDecimal(balanceInWei), Convert.Unit.ETHER));
+                if(balanceInWei.compareTo(new BigInteger(land.getPrice())) == -1){
+                    return new GeneralResponse(false, "not-enough-money");
+                }
+                TransactionReceipt transBuy = manageRealEsate.transferLand(account.getAddress(), BigInteger.valueOf(request.getLandId())).send();
+                if (transBuy.isStatusOK()) {
+//                    List<ManageRealEsate.TransferEventResponse> transferEventResponses = manageRealEsate.getTransferEvents(transBuy);
+                    String eth = CurrencyConverter.VNDToETH(land.getPrice());
+                    if (MyWeb3j.transferEth(privateTemp,web3j, land.getAddressHolder(), eth)) {
+                        return new GeneralResponse(true);
+                    } else {//rollback land to owner
+                        transBuy = manageRealEsate.transferLand(land.getAddressHolder(), BigInteger.valueOf(request.getLandId())).send();
+                    }
+                } else {
+                    return new GeneralResponse(false);
+                }
+            } catch (Exception e) {
+                if (e.getMessage().contains("sender doesn't have enough funds to send tx")) {
+                    System.out.println("Tài khoản không đủ gas để chạy transaction mua");
+                    return new GeneralResponse(false, "not-enough-gas");
+                }
+                e.printStackTrace();
+                return new GeneralResponse(false);
+            }
+        }
+        return new GeneralResponse(false);
     }
 }
