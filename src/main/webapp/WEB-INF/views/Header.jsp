@@ -37,8 +37,16 @@
                                                              href="/member/help">Trợ giúp</a></li>
             </c:if>
             <li class="avatar">
+                <c:if test="${requestScope.role == 'admin'}">
+                    <div class="badge badge-danger text-wrap" style="width: 6rem;">
+                        Người quản trị,
+                    </div>
+                </c:if>
+
                 <img id="i-img-ipfs" src="/imgs/item-real/avatar-default.png" alt="Avatar">
-                <span id="i-fullName"></span>
+                <c:if test="${requestScope.role == 'member'}">
+                    <span id="i-fullName"></span>
+                </c:if>
                 <ul class="avatar-detail">
                     <li><a href="/accounts/detail">Thông tin cá nhân</a></li>
                     <li style="border-top: 1px dashed #fff;"><a href="/logout" methods="GET">Đăng
