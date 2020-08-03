@@ -12,6 +12,7 @@ public class Land {
     private int landId;
     @Indexed
     private String addressHolder;
+    private String nameOwner;
     private String district;
     private String ward;
     private String description;

@@ -38,6 +38,7 @@
             </c:if>
             <li class="avatar">
                 <img id="i-img-ipfs" src="/imgs/item-real/avatar-default.png" alt="Avatar">
+                <span id="i-fullName"></span>
                 <ul class="avatar-detail">
                     <li><a href="/accounts/detail">Thông tin cá nhân</a></li>
                     <li style="border-top: 1px dashed #fff;"><a href="/logout" methods="GET">Đăng
@@ -70,44 +71,53 @@
     let url = window.location.href;
 
     window.addEventListener('load',function () {
-        if(${not empty sessionScope.MY_SESSION}){
-            let objSession = ${sessionScope.MY_SESSION};
+        let mySession = '${sessionScope.MY_SESSION}';
+        if(mySession != ''){
+            let objSession = JSON.parse('${sessionScope.MY_SESSION}');
             objImgIpfs.src = objSession.imgPath;
+            document.getElementById('i-fullName').innerText = objSession.fullName;
         }
-    });
-    objUrlToAdminHome.addEventListener('click',function () {
-        if(${requestScope.role == 'admin'}) {
-            objUrlToAdminHome.href = "/";
-        } else if (${requestScope.role == 'member'}) {
-            objUrlToAdminHome.href = "/";
+        if(objUrlToAdminHome != null){
+            objUrlToAdminHome.addEventListener('click',function () {
+                if(${requestScope.role == 'admin'}) {
+                    objUrlToAdminHome.href = "/";
+                } else if (${requestScope.role == 'member'}) {
+                    objUrlToAdminHome.href = "/";
+                }
+            });
         }
-    });
-    if (typeof url == 'string') {
-        document.getElementById('i-logo-dapp').style.cssText = "border-bottom: none;";
-        let listLi = document.getElementsByClassName("nav-hover");
-        for (let j = 0; j < listLi.length; j++) {
-            console.log("+++++++++++remove++++++:" + j);
-            listLi[j].classList.remove("tab-current");
+
+        if (typeof url == 'string') {
+            if(null != document.getElementById('i-logo-dapp')){
+                document.getElementById('i-logo-dapp').style.cssText = "border-bottom: none;";
+            }
+
+            let listLi = document.getElementsByClassName("nav-hover");
+            for (let j = 0; j < listLi.length; j++) {
+                console.log("+++++++++++remove++++++:" + j);
+                listLi[j].classList.remove("tab-current");
+            }
+            for (let i = 0; i < listLi.length; i++) {
+                if (url.includes(listLi[i].href)) {
+                    listLi[i].classList.add("tab-current");
+                    break;
+                }
+            }
+            // if (url.includes("/")) {
+            //     document.getElementById('i-logo-dapp').style.cssText =
+            //         "border-bottom: 2px orange solid;";
+            // }
         }
-        for (let i = 0; i < listLi.length; i++) {
-            if (url.includes(listLi[i].href)) {
-                listLi[i].classList.add("tab-current");
-                break;
+
+        function removeHover() {
+            let listLi = document.getElementsByClassName("nav-hover");
+            let i = 0;
+            for (i = 0; i < listLi.length; i++) {
+                listLi[i].classList.remove("tab-current");
             }
         }
-        if (url.includes("/")) {
-            document.getElementById('i-logo-dapp').style.cssText =
-                "border-bottom: 2px orange solid;";
-        }
-    }
+    });
 
-    function removeHover() {
-        let listLi = document.getElementsByClassName("nav-hover");
-        let i = 0;
-        for (i = 0; i < listLi.length; i++) {
-            listLi[i].classList.remove("tab-current");
-        }
-    }
 
 
 </script>

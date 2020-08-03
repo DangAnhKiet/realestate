@@ -6,6 +6,7 @@ import lombok.Data;
 @Data
 public class LandResponse {
     private String addressSeller;
+    private String ownerName;
     private String district;
     private String street;
     private String price;
@@ -24,6 +25,7 @@ public class LandResponse {
 
     public LandResponse(Land land) {
         this.addressSeller = land.getAddressHolder();
+        this.ownerName = land.getNameOwner();
         this.district = land.getDistrict();
         this.street = land.getStreet();
         this.price = land.getPrice();

@@ -52,8 +52,13 @@ public class LandServiceImpl implements LandService {
 
     @Override
     public GeneralResponse addLand(LandRequest request) {
+        Account account = accountRepository.findByAddress(request.getAddressSeller());
+        if(account == null){
+            return new GeneralResponse(false,"locked-account");
+        }
         Land land = new Land();
         land.setAddressHolder(request.getAddressSeller());
+        land.setNameOwner(account.getFullName().toUpperCase());
         land.setDistrict(request.getDistrict());
         land.setPathImage(request.getPathImage());
         land.setPrice(request.getPrice());
@@ -142,6 +147,7 @@ public class LandServiceImpl implements LandService {
         Land landNative = landRepository.getByLandId(idLand, LandStatus.active.toString());
         if (landNative != null) {
             LandResponse landResponse = new LandResponse(landNative);
+            landResponse.setOwnerName(landResponse.getOwnerName());
             landResponse.setAddressSeller(landNative.getAddressHolder());
             landResponse.setDescription(landNative.getDescription());
             landResponse.setDistrict(landNative.getDistrict());
@@ -193,7 +199,7 @@ public class LandServiceImpl implements LandService {
                         transBuy = manageRealEsate.transferLand(land.getAddressHolder(), BigInteger.valueOf(request.getLandId())).send();
                     }
                 } else {
-                    return new GeneralResponse(false);
+                    return new GeneralResponse(false, "error-system");
                 }
             } catch (Exception e) {
                 if (e.getMessage().contains("sender doesn't have enough funds to send tx")) {
