@@ -30,5 +30,5 @@ public interface LandService {
 
     public GeneralResponse updateAddressHolder(UpdateAddressRequest request);
 
-    public List<HistoryLandResponse> getHistoryFromNetwork(HistoryLandRequest request) throws Exception;
+    public List<HistoryLandResponse> getHistoryFromNetwork(String landId) throws Exception;
 }
