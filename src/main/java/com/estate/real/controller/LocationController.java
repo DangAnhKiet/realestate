@@ -3,6 +3,7 @@ package com.estate.real.controller;
 import com.estate.real.document.History;
 import com.estate.real.document.Land;
 import com.estate.real.model.enums.Role;
+import com.estate.real.model.response.GeneralResponse;
 import com.estate.real.model.response.LandResponse;
 import com.estate.real.service.inf.AccountService;
 import com.estate.real.service.inf.LandService;
@@ -148,6 +149,12 @@ public class LocationController {
         }
 
         return "LandDetailNew";
+    }
+
+    @RequestMapping(value = {"/update/{id}"}, method = RequestMethod.GET)
+    public String landUpdate(Model model, @PathVariable("id") int id) {
+        GeneralResponse landResponse = landService.updateLandStatus(id);
+        return "redirect:/member/manage/land";
     }
 
     @RequestMapping(value = {"/test"}, method = RequestMethod.GET)

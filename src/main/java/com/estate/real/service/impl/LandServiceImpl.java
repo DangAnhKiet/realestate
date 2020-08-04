@@ -155,7 +155,7 @@ public class LandServiceImpl implements LandService {
 
     @Override
     public LandResponse getLandById(int idLand) {
-        Land landNative = landRepository.getByLandId(idLand);
+        Land landNative = landRepository.getByLandIdAndStatus(idLand, LandStatus.active.toString());
         if (landNative != null) {
             LandResponse landResponse = new LandResponse(landNative);
             landResponse.setOwnerName(landResponse.getOwnerName());
@@ -185,7 +185,7 @@ public class LandServiceImpl implements LandService {
         landRepository.updateLand(request.getLandId(), map);
         if (accountBuyer == null || landTransfer == null) {
             Map<String, Object> map1 = new HashMap<>();
-            map.put("status", LandStatus.active.toString());
+            map1.put("status", LandStatus.active.toString());
             landRepository.updateLand(request.getLandId(), map1);
             return new GeneralResponse(false);
         } else {
@@ -204,7 +204,7 @@ public class LandServiceImpl implements LandService {
                 BigInteger balanceInWei = balanceResult.getBalance();
                 if (balanceInWei.compareTo(new BigInteger(landTransfer.getPrice())) == -1) {
                     Map<String, Object> map1 = new HashMap<>();
-                    map.put("status", LandStatus.active.toString());
+                    map1.put("status", LandStatus.active.toString());
                     landRepository.updateLand(request.getLandId(), map1);
                     return new GeneralResponse(false, "not-enough-money");
                 }
@@ -267,18 +267,18 @@ public class LandServiceImpl implements LandService {
                                     });
                         }
                         Map<String, Object> map1 = new HashMap<>();
-                        map.put("status", LandStatus.active.toString());
+                        map1.put("status", LandStatus.active.toString());
                         landRepository.updateLand(request.getLandId(), map1);
                         return new GeneralResponse(false, "error-transfer-eth");
                     }
                 }
                 Map<String, Object> map1 = new HashMap<>();
-                map.put("status", LandStatus.active.toString());
+                map1.put("status", LandStatus.active.toString());
                 landRepository.updateLand(request.getLandId(), map1);
                 return new GeneralResponse(false);
             } catch (Exception e) {
                 Map<String, Object> map1 = new HashMap<>();
-                map.put("status", LandStatus.active.toString());
+                map1.put("status", LandStatus.active.toString());
                 landRepository.updateLand(request.getLandId(), map1);
                 System.out.println(e.getMessage());
                 if (null != e.getMessage() && e.getMessage().contains("sender doesn't have enough funds to send tx")) {
@@ -381,5 +381,19 @@ public class LandServiceImpl implements LandService {
             landResponses.add(historyLandResponse);
         }
         return landResponses;
+    }
+
+    @Override
+    public GeneralResponse updateLandStatus(int landId) {
+        Map<String, Object> map = new HashMap<>();
+        Land land = landRepository.getByLandId(landId);
+        if (land.getStatus().equals(LandStatus.active.toString())) {
+            map.put("status", LandStatus.pending.toString());
+        }
+        if (land.getStatus().equals(LandStatus.pending.toString())) {
+            map.put("status", LandStatus.active.toString());
+        }
+        landRepository.updateLand(landId, map);
+        return new GeneralResponse(true);
     }
 }

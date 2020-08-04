@@ -19,7 +19,7 @@
                     <c:forEach items="${requestScope.landResponseList}" var="i">
                         <div class="col-sm-12">
                             <div class="card co">
-                                <div><img class="card-img-bottom-new " src="${i.image}" alt="Card image cap"></div>
+                                <div><img class="card-img-bottom-new" src="${i.image}" alt="Card image cap"></div>
                                 <div class="card-body">
                                     <c:if test="${requestScope.role == 'admin'}">
                                         <h5 class="card-title">LandId: <span class="i-land">${i.landId}</span></h5>

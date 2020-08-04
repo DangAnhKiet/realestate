@@ -155,13 +155,13 @@
                     document.getElementById('i-alert').style.display = "block";
                 } else if (jsonSessionLandDetail.role == "member") {
                     if (landCurrent == jsonSessionLandDetail.walletAddress) {
-                        document.getElementById('i-alert').innerText = "Bạn đang sở hữu bất động sản này. Không thể thực hiện giao dịc MUA.";
+                        document.getElementById('i-alert').innerText = "Bạn đang sở hữu bất động sản này. Không thể thực hiện giao dịch mua.";
                         document.getElementById('i-alert').style.display = "block";
                     } else {
                         getBalance(document.getElementById('i-money-owner-wallet'));
                         document.getElementById('i-modal-detail-transfer').style.display = "block";
                         document.getElementById('i-status-success-password').style.display = "none";
-                        document.getElementById('i-click-buy-inside').addEventListener('click',function () {
+                        document.getElementById('i-click-buy-inside').addEventListener('click', function () {
                             document.getElementById('i-updating-land').style.display = 'block';
                             $.ajax({
                                 type: "POST",

@@ -26,6 +26,16 @@
                                 <a style="background-color: #EEA738; border-color: #EEA738;" href="/landn/${i.landId}"
                                    class="btn land-view-detail">Xem
                                     chi tiết</a>
+                                <c:if test="${i.status == 'active'}">
+                                    <a style="background-color: #EEA738; border-color: #EEA738;"
+                                       href="/update/${i.landId}"
+                                       class="btn land-view-detail">không công khai</a>
+                                </c:if>
+                                <c:if test="${i.status == 'pending'}">
+                                    <a style="background-color: #EEA738; border-color: #EEA738;"
+                                       href="/update/${i.landId}"
+                                       class="btn land-view-detail">công khai</a>
+                                </c:if>
                             </div>
                         </div>
                     </div>

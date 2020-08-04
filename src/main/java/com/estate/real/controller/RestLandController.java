@@ -57,8 +57,12 @@ public class RestLandController {
     }
 
     @RequestMapping(value = "/history", method = RequestMethod.POST)
-    public List<HistoryLandResponse> updateAddressHolder(@RequestBody HistoryLandRequest request) throws Exception {
+    public List<HistoryLandResponse> getHistoryFromNetwork(@RequestBody HistoryLandRequest request) throws Exception {
         return landService.getHistoryFromNetwork(request);
     }
 
+    @RequestMapping(value = "/status", method = RequestMethod.GET)
+    public GeneralResponse updateLandStatus(@RequestParam int landId) {
+        return landService.updateLandStatus(landId);
+    }
 }

@@ -23,7 +23,7 @@
                 </c:if>
                 <c:if test="${requestScope.isNull == false}">
                     <div class="card-body">
-                        <img src="${requestScope.landResponse.image}"
+                        <img style="width: 50%;" src="${requestScope.landResponse.image}"
                              alt="img-detail-land-${requestScope.landResponse.landId}">
                         <h5 style="padding-top: 2%; font-size: xx-large;" class="card-title">
                             Đường ${requestScope.landResponse.street},
