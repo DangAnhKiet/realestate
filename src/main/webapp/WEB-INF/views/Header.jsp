@@ -29,13 +29,14 @@
                                                              href="/member/manage/land">Quản lí
                     đất</a>
                 </li>
-                <li style="border-left: 1px dashed #fff;"><a class="nav-hover" id="i-member-land-history"
-                                                             href="/member/manage/history">Lịch sử giao
-                    dịch</a>
+                <%--                <li style="border-left: 1px dashed #fff;"><a class="nav-hover" id="i-member-land-history"--%>
+                <%--                                                             href="/member/manage/history">Lịch sử giao--%>
+                <%--                    dịch</a>--%>
                 </li>
                 <li style="border-left: 1px dashed #fff;"><a class="nav-hover" id="i-member-help"
                                                              href="/member/help">Trợ giúp</a></li>
-                <li style="padding-top: 1rem; padding-left: 8%; color: white;">Số tiền trong ví: <span>  <strong>1234 </strong>ETH</span></li>
+                <li style="padding-top: 1rem; padding-left: 8%; color: white;">Số tiền trong ví:
+                    <span>  <strong>1234 </strong>ETH</span></li>
             </c:if>
             <li class="avatar">
                 <c:if test="${requestScope.role == 'admin'}">

@@ -92,7 +92,7 @@ public class CurrencyConverter {
         return result;
     }
     public static void main(String[] args) {
-        VNDToETH("1000000000");
+            System.out.println(VNDToETH("10000000000"));
     }
 
 }

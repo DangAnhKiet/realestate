@@ -940,5 +940,10 @@ section .section-title {
         width: 80px;
         height: 80px;
     }
+}
 
+.card-img-bottom-new {
+    width: 35% !important;
+    border-bottom-right-radius: calc(0.25rem - 1px);
+    border-bottom-left-radius: calc(0.25rem - 1px);
 }

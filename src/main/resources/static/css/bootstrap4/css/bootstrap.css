@@ -4668,12 +4668,6 @@ input[type="button"].btn-block {
     border-bottom-left-radius: calc(0.25rem - 1px);
 }
 
-.card-img-bottom-new {
-    width: 50%;
-    border-bottom-right-radius: calc(0.25rem - 1px);
-    border-bottom-left-radius: calc(0.25rem - 1px);
-}
-
 .card-deck {
     display: -ms-flexbox;
     display: flex;

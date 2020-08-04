@@ -18,9 +18,12 @@
                 <c:if test="${not empty requestScope.landResponseList}">
                     <c:forEach items="${requestScope.landResponseList}" var="i">
                         <div class="col-sm-12">
-                            <div class="card my-card-home">
-                                <img class="card-img-bottom-new" src="${i.image}" alt="Card image cap">
+                            <div class="card co">
+                                <div><img class="card-img-bottom-new " src="${i.image}" alt="Card image cap"></div>
                                 <div class="card-body">
+                                    <c:if test="${requestScope.role == 'admin'}">
+                                        <h5 class="card-title">LandId: <span class="i-land">${i.landId}</span></h5>
+                                    </c:if>
                                     <h5 class="card-title">Giá bán: <span class="i-price">${i.price}</span> VNĐ</h5>
                                     <p class="card-text">${i.street} | ${i.district}</p>
                                     <a style="background-color: #EEA738; border-color: #EEA738;"
@@ -34,7 +37,8 @@
                 </c:if>
                 <c:if test="${empty requestScope.landResponseList}">
                     <div class="col sm 12">
-                        <h4 style="text-align: center; padding-bottom: 20%; padding-top: 10%;">Không tìm thấy bất động sản mới</h4>
+                        <h4 style="text-align: center; padding-bottom: 20%; padding-top: 10%;">Không tìm thấy bất động
+                            sản mới</h4>
                     </div>
                 </c:if>
             </div>
@@ -45,9 +49,9 @@
 </div>
 <script type="text/javascript">
     let objPrice = document.getElementsByClassName('i-price');
-    for(let i = 0; i < objPrice.length; i++){
+    for (let i = 0; i < objPrice.length; i++) {
         if (objPrice[i].textContent != "" && !(isNaN(objPrice[i].textContent))) {
-            objPrice[i].innerText  = new Intl.NumberFormat('vi-VN', {maximumSignificantDigits: 3}).format(objPrice[i].textContent);
+            objPrice[i].innerText = new Intl.NumberFormat('vi-VN', {maximumSignificantDigits: 3}).format(objPrice[i].textContent);
         }
     }
     // window.addEventListener('load',function () {

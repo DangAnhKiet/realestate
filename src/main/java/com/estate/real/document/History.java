@@ -10,13 +10,14 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Data
 @NoArgsConstructor
 public class History {
-    private long timestamp;
+    private int landID;
+    private String timestamp;
     @Indexed
     private String seller;
     @Indexed
     private String buyer;
-    private int landID;
     private String price;
+    private String image;
     private String createdDate;
     private String updatedDate;
     private String createdBy;

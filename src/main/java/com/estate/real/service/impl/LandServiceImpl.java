@@ -10,11 +10,9 @@ import com.estate.real.document.History;
 import com.estate.real.document.Land;
 import com.estate.real.model.enums.AccountStatus;
 import com.estate.real.model.enums.LandStatus;
-import com.estate.real.model.request.LandFilterRequest;
-import com.estate.real.model.request.LandPagingRequest;
-import com.estate.real.model.request.LandRequest;
-import com.estate.real.model.request.TransactionRequest;
+import com.estate.real.model.request.*;
 import com.estate.real.model.response.GeneralResponse;
+import com.estate.real.model.response.HistoryLandResponse;
 import com.estate.real.model.response.LandResponse;
 import com.estate.real.service.inf.LandService;
 import com.estate.real.utils.CurrencyConverter;
@@ -24,22 +22,21 @@ import com.estate.real.utils.MyWeb3j;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.web3j.abi.EventEncoder;
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameterName;
-import org.web3j.protocol.core.methods.request.EthFilter;
-import org.web3j.protocol.core.methods.response.EthAccounts;
 import org.web3j.protocol.core.methods.response.EthGetBalance;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.http.HttpService;
-import org.web3j.tuples.generated.Tuple8;
+import org.web3j.tuples.generated.Tuple5;
 import org.web3j.utils.Convert;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -158,7 +155,7 @@ public class LandServiceImpl implements LandService {
 
     @Override
     public LandResponse getLandById(int idLand) {
-        Land landNative = landRepository.getByLandId(idLand, LandStatus.active.toString());
+        Land landNative = landRepository.getByLandId(idLand);
         if (landNative != null) {
             LandResponse landResponse = new LandResponse(landNative);
             landResponse.setOwnerName(landResponse.getOwnerName());
@@ -181,8 +178,15 @@ public class LandServiceImpl implements LandService {
         Account accountBuyer = accountRepository.findByNameLoginAndStatus(request.getAddress(), AccountStatus.active.toString());
         byte[] byteArray = Base64.decodeBase64(accountBuyer.getPrivateKey().getBytes());
         String privateKeyBuyer = new String(byteArray);
-        Land landTransfer = landRepository.getByLandId(request.getLandId(), LandStatus.active.toString());
+        Land landTransfer = landRepository.getByLandIdAndStatus(request.getLandId(), LandStatus.active.toString());
+        Account accountSeller = accountRepository.findByAddress(landTransfer.getAddressHolder());
+        Map<String, Object> map = new HashMap<>();
+        map.put("status", LandStatus.pending.toString());
+        landRepository.updateLand(request.getLandId(), map);
         if (accountBuyer == null || landTransfer == null) {
+            Map<String, Object> map1 = new HashMap<>();
+            map.put("status", LandStatus.active.toString());
+            landRepository.updateLand(request.getLandId(), map1);
             return new GeneralResponse(false);
         } else {
             try {
@@ -199,13 +203,16 @@ public class LandServiceImpl implements LandService {
                         DefaultBlockParameterName.LATEST).send();
                 BigInteger balanceInWei = balanceResult.getBalance();
                 if (balanceInWei.compareTo(new BigInteger(landTransfer.getPrice())) == -1) {
+                    Map<String, Object> map1 = new HashMap<>();
+                    map.put("status", LandStatus.active.toString());
+                    landRepository.updateLand(request.getLandId(), map1);
                     return new GeneralResponse(false, "not-enough-money");
                 }
                 //Thực hiện transfer
 //                event Transfer(address indexed _from, address indexed _to, uint _landId);
 //            function transferLand(address _landBuyer,address _ownerLand, uint _landID)
                 TransactionReceipt receiptTransfer = manageRealEsate.transferLand(accountBuyer.getAddress(), landTransfer.getAddressHolder(),
-                        BigInteger.valueOf(landTransfer.getLandId()),MyDate.getNow(),landTransfer.getPathImage()).send();
+                        BigInteger.valueOf(landTransfer.getLandId()), MyDate.getNow(), landTransfer.getPathImage()).send();
                 if (receiptTransfer.isStatusOK()) {
                     manageRealEsate
                             .transferEventObservable(DefaultBlockParameterName.LATEST, DefaultBlockParameterName.LATEST)
@@ -223,7 +230,23 @@ public class LandServiceImpl implements LandService {
                     String privateKeyBuyerNew = new String(byteArrayNew);
                     if (MyWeb3j.transferEth(privateKeyBuyerNew, web3j, landTransfer.getAddressHolder(), eth)) {
                         System.out.println("Giao dich mua dat thanh cong");
-                        //
+                        // update address
+//                        Tuple8<String, String, String, String, String, String, String, BigInteger> landTupble = manageRealEsate.getLandByAddress(i,
+//                                ).send();
+//                        System.out.println(landTupble.getValue1());
+//                        System.out.println(landTupble.getValue8());
+
+                        Map<String, Object> map1 = new HashMap<>();
+                        map1.put("addressHolder", accountBuyer.getAddress());
+                        landRepository.updateLand(request.getLandId(), map1);
+                        // save history
+//                        History history = new History();
+//                        history.setSeller(accountSeller.getFullName());
+//                        history.setBuyer(accountBuyer.getFullName());
+//                        history.setTimestamp(MyDate.getNow());
+//                        history.setPrice(landTransfer.getPrice());
+//                        history.setImage(landTransfer.getPathImage());
+//                        historyRepository.save(history);
                         return new GeneralResponse(true);
                     } else {//rollback land to previous owner
                         System.out.println("Chuyen tien that bai.");
@@ -243,11 +266,20 @@ public class LandServiceImpl implements LandService {
                                         System.out.println(" id cua dat: " + landId);
                                     });
                         }
+                        Map<String, Object> map1 = new HashMap<>();
+                        map.put("status", LandStatus.active.toString());
+                        landRepository.updateLand(request.getLandId(), map1);
                         return new GeneralResponse(false, "error-transfer-eth");
                     }
                 }
+                Map<String, Object> map1 = new HashMap<>();
+                map.put("status", LandStatus.active.toString());
+                landRepository.updateLand(request.getLandId(), map1);
                 return new GeneralResponse(false);
             } catch (Exception e) {
+                Map<String, Object> map1 = new HashMap<>();
+                map.put("status", LandStatus.active.toString());
+                landRepository.updateLand(request.getLandId(), map1);
                 System.out.println(e.getMessage());
                 if (null != e.getMessage() && e.getMessage().contains("sender doesn't have enough funds to send tx")) {
                     System.out.println("Tài khoản không đủ gas để chạy transaction mua");
@@ -297,5 +329,57 @@ public class LandServiceImpl implements LandService {
         } else {
             return "0";
         }
+    }
+
+    @Override
+    public GeneralResponse updateAddressHolder(UpdateAddressRequest request) {
+        Land land = landRepository.getByLandIdAndStatus(request.getLandId(), LandStatus.active.toString());
+        if (land == null) {
+            return new GeneralResponse(false);
+        }
+        Map<String, Object> map = new HashMap<>();
+        map.put("addressHolder", request.getAddress());
+        landRepository.updateLand(request.getLandId(), map);
+        return new GeneralResponse(true);
+    }
+
+    @Override
+    public List<HistoryLandResponse> getHistoryFromNetwork(HistoryLandRequest request) throws Exception {
+        List<HistoryLandResponse> landResponses = new ArrayList<>();
+
+        Web3j web3j = Web3j.build(new HttpService(ContractInfo.locationEthereum));
+//            Credentials credentials = Credentials.create(ContractInfo.pkDeploy);
+        Credentials credentials = Credentials.create(ContractInfo.pkDeploy);
+        String addressContract = MyFile.RealFromFile(MyFile.ADDRESS_CONTRACT_FILE);
+        BigInteger gasLimit = BigInteger.valueOf(672197500);
+        BigInteger gasPrice =
+                Convert.toWei("2000000", Convert.Unit.WEI).toBigInteger();
+        ManageRealEsate manageRealEsate = ManageRealEsate.load(addressContract, web3j, credentials,
+                gasLimit, gasPrice);
+
+
+        BigInteger landIdCurrent = BigInteger.valueOf(request.getLandId());
+        BigInteger sizeArrayLandCurrent = manageRealEsate.getNoOfHistory(landIdCurrent).send();
+        System.out.println("+++++++++++++++++++++++++++++++++++Danh sach LICH SU GIAO DICH CUA LANDID: ");
+        for (int i = 0; i < sizeArrayLandCurrent.intValue(); i++) {
+            Tuple5<String, String, String, String, String> historyList = manageRealEsate.getHistoryByLandId(landIdCurrent,
+                    BigInteger.valueOf(i)).send();
+            System.out.println(historyList.getValue1());//dia chi nguoi mua
+            System.out.println(historyList.getValue2());//dia chi nguoi ban
+            System.out.println(historyList.getValue3());//gia ban
+            System.out.println(historyList.getValue4());//ngay bans
+            System.out.println(historyList.getValue5());//hinh anh
+
+            HistoryLandResponse historyLandResponse = new HistoryLandResponse();
+            Account buyer = accountRepository.findByAddress(historyList.getValue1());
+            Account seller = accountRepository.findByAddress(historyList.getValue2());
+            historyLandResponse.setBuyer(buyer.getFullName());
+            historyLandResponse.setSeller(seller.getFullName());
+            historyLandResponse.setPrice(historyList.getValue3());
+            historyLandResponse.setTimestamp(historyList.getValue4());
+            historyLandResponse.setImage(historyList.getValue5());
+            landResponses.add(historyLandResponse);
+        }
+        return landResponses;
     }
 }

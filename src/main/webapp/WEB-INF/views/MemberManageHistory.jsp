@@ -21,8 +21,8 @@
                             <div class="card my-card-home">
                                 <img class="card-img-bottom-new" src="${i.image}" alt="Card image cap">
                                 <div class="card-body">
-                                    <h5 class="card-title">Người bán: <span class="i-price">${i.seller}</span> VNĐ</h5>
-                                    <h5 class="card-title">Người mua: <span class="i-price">${i.buyer}</span> VNĐ</h5>
+                                    <h5 class="card-title">Người bán: <span class="i-price">${i.seller}</span></h5>
+                                    <h5 class="card-title">Người mua: <span class="i-price">${i.buyer}</span></h5>
                                     <h5 class="card-title">Giá bán: <span class="i-price">${i.price}</span> VNĐ</h5>
                                     <h5 class="card-title">Thời gian bán: <span class="i-price">${i.timestamp}</span>
                                         VNĐ</h5>
