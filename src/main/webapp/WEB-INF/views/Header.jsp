@@ -35,7 +35,7 @@
                 </li>
                 <li style="border-left: 1px dashed #fff;"><a class="nav-hover" id="i-member-help"
                                                              href="/member/help">Trợ giúp</a></li>
-                <li style="border-left: 1px dashed #fff;">Số tiền trong ví: <span>  <strong>1234 </strong>ETH</span></li>
+                <li style="padding-top: 1rem; padding-left: 8%; color: white;">Số tiền trong ví: <span>  <strong>1234 </strong>ETH</span></li>
             </c:if>
             <li class="avatar">
                 <c:if test="${requestScope.role == 'admin'}">
@@ -79,6 +79,30 @@
     let objUrlToAdminHome = document.getElementById('i-a-logo-home');
     let url = window.location.href;
 
+    function getBalance(elemCurr){
+        let mySession = '${sessionScope.MY_SESSION}';
+        let jsonSession = JSON.parse(mySession);
+        $.ajax({
+            type: "POST",
+            contentType: "text/plain",
+            url: 'http://localhost:8084/api/land/checkBalance',
+            data: jsonSession.userLogin,
+            success: function (objResponse) {
+                if (objResponse.success === true) {
+                    if(elemCurr != null){
+                        // document.getElementById('i-money-owner-wallet').innerText = objResponse.strResult;
+                        elemCurr.innerText = objResponse.strResult;
+                    }
+
+                } else if (objResponse.success === false ) {
+                    if(elemCurr != null){
+                        // document.getElementById('i-money-owner-wallet').innerText = objResponse.strResult;
+                        elemCurr.innerText = "###";
+                    }
+                }
+            }
+        });
+    }
     // window.addEventListener('load', function () {
 
         let mySession = '${sessionScope.MY_SESSION}';

@@ -205,7 +205,7 @@ public class LandServiceImpl implements LandService {
 //                event Transfer(address indexed _from, address indexed _to, uint _landId);
 //            function transferLand(address _landBuyer,address _ownerLand, uint _landID)
                 TransactionReceipt receiptTransfer = manageRealEsate.transferLand(accountBuyer.getAddress(), landTransfer.getAddressHolder(),
-                        BigInteger.valueOf(landTransfer.getLandId())).send();
+                        BigInteger.valueOf(landTransfer.getLandId()),MyDate.getNow(),landTransfer.getPathImage()).send();
                 if (receiptTransfer.isStatusOK()) {
                     manageRealEsate
                             .transferEventObservable(DefaultBlockParameterName.LATEST, DefaultBlockParameterName.LATEST)
@@ -229,7 +229,7 @@ public class LandServiceImpl implements LandService {
                         System.out.println("Chuyen tien that bai.");
                         TransactionReceipt receiptTransferNew = manageRealEsate.transferLand(landTransfer.getAddressHolder(),
                                 accountBuyer.getAddress(),
-                                BigInteger.valueOf(landTransfer.getLandId())).send();
+                                BigInteger.valueOf(landTransfer.getLandId()), MyDate.getNow(), landTransfer.getPathImage()).send();
                         if (receiptTransferNew.isStatusOK()) {
                             System.out.println("Chuyển đất ngược lại chủ cũ thành công.");
                             manageRealEsate

@@ -130,13 +130,13 @@
     //     }
     //
     // });
-    window.addEventListener('load', function () {
+    // window.addEventListener('load', function () {
         document.getElementById('i-modal-transfer').style.display = "none";
         document.getElementById('i-success-icon').style.display = "none";
         document.getElementById('i-fail-icon').style.display = "none";
         // reset alert
         document.getElementById('i-alert').style.display = "none";
-        let mySession = '${sessionScope.MY_SESSION}';
+        let mySessionLandDetail = '${sessionScope.MY_SESSION}';
         let landCurrent = '${requestScope.addressHolder}';
 
         let objPrice = document.getElementById('i-price');
@@ -144,39 +144,21 @@
             objPrice.innerText = new Intl.NumberFormat('vi-VN', {maximumSignificantDigits: 3}).format(objPrice.textContent);
         }
 
-        function getBalance(){
-            let mySession = '${sessionScope.MY_SESSION}';
-            let jsonSession = JSON.parse(mySession);
-            $.ajax({
-                type: "POST",
-                contentType: "text/plain",
-                url: 'http://localhost:8084/api/land/checkBalance',
-                data: jsonSession.userLogin,
-                success: function (objResponse) {
-                    if (objResponse.success === true) {
-                        document.getElementById('i-money-owner-wallet').innerText = objResponse.strResult;
-                    } else if (objResponse.success === false ) {
-                        document.getElementById('i-money-owner-wallet').innerText = "Lỗi không thể lấy thông tin số dư";
-                    }
-                }
-            });
-        }
-
         document.getElementById('i-btn-buy').addEventListener('click', function () {
-            if (mySession != "") {
-                let jsonSession = JSON.parse(mySession);
+            if (mySessionLandDetail != "") {
+                let jsonSessionLandDetail = JSON.parse(mySessionLandDetail);
                 console.log(landCurrent);
-                console.log(JSON.stringify(jsonSession));
-                console.log(landCurrent == jsonSession.walletAddress);
-                if (jsonSession.role == "admin") {
+                console.log(JSON.stringify(jsonSessionLandDetail));
+                console.log(landCurrent == jsonSessionLandDetail.walletAddress);
+                if (jsonSessionLandDetail.role == "admin") {
                     document.getElementById('i-alert').innerText = "Chỉ thành viên mới được quyền thực hiện giao dịch mua bán";
                     document.getElementById('i-alert').style.display = "block";
-                } else if (jsonSession.role == "member") {
-                    if (landCurrent == jsonSession.walletAddress) {
+                } else if (jsonSessionLandDetail.role == "member") {
+                    if (landCurrent == jsonSessionLandDetail.walletAddress) {
                         document.getElementById('i-alert').innerText = "Bạn đang sở hữu bất động sản này. Không thể thực hiện giao dịc MUA.";
                         document.getElementById('i-alert').style.display = "block";
                     } else {
-                        getBalance();
+                        getBalance(document.getElementById('i-money-owner-wallet'));
                         document.getElementById('i-modal-detail-transfer').style.display = "block";
                         document.getElementById('i-status-success-password').style.display = "none";
                         document.getElementById('i-click-buy-inside').addEventListener('click',function () {
@@ -186,7 +168,7 @@
                                 contentType: "application/json",
                                 url: 'http://localhost:8084/api/land/transaction',
                                 data: JSON.stringify({
-                                    "address": jsonSession.userLogin,
+                                    "address": jsonSessionLandDetail.userLogin,
                                     "landId": '${requestScope.landId}'
                                 }),
                                 success: function (objResponse) {
@@ -194,29 +176,29 @@
                                     document.getElementById('i-modal-detail-transfer').style.display = "none";
                                     if (objResponse.success === true) {
                                         document.getElementById('i-alert-title').innerText = "Giao dịch mua thành công";
-                                        document.getElementById('i-success-icon').style.display = "block";
+                                        document.getElementById('i-success-icon').style.display = "inline";
                                         document.getElementById('i-status-success-password').style.display = "block";
                                         document.getElementById('i-modal-transfer').style.display = "block";
 
                                     } else if (objResponse.success === false && objResponse.strResult == "not-enough-money") {
                                         document.getElementById('i-alert-title').innerText = "Giao dịch mua thất bại";
                                         document.getElementById('i-alert-content').innerText = "Tài khoản không đủ tiền để thực hiện giao dịch";
-                                        document.getElementById('i-fail-icon').style.display = "block";
+                                        document.getElementById('i-fail-icon').style.display = "inline";
                                         document.getElementById('i-modal-transfer').style.display = "block";
                                     } else if (objResponse.success === false && objResponse.strResult == "not-enough-gas") {
                                         document.getElementById('i-alert-title').innerText = "Giao dịch mua thất bại";
                                         document.getElementById('i-alert-content').innerText = "Tài khoản không đủ gas để thực hiện giao dịch";
-                                        document.getElementById('i-fail-icon').style.display = "block";
+                                        document.getElementById('i-fail-icon').style.display = "inline";
                                         document.getElementById('i-modal-transfer').style.display = "block";
                                     }else if (objResponse.success === false && objResponse.strResult == "error-transfer-eth") {
                                         document.getElementById('i-alert-title').innerText = "Giao dịch mua thất bại";
                                         document.getElementById('i-alert-content').innerText = "Lỗi hệ thống thanh toán tiền tệ. Xin quay lại sau.";
-                                        document.getElementById('i-fail-icon').style.display = "block";
+                                        document.getElementById('i-fail-icon').style.display = "inline";
                                         document.getElementById('i-modal-transfer').style.display = "block";
                                     }else if (objResponse.success === false) {
                                         document.getElementById('i-alert-title').innerText = "Giao dịch mua thất bại";
                                         document.getElementById('i-alert-content').innerText = "Hệ thống giao dịch đang bảo trì. Xin quay lại sau";
-                                        document.getElementById('i-fail-icon').style.display = "block";
+                                        document.getElementById('i-fail-icon').style.display = "inline";
                                         document.getElementById('i-modal-transfer').style.display = "block";
                                     }
                                 }
@@ -233,7 +215,7 @@
                 objPriceEth.innerText = new Intl.NumberFormat('vi-VN', {maximumSignificantDigits: 3}).format(objPriceEth.textContent);
             }
         });
-    });
+    // });
 </script>
 </body>
 </html>

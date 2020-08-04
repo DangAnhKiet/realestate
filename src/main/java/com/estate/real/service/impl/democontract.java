@@ -13,6 +13,7 @@ import org.web3j.protocol.core.methods.response.EthAccounts;
 import org.web3j.protocol.core.methods.response.EthGetBalance;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.http.HttpService;
+import org.web3j.tuples.generated.Tuple5;
 import org.web3j.tuples.generated.Tuple8;
 import org.web3j.utils.Convert;
 
@@ -69,28 +70,45 @@ public class democontract {
 //                        });
 //            }
 
-            String addressDeploy = "0xc29E3EC8C74638d1979b6f72762E4C7d944Fc530";
-//            System.out.println("so land: "+manageRealEsate.getNoOfLand(addressC).send());;
-            EthAccounts listAccount = new EthAccounts();
-            listAccount = web3j.ethAccounts().sendAsync().get() ;
-            List<String> stringListAccount = listAccount.getAccounts();
-            for (String i : stringListAccount){
-                BigInteger size = manageRealEsate.getNoOfLand(i).send();
-                int intSize = size.intValue();
-                System.out.println("+++++++++++++++++++++++++++++++++++Danh sach dat cua accout: "+i);
-                for(int j = 0; j < intSize; j++){
-                    Tuple8<String, String, String, String, String, String, String, BigInteger> landTupble = manageRealEsate.getLandByAddress(i,
-                    BigInteger.valueOf(j)).send();
-                    System.out.println(landTupble.getValue1());
-                    System.out.println(landTupble.getValue2());
-                    System.out.println(landTupble.getValue3());
-                    System.out.println(landTupble.getValue4());
-                    System.out.println(landTupble.getValue5());
-                    System.out.println(landTupble.getValue6());
-                    System.out.println(landTupble.getValue7());
-                    System.out.println(landTupble.getValue8());
-                }
+//            String addressDeploy = "0xc29E3EC8C74638d1979b6f72762E4C7d944Fc530";
+////            System.out.println("so land: "+manageRealEsate.getNoOfLand(addressC).send());;
+//            EthAccounts listAccount = new EthAccounts();
+//            listAccount = web3j.ethAccounts().sendAsync().get() ;
+//            List<String> stringListAccount = listAccount.getAccounts();
+//            for (String i : stringListAccount){
+//                BigInteger size = manageRealEsate.getNoOfLand(i).send();
+//                int intSize = size.intValue();
+//                System.out.println("+++++++++++++++++++++++++++++++++++Danh sach dat cua accout: "+i);
+//                for(int j = 0; j < intSize; j++){
+//                    Tuple8<String, String, String, String, String, String, String, BigInteger> landTupble = manageRealEsate.getLandByAddress(i,
+//                    BigInteger.valueOf(j)).send();
+//                    System.out.println(landTupble.getValue1());
+//                    System.out.println(landTupble.getValue2());
+//                    System.out.println(landTupble.getValue3());
+//                    System.out.println(landTupble.getValue4());
+//                    System.out.println(landTupble.getValue5());
+//                    System.out.println(landTupble.getValue6());
+//                    System.out.println(landTupble.getValue7());
+//                    System.out.println(landTupble.getValue8());
+//                }
+//            }
+
+
+////            GET HISTORY OF LAND
+            BigInteger landIdCurrent = BigInteger.valueOf(1);
+            BigInteger sizeArrayLandCurrent = manageRealEsate.getNoOfHistory(landIdCurrent).send();
+            System.out.println("+++++++++++++++++++++++++++++++++++Danh sach LICH SU GIAO DICH CUA LANDID: ");
+            for (int i = 0; i < sizeArrayLandCurrent.intValue(); i++){
+                Tuple5<String, String, String, String, String> historyList = manageRealEsate.getHistoryByLandId(landIdCurrent,
+                        BigInteger.valueOf(i)).send();
+                System.out.println(historyList.getValue1());//dia chi nguoi mua
+                System.out.println(historyList.getValue2());//dia chi nguoi ban
+                System.out.println(historyList.getValue3());//gia ban
+                System.out.println(historyList.getValue4());//ngay bans
+                System.out.println(historyList.getValue5());//hinh anh
             }
+
+
 //            Tuple8<String, String, String, String, String, String, String, BigInteger> landTupble = manageRealEsate.getLandByAddress(addressC,
 //                    BigInteger.valueOf(0)).send();
             System.out.println("sfsdf");

@@ -84,21 +84,57 @@ public class LocationController {
     }
 
     @RequestMapping(value = {"/land/{id}"}, method = RequestMethod.GET)
-    public String landDetail(Model model,@PathVariable("id")int id)
+    public String landDetail(Model model,@PathVariable("id")int id, HttpServletRequest httpServletRequest)
     {
+        String strSession = (String) httpServletRequest.getSession().getAttribute("MY_SESSION");
         LandResponse landResponse = landService.getLandById(id);
-        if(landResponse !=null) {
-            model.addAttribute("isNull", false);
-            model.addAttribute("landResponse", landResponse);
-            String valueEth = accountService.getETHFromVND(landResponse.getPrice());
-            model.addAttribute("valueEth", valueEth);
-            model.addAttribute("addressHolder", landResponse.getAddressSeller());
-            model.addAttribute("landId", landResponse.getLandId());
+        if (strSession == null || strSession.isEmpty()) {
+            if(landResponse !=null) {
+                model.addAttribute("isNull", false);
+                model.addAttribute("landResponse", landResponse);
+                String valueEth = accountService.getETHFromVND(landResponse.getPrice());
+                model.addAttribute("valueEth", valueEth);
+                model.addAttribute("addressHolder", landResponse.getAddressSeller());
+                model.addAttribute("landId", landResponse.getLandId());
+            } else {
+                model.addAttribute("isNull", true);
+            }
+            return "LandDetail";
         } else {
-            model.addAttribute("isNull", true);
+            JSONObject jsonSession = new JSONObject(strSession);
+            if (jsonSession.has("role")) {
+                if (jsonSession.getString("role").contains(Role.member.toString())) {
+                    model.addAttribute("role", Role.member.toString());
+                    if(landResponse !=null) {
+                        model.addAttribute("isNull", false);
+                        model.addAttribute("landResponse", landResponse);
+                        String valueEth = accountService.getETHFromVND(landResponse.getPrice());
+                        model.addAttribute("valueEth", valueEth);
+                        model.addAttribute("addressHolder", landResponse.getAddressSeller());
+                        model.addAttribute("landId", landResponse.getLandId());
+                    } else {
+                        model.addAttribute("isNull", true);
+                    }
+                    return "LandDetail";
+                }
+                if (jsonSession.getString("role").contains(Role.admin.toString())) {
+                    model.addAttribute("role", Role.admin.toString());
+                    if(landResponse !=null) {
+                        model.addAttribute("isNull", false);
+                        model.addAttribute("landResponse", landResponse);
+                        String valueEth = accountService.getETHFromVND(landResponse.getPrice());
+                        model.addAttribute("valueEth", valueEth);
+                        model.addAttribute("addressHolder", landResponse.getAddressSeller());
+                        model.addAttribute("landId", landResponse.getLandId());
+                    } else {
+                        model.addAttribute("isNull", true);
+                    }
+                    return "LandDetail";
+                }
+            }
+            httpServletRequest.getSession().invalidate();
+            return "redirect:/not-found";
         }
-
-        return "LandDetail";
     }
 
     @RequestMapping(value = {"/landn/{id}"}, method = RequestMethod.GET)
