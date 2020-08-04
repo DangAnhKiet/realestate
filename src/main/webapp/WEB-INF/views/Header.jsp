@@ -39,7 +39,7 @@
             <li class="avatar">
                 <c:if test="${requestScope.role == 'admin'}">
                     <div class="badge badge-danger text-wrap" style="width: 6rem;">
-                        Người quản trị,
+                        Người quản trị
                     </div>
                 </c:if>
 
@@ -78,30 +78,28 @@
     let objUrlToAdminHome = document.getElementById('i-a-logo-home');
     let url = window.location.href;
 
-    window.addEventListener('load',function () {
-        let mySession1 = '${sessionScope.MY_SESSION}';
-        if(mySession1 != ''){
-            let objSession = JSON.parse('${sessionScope.MY_SESSION}');
-            console.log(objSession);
-            console.log(objSession.imgPath);
-            objImgIpfs.src = objSession.imgPath;
-            // document.getElementById('i-fullName').addEventListener('load',function () {
-            //     document.getElementById('i-fullName').innerText = objSession.fullName;
-            // });
+    window.addEventListener('load', function () {
 
+        let mySession = '${sessionScope.MY_SESSION}';
+
+        if (${requestScope.role == 'member'}) {
+            if (mySession !== '') {
+                let objSession = JSON.parse(mySession);
+                objImgIpfs.src = objSession.imgPath;
+                document.getElementById('i-fullName').innerText = objSession.fullName;
+            }
         }
-        if(objUrlToAdminHome != null){
-            objUrlToAdminHome.addEventListener('click',function () {
-                if(${requestScope.role == 'admin'}) {
+        if (objUrlToAdminHome != null) {
+            objUrlToAdminHome.addEventListener('click', function () {
+                if (${requestScope.role == 'admin'}) {
                     objUrlToAdminHome.href = "/";
                 } else if (${requestScope.role == 'member'}) {
                     objUrlToAdminHome.href = "/";
                 }
             });
         }
-
         if (typeof url == 'string') {
-            if(null != document.getElementById('i-logo-dapp')){
+            if (null != document.getElementById('i-logo-dapp')) {
                 document.getElementById('i-logo-dapp').style.cssText = "border-bottom: none;";
             }
 
@@ -111,7 +109,7 @@
                 listLi[j].classList.remove("tab-current");
             }
             for (let i = 0; i < listLi.length; i++) {
-                if (url.includes(listLi[i].href)) {
+                if (url === (listLi[i].href)) {
                     listLi[i].classList.add("tab-current");
                     break;
                 }
@@ -130,7 +128,6 @@
             }
         }
     });
-
 
 
 </script>
