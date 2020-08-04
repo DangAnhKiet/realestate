@@ -78,7 +78,7 @@ contract ManageRealEsate {
         for (uint i = 0; i < (__ownedLands[_ownerLand].length); i++)
         {
             //if given land ID is indeed in owner's collection
-            if (__ownedLands[_ownerLand][i].landID == _landID)
+            if (__ownedLands[_ownerLand][i].ownerAddress != address(0)  && __ownedLands[_ownerLand][i].landID == _landID)
             {
                 //copy land in new owner's collection
                 Land memory myLand = Land(
@@ -96,13 +96,13 @@ contract ManageRealEsate {
 
                 //remove land from current ownerAddress
                 delete __ownedLands[_ownerLand][i];
-                totalLandsCounter--;
+//                totalLandsCounter--;
 
                 //Save __historyList
                 History memory historyTemp = History({
                     addressBuyer : _landBuyer,
                     addressSeller : _ownerLand,
-                    cost : __ownedLands[_landBuyer][i].cost,
+                    cost : myLand.cost,
                     date : _date,
                     image : _image
                     });

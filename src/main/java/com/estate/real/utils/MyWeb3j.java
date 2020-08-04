@@ -176,11 +176,16 @@ public class MyWeb3j {
             System.out.println("transactionHash: " + transactionHash);
             // Wait for transaction to be mined
             Optional<TransactionReceipt> transactionReceipt = null;
+            int count = 0;
             do {
+                count++;
                 System.out.println("checking if transaction " + transactionHash + " is mined....");
                 EthGetTransactionReceipt ethGetTransactionReceiptResp = web3.ethGetTransactionReceipt(transactionHash).send();
                 transactionReceipt = ethGetTransactionReceiptResp.getTransactionReceipt();
                 Thread.sleep(3000); // Wait 3 sec
+                if(count == 5){
+                    return false;
+                }
             } while (!transactionReceipt.isPresent());
             System.out.println("Transaction " + transactionHash + " was mined in block # " + transactionReceipt.get().getBlockNumber());
             System.out.println("Balance: " + Convert.fromWei(web3.ethGetBalance(credentials.getAddress(), DefaultBlockParameterName.LATEST).send().getBalance().toString(), Convert.Unit.ETHER));

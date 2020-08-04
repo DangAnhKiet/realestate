@@ -3,7 +3,9 @@ package com.estate.real.controller;
 import com.estate.real.document.History;
 import com.estate.real.document.Land;
 import com.estate.real.model.enums.Role;
+import com.estate.real.model.response.AccountResponse;
 import com.estate.real.model.response.GeneralResponse;
+import com.estate.real.model.response.HistoryLandResponse;
 import com.estate.real.model.response.LandResponse;
 import com.estate.real.service.inf.AccountService;
 import com.estate.real.service.inf.LandService;
@@ -135,6 +137,18 @@ public class LocationController {
             }
             httpServletRequest.getSession().invalidate();
             return "redirect:/not-found";
+        }
+    }
+
+    @RequestMapping(value = {"/land/history/{id}"}, method = RequestMethod.GET)
+    public String landHistory(Model model,@PathVariable("id")int id, HttpServletRequest httpServletRequest) throws Exception {
+        List<HistoryLandResponse>  historyLandResponses = landService.getHistoryFromNetwork(Integer.toString(id));
+        String strSession = (String) httpServletRequest.getSession().getAttribute("MY_SESSION");
+        if (strSession == null || strSession.isEmpty()) {
+            return "redirect:/login";
+        } else {
+           model.addAttribute("historyLandResponses",historyLandResponses);
+           return "AdminHistoryDetail";
         }
     }
 
@@ -287,7 +301,8 @@ public class LocationController {
             if (jsonSession.has("role")) {
                 if (jsonSession.getString("role").contains(Role.admin.toString())) {
                     model.addAttribute("role", Role.admin.toString());
-//                    model.addAttribute("listLands", landService.getAllLand());
+                    List<LandResponse> landResponses = landService.getAllLand();
+                    model.addAttribute("landResponses",landResponses);
                     return "AdminManageLand";
                 }
             }
@@ -347,7 +362,8 @@ public class LocationController {
             if (jsonSession.has("role")) {
                 if (jsonSession.getString("role").contains(Role.admin.toString())) {
                     model.addAttribute("role", Role.admin.toString());
-//                    model.addAttribute("listLands", landService.getAllLand());
+                    List<AccountResponse> accountResponses = accountService.getAll();
+                    model.addAttribute("accountResponses", accountResponses);
                     return "AdminManageAccount";
                 }
             }

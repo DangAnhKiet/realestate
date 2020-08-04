@@ -92,17 +92,20 @@ public class democontract {
 //                    System.out.println(landTupble.getValue8());
 //                }
 //            }
-
-
-////            GET HISTORY OF LAND
+//            String add1 = "0x6d89aE72497e6147332D5cc03B8232a4Ed0324A9";
+//            String add2 = "0xF6F0CEC2854e7F348eE6a7227F6Cb6D02a07B6a7";
+//            String add3 = "0x5Bab829317a29610ac4dCd8C8EdAFc7Df5dbB610";
+//            BigInteger size = manageRealEsate.getNoOfLand(add3).send();
+//            System.out.println(manageRealEsate.totalLandsCounter().send());
+//////            GET HISTORY OF LAND
             BigInteger landIdCurrent = BigInteger.valueOf(1);
             BigInteger sizeArrayLandCurrent = manageRealEsate.getNoOfHistory(landIdCurrent).send();
             System.out.println("+++++++++++++++++++++++++++++++++++Danh sach LICH SU GIAO DICH CUA LANDID: ");
             for (int i = 0; i < sizeArrayLandCurrent.intValue(); i++){
                 Tuple5<String, String, String, String, String> historyList = manageRealEsate.getHistoryByLandId(landIdCurrent,
                         BigInteger.valueOf(i)).send();
-                System.out.println(historyList.getValue1());//dia chi nguoi mua
-                System.out.println(historyList.getValue2());//dia chi nguoi ban
+                System.out.println("Nguoi mua "+historyList.getValue1());//dia chi nguoi mua
+                System.out.println("Nguoi ban "+historyList.getValue2());//dia chi nguoi ban
                 System.out.println(historyList.getValue3());//gia ban
                 System.out.println(historyList.getValue4());//ngay bans
                 System.out.println(historyList.getValue5());//hinh anh

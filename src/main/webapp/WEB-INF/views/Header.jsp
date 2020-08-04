@@ -45,7 +45,7 @@
             <li class="avatar">
                 <c:if test="${requestScope.role == 'admin'}">
                     <div class="badge badge-danger text-wrap" style="width: 6rem;">
-                        Người quản trị
+                        Quản trị viên
                     </div>
                 </c:if>
 

@@ -20,10 +20,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Base64;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class AccountServiceImpl implements AccountService {
@@ -78,6 +76,17 @@ public class AccountServiceImpl implements AccountService {
     public List<Account> getAllByStatus(String status) {
         return accountRepository.findAllByStatus(status);
     }
+
+    @Override
+    public List<AccountResponse> getAll() {
+        List<Account> accounts = accountRepository.getAllLands();
+        List<AccountResponse> accountResponses = new ArrayList<>();
+        if(accounts != null){
+            return accounts.stream().map(AccountResponse::new).collect(Collectors.toList());
+        }
+        return accountResponses;
+    }
+
 
     @Override
     public String login(HttpServletRequest httpServletRequest, AccountLoginRequest accountLoginRequest) {

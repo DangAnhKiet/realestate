@@ -61,19 +61,20 @@ public class RestLandController {
     }
 
     @RequestMapping(value = "/history", method = RequestMethod.POST)
-    public List<JSONObject> updateAddressHolder(@RequestBody String landId) throws Exception {
-        List<JSONObject> stringList = new ArrayList<>();
-        for (HistoryLandResponse landResponse : landService.getHistoryFromNetwork(landId)){
-            JSONObject objList = new JSONObject();
-            objList.put("timestamp",landResponse.getTimestamp());
-            objList.put("buyer",landResponse.getBuyer());
-            objList.put("seller",landResponse.getSeller());
-            objList.put("price",landResponse.getPrice());
-            objList.put("image",landResponse.getImage());
+    public String updateAddressHolder(@RequestBody String landId) throws Exception {
+        JSONArray stringList = new JSONArray();
+        List<HistoryLandResponse>  historyLandResponses = landService.getHistoryFromNetwork(landId);
+        for (HistoryLandResponse landResponse :historyLandResponses ){
+            JSONObject obj = new JSONObject();
+            obj.put("timestamp",landResponse.getTimestamp());
+            obj.put("buyer",landResponse.getBuyer());
+            obj.put("seller",landResponse.getSeller());
+            obj.put("price",landResponse.getPrice());
+            obj.put("image",landResponse.getImage());
 
-            stringList.add(objList);
+            stringList.put(obj);
         }
-        return stringList;
+        return stringList.toString();
     }
 
     @RequestMapping(value = "/status", method = RequestMethod.GET)

@@ -2,6 +2,7 @@ package com.estate.real.Repository.Impl;
 
 import com.estate.real.Repository.extend.AccountRepositoryExtend;
 import com.estate.real.document.Account;
+import com.estate.real.document.Land;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.FindAndModifyOptions;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -10,6 +11,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Map;
 
 @Repository
@@ -32,5 +34,12 @@ public class AccountRepositoryImpl implements AccountRepositoryExtend {
         FindAndModifyOptions options = new FindAndModifyOptions();
         options.returnNew(true).upsert(true);
         mongoTemplate.findAndModify(query, update, options, Account.class);
+    }
+
+    @Override
+    public List<Account> getAllLands() {
+//        Query query = new Query();
+//        query.addCriteria(Criteria.where("status").is(LandStatus.active.toString()));
+        return mongoTemplate.findAll(Account.class);
     }
 }

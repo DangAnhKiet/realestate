@@ -3,6 +3,7 @@ package com.estate.real.service.inf;
 import com.estate.real.document.Account;
 import com.estate.real.document.History;
 import com.estate.real.model.request.*;
+import com.estate.real.model.response.AccountResponse;
 import com.estate.real.model.response.GeneralResponse;
 
 import javax.servlet.http.HttpServletRequest;
@@ -13,6 +14,8 @@ public interface AccountService {
     public GeneralResponse addAccount(AccountRequest request);
 
     public List<Account> getAllByStatus(String status);
+
+    public List<AccountResponse> getAll();
 
     public String login(HttpServletRequest httpServletRequest, AccountLoginRequest request);
 

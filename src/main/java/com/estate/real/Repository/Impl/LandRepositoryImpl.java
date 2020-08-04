@@ -40,9 +40,9 @@ public class LandRepositoryImpl implements LandRepositoryExtend {
 
     @Override
     public List<Land> getAllLands() {
-        Query query = new Query();
-        query.addCriteria(Criteria.where("status").is(LandStatus.active.toString()));
-        return mongoTemplate.find(query, Land.class);
+//        Query query = new Query();
+//        query.addCriteria(Criteria.where("status").is(LandStatus.active.toString()));
+        return mongoTemplate.findAll(Land.class);
     }
 
     @Override

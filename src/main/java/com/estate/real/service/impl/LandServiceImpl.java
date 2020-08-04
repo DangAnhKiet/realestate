@@ -238,6 +238,7 @@ public class LandServiceImpl implements LandService {
 
                         Map<String, Object> map1 = new HashMap<>();
                         map1.put("addressHolder", accountBuyer.getAddress());
+                        map1.put("nameOwner", accountBuyer.getFullName());
                         landRepository.updateLand(request.getLandId(), map1);
                         // save history
 //                        History history = new History();
