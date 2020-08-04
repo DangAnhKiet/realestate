@@ -35,6 +35,7 @@
                 </li>
                 <li style="border-left: 1px dashed #fff;"><a class="nav-hover" id="i-member-help"
                                                              href="/member/help">Trợ giúp</a></li>
+                <li style="border-left: 1px dashed #fff;">Số tiền trong ví: <span>  <strong>1234 </strong>ETH</span></li>
             </c:if>
             <li class="avatar">
                 <c:if test="${requestScope.role == 'admin'}">
@@ -78,7 +79,7 @@
     let objUrlToAdminHome = document.getElementById('i-a-logo-home');
     let url = window.location.href;
 
-    window.addEventListener('load', function () {
+    // window.addEventListener('load', function () {
 
         let mySession = '${sessionScope.MY_SESSION}';
 
@@ -127,7 +128,7 @@
                 listLi[i].classList.remove("tab-current");
             }
         }
-    });
+    // });
 
 
 </script>

@@ -7,7 +7,7 @@ public class MyDate {
     public static String getNow(){
         String result = "";
         Date date = new Date();
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy-HH:mm:ss");
         return formatter.format(date);
     }
 

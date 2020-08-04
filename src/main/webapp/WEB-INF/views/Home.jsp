@@ -44,14 +44,15 @@
     </div>
 </div>
 <script type="text/javascript">
-    window.addEventListener('load',function () {
-        let objPrice = document.getElementsByClassName('i-price');
-        for(let i = 0; i < objPrice.length; i++){
-            if (objPrice[i].textContent != "" && !(isNaN(objPrice[i].textContent))) {
-                objPrice[i].innerText  = new Intl.NumberFormat('vi-VN', {maximumSignificantDigits: 3}).format(objPrice[i].textContent);
-            }
+    let objPrice = document.getElementsByClassName('i-price');
+    for(let i = 0; i < objPrice.length; i++){
+        if (objPrice[i].textContent != "" && !(isNaN(objPrice[i].textContent))) {
+            objPrice[i].innerText  = new Intl.NumberFormat('vi-VN', {maximumSignificantDigits: 3}).format(objPrice[i].textContent);
         }
-    });
+    }
+    // window.addEventListener('load',function () {
+    //
+    // });
 </script>
 </body>
 </html>
