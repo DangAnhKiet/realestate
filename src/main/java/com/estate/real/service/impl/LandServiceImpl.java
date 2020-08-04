@@ -24,12 +24,16 @@ import com.estate.real.utils.MyWeb3j;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.web3j.abi.EventEncoder;
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameterName;
+import org.web3j.protocol.core.methods.request.EthFilter;
+import org.web3j.protocol.core.methods.response.EthAccounts;
 import org.web3j.protocol.core.methods.response.EthGetBalance;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.http.HttpService;
+import org.web3j.tuples.generated.Tuple8;
 import org.web3j.utils.Convert;
 
 import java.math.BigDecimal;
@@ -53,8 +57,8 @@ public class LandServiceImpl implements LandService {
     @Override
     public GeneralResponse addLand(LandRequest request) {
         Account account = accountRepository.findByAddress(request.getAddressSeller());
-        if(account == null){
-            return new GeneralResponse(false,"locked-account");
+        if (account == null) {
+            return new GeneralResponse(false, "locked-account");
         }
         Land land = new Land();
         land.setAddressHolder(request.getAddressSeller());
@@ -72,10 +76,18 @@ public class LandServiceImpl implements LandService {
         land.setLandId(-1);
 
         //Thêm đất vào ethereum
+        Web3j web3j = Web3j.build(new HttpService(ContractInfo.locationEthereum));
+//            Credentials credentials = Credentials.create(ContractInfo.pkDeploy);
+        Credentials credentials = Credentials.create(ContractInfo.pkDeploy);
+        String addressContract = MyFile.RealFromFile(MyFile.ADDRESS_CONTRACT_FILE);
+        BigInteger gasLimit = BigInteger.valueOf(672197500);
+        BigInteger gasPrice =
+                Convert.toWei("2000000", Convert.Unit.WEI).toBigInteger();
+        ManageRealEsate manageRealEsate = ManageRealEsate.load(addressContract, web3j, credentials,
+                gasLimit, gasPrice);
         try {
-            ManageRealEsate manageRealEsate = MyWeb3j.LoadSmartContract();
             if (manageRealEsate != null) {
-                TransactionReceipt transactionReceipt = manageRealEsate.addLand(land.getDistrict(), land.getStreet(),
+                TransactionReceipt transactionReceipt = manageRealEsate.addLand(land.getAddressHolder(), land.getDistrict(), land.getStreet(),
                         land.getPathImage(), land.getPrice(), land.getWard(), land.getDescription()).send();
                 System.out.println("Trạng thái của quá trình thêm land vào blockchain: " + transactionReceipt.isStatusOK());
                 if (transactionReceipt.isStatusOK()) {
@@ -84,7 +96,9 @@ public class LandServiceImpl implements LandService {
                             .addEventObservable(DefaultBlockParameterName.LATEST, DefaultBlockParameterName.LATEST)
                             .subscribe(event -> {
                                 final int landId = Integer.valueOf(event._landID.toString());
+                                final String addressOwner = event._owner.toString();
                                 System.out.println(" landid vua moi add vao blockchain: " + landId);
+                                System.out.println(" address chu dat moi add: " + addressOwner);
                                 land.setLandId(landId);
                             });
                     //Them land vao database
@@ -164,45 +178,78 @@ public class LandServiceImpl implements LandService {
 
     @Override
     public GeneralResponse handleTransaction(TransactionRequest request) {
-        Account account = accountRepository.findByNameLoginAndStatus(request.getAddress(), AccountStatus.active.toString());
-        byte[] byteArray = Base64.decodeBase64(account.getPrivateKey().getBytes());
-        String privateTemp =  new String(byteArray);
-        Land land = landRepository.getByLandId(request.getLandId(), LandStatus.active.toString());
-        if (account == null || land == null) {
+        Account accountBuyer = accountRepository.findByNameLoginAndStatus(request.getAddress(), AccountStatus.active.toString());
+        byte[] byteArray = Base64.decodeBase64(accountBuyer.getPrivateKey().getBytes());
+        String privateKeyBuyer = new String(byteArray);
+        Land landTransfer = landRepository.getByLandId(request.getLandId(), LandStatus.active.toString());
+        if (accountBuyer == null || landTransfer == null) {
             return new GeneralResponse(false);
         } else {
             try {
                 Web3j web3j = Web3j.build(new HttpService(ContractInfo.locationEthereum));
-                Credentials credentials = Credentials.create(privateTemp);
+                Credentials credentials = Credentials.create(ContractInfo.pkDeploy);
                 String addressContract = MyFile.RealFromFile(MyFile.ADDRESS_CONTRACT_FILE);
                 BigInteger gasLimit = BigInteger.valueOf(672197500);
                 BigInteger gasPrice =
                         Convert.toWei("2000000", Convert.Unit.WEI).toBigInteger();
                 ManageRealEsate manageRealEsate = ManageRealEsate.load(addressContract, web3j, credentials,
                         gasLimit, gasPrice);
-                EthGetBalance balanceResult = MyWeb3j.web3j.ethGetBalance(account.getAddress(),
+                //Kiểm tra só tiền trong ví của người mua với giá đất hiện tại
+                EthGetBalance balanceResult = web3j.ethGetBalance(accountBuyer.getAddress(),
                         DefaultBlockParameterName.LATEST).send();
-//Obtain the BigInteger balance representation, in the wei unit.
                 BigInteger balanceInWei = balanceResult.getBalance();
-                System.out.println(Convert.toWei(new BigDecimal(land.getPrice()), Convert.Unit.ETHER));
-                System.out.println(Convert.toWei(new BigDecimal(balanceInWei), Convert.Unit.ETHER));
-                if(balanceInWei.compareTo(new BigInteger(land.getPrice())) == -1){
+                if (balanceInWei.compareTo(new BigInteger(landTransfer.getPrice())) == -1) {
                     return new GeneralResponse(false, "not-enough-money");
                 }
-                TransactionReceipt transBuy = manageRealEsate.transferLand(account.getAddress(), BigInteger.valueOf(request.getLandId())).send();
-                if (transBuy.isStatusOK()) {
-//                    List<ManageRealEsate.TransferEventResponse> transferEventResponses = manageRealEsate.getTransferEvents(transBuy);
-                    String eth = CurrencyConverter.VNDToETH(land.getPrice());
-                    if (MyWeb3j.transferEth(privateTemp,web3j, land.getAddressHolder(), eth)) {
+                //Thực hiện transfer
+//                event Transfer(address indexed _from, address indexed _to, uint _landId);
+//            function transferLand(address _landBuyer,address _ownerLand, uint _landID)
+                TransactionReceipt receiptTransfer = manageRealEsate.transferLand(accountBuyer.getAddress(), landTransfer.getAddressHolder(),
+                        BigInteger.valueOf(landTransfer.getLandId())).send();
+                if (receiptTransfer.isStatusOK()) {
+                    manageRealEsate
+                            .transferEventObservable(DefaultBlockParameterName.LATEST, DefaultBlockParameterName.LATEST)
+                            .subscribe(event -> {
+                                final String transferFrom = event._from;
+                                final String transferTo = event._to;
+                                final int landId = Integer.valueOf(event._landId.toString());
+                                System.out.println(" dia chi nguoi ban: " + transferFrom);
+                                System.out.println(" dia chi nguoi mua: " + transferTo);
+                                System.out.println(" id cua dat: " + landId);
+                            });
+                    //Chuyển tiền:
+                    String eth = CurrencyConverter.VNDToETH(landTransfer.getPrice());
+                    byte[] byteArrayNew = Base64.decodeBase64(accountBuyer.getPrivateKey().getBytes());
+                    String privateKeyBuyerNew = new String(byteArrayNew);
+                    if (MyWeb3j.transferEth(privateKeyBuyerNew, web3j, landTransfer.getAddressHolder(), eth)) {
+                        System.out.println("Giao dich mua dat thanh cong");
+                        //
                         return new GeneralResponse(true);
-                    } else {//rollback land to owner
-                        transBuy = manageRealEsate.transferLand(land.getAddressHolder(), BigInteger.valueOf(request.getLandId())).send();
+                    } else {//rollback land to previous owner
+                        System.out.println("Chuyen tien that bai.");
+                        TransactionReceipt receiptTransferNew = manageRealEsate.transferLand(landTransfer.getAddressHolder(),
+                                accountBuyer.getAddress(),
+                                BigInteger.valueOf(landTransfer.getLandId())).send();
+                        if (receiptTransferNew.isStatusOK()) {
+                            System.out.println("Chuyển đất ngược lại chủ cũ thành công.");
+                            manageRealEsate
+                                    .transferEventObservable(DefaultBlockParameterName.LATEST, DefaultBlockParameterName.LATEST)
+                                    .subscribe(event -> {
+                                        final String transferFrom = event._from;
+                                        final String transferTo = event._to;
+                                        final int landId = Integer.valueOf(event._landId.toString());
+                                        System.out.println(" dia chi nguoi ban: " + transferFrom);
+                                        System.out.println(" dia chi nguoi mua: " + transferTo);
+                                        System.out.println(" id cua dat: " + landId);
+                                    });
+                        }
+                        return new GeneralResponse(false, "error-transfer-eth");
                     }
-                } else {
-                    return new GeneralResponse(false, "error-system");
                 }
+                return new GeneralResponse(false);
             } catch (Exception e) {
-                if (e.getMessage().contains("sender doesn't have enough funds to send tx")) {
+                System.out.println(e.getMessage());
+                if (null != e.getMessage() && e.getMessage().contains("sender doesn't have enough funds to send tx")) {
                     System.out.println("Tài khoản không đủ gas để chạy transaction mua");
                     return new GeneralResponse(false, "not-enough-gas");
                 }
@@ -210,12 +257,45 @@ public class LandServiceImpl implements LandService {
                 return new GeneralResponse(false);
             }
         }
-        return new GeneralResponse(false);
     }
 
     @Override
     public GeneralResponse saveTransaction(History history) {
         historyRepository.save(history);
         return new GeneralResponse(true);
+    }
+
+    @Override
+    public String getBalance(String userLogin) {
+        Account account = accountRepository.findByNameLoginAndStatus(userLogin, AccountStatus.active.toString());
+        if (account == null) {
+            return "";
+        }
+        byte[] byteArray = Base64.decodeBase64(account.getPrivateKey().getBytes());
+        String privateTemp = new String(byteArray);
+        Web3j web3j = Web3j.build(new HttpService(ContractInfo.locationEthereum));
+        Credentials credentials = Credentials.create(privateTemp);
+        String addressContract = MyFile.RealFromFile(MyFile.ADDRESS_CONTRACT_FILE);
+        BigInteger gasLimit = BigInteger.valueOf(672197500);
+        BigInteger gasPrice =
+                Convert.toWei("2000000", Convert.Unit.WEI).toBigInteger();
+        ManageRealEsate manageRealEsate = ManageRealEsate.load(addressContract, web3j, credentials,
+                gasLimit, gasPrice);
+        EthGetBalance balanceResult;
+        try {
+            balanceResult = web3j.ethGetBalance(account.getAddress(), DefaultBlockParameterName.LATEST).send();
+        } catch (Exception e) {
+            System.out.println("Loi số dư ví tiền của người mua đất");
+            e.printStackTrace();
+            return "null";
+        }
+        BigInteger balanceInWei = balanceResult.getBalance();
+        System.out.println(Convert.toWei(new BigDecimal(balanceInWei), Convert.Unit.WEI));
+        System.out.println(balanceInWei.toString());
+        if (balanceInWei.toString().length() >= 18) {
+            return balanceInWei.toString().substring(0, balanceInWei.toString().length() - 18);
+        } else {
+            return "0";
+        }
     }
 }

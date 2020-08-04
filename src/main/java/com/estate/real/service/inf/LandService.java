@@ -27,4 +27,6 @@ public interface LandService {
     public GeneralResponse handleTransaction(TransactionRequest request);
 
     public GeneralResponse saveTransaction(History history);
+
+    String getBalance(String userLogin);
 }

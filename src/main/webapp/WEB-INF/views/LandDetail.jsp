@@ -31,7 +31,7 @@
                             Quận: ${requestScope.landResponse.district}</h5>
                         <p style="text-align: justify;" class="card-text">
                             <span style="text-decoration: underline">Chủ sở hữu:
-                            </span><span><strong id="i-holder">${requestScope.landResponse.ownerName}</strong> VND</span>
+                            </span><span><strong id="i-holder">${requestScope.landResponse.ownerName}</strong></span>
                             <br/>
                             <span style="text-decoration: underline">Giá bán theo VND:
                             </span><span><strong id="i-price">${requestScope.landResponse.price}</strong> VND</span>
@@ -57,13 +57,13 @@
             </div>
             <jsp:include page="Footer.jsp"/>
             <div class="w3-container">
-                <div id="i-modal-transfer" class="w3-modal">
+                <div id="i-modal-transfer" style="display: none" class="w3-modal">
                     <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:800px">
                         <div id="i-status-success-password" style="display: none">
                             <div class="w3-center"><br>
-                                <img id="i-success-icon" style="width: 30%; padding: 14px; display: none;" id="i-img-uploaded-password"
+                                <img id="i-success-icon" style="width: 30%; padding: 14px; display: none;"
                                      src="/imgs/item-real/status-success.png">
-                                <img id="i-fail-icon" style="width: 30%; padding: 14px; display: none;" id="i-img-uploaded-password"
+                                <img id="i-fail-icon" style="width: 30%; padding: 14px; display: none;"
                                      src="/imgs/item-real/alert.png">
                                 <h3 id="i-alert-title"></h3>
                                 <strong id="i-alert-content"></strong>
@@ -73,12 +73,41 @@
                             <div style="display: flex; justify-content: flex-end; padding-right: 10px;">
                                 <hr>
                                 <button id="i-close-modal-password"
-                                        onclick="document.getElementById('i-modal-password').style.display='none'"
+                                        onclick="document.getElementById('i-modal-transfer').style.display='none'"
                                         type="button"
                                         class="button">Đóng
                                 </button>
                                 <hr>
                             </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+<%--            Modal detail transfer--%>
+            <div class="w3-container">
+                <div id="i-modal-detail-transfer" style="display: none" class="w3-modal">
+                    <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:800px">
+                        <div  style="display: block">
+                            <div class="w3-center"><br>
+                                <p>Số dư trong ví của bạn: <strong><span id="i-money-owner-wallet">0</span></strong>  (ETH)</p>
+                                <p>Gía bất động sản sẽ mua: <strong><span id="i-price-land">${requestScope.valueEth}</span></strong>  (ETH)</p>
+                            </div>
+                        </div>
+                        <div class="w3-section">
+                            <div style="display: flex; justify-content: flex-end; padding-right: 10px;">
+                                <hr>
+                                <button
+                                        onclick="document.getElementById('i-modal-detail-transfer').style.display='none'"
+                                        type="button"
+                                        class="button">Đóng
+                                </button>
+                                <button id="i-click-buy-inside"
+                                        type="button"
+                                        class="button">Mua
+                                </button>
+                                <hr>
+                            </div>
+                            <div style="display: none;left: 45%;" id="i-updating-land" class="lds-hourglass"></div>
                         </div>
                     </div>
                 </div>
@@ -92,8 +121,10 @@
     //     // Check if Web3 has been injected by the browser (Mist/MetaMask).
     //     if (typeof web3 !== 'undefined') {
     //         // Use Mist/MetaMask's provider.
-    //         web3js = new Web3(web3.currentProvider);
-    //         console.log("co metamask");
+    //         web3 = new Web3();
+    //         web3.setProvider(new Web3.providers.HttpProvider('http://localhost:7545'));
+    //
+    //         web3.eth.sendTransaction({from: web3.eth.accounts[9], to:web3.eth.accounts[1], value: web3.toWei(100, "ether")})
     //     } else {
     //        console.log("ko co metamask");
     //     }
@@ -113,6 +144,24 @@
             objPrice.innerText = new Intl.NumberFormat('vi-VN', {maximumSignificantDigits: 3}).format(objPrice.textContent);
         }
 
+        function getBalance(){
+            let mySession = '${sessionScope.MY_SESSION}';
+            let jsonSession = JSON.parse(mySession);
+            $.ajax({
+                type: "POST",
+                contentType: "text/plain",
+                url: 'http://localhost:8084/api/land/checkBalance',
+                data: jsonSession.userLogin,
+                success: function (objResponse) {
+                    if (objResponse.success === true) {
+                        document.getElementById('i-money-owner-wallet').innerText = objResponse.strResult;
+                    } else if (objResponse.success === false ) {
+                        document.getElementById('i-money-owner-wallet').innerText = "Lỗi không thể lấy thông tin số dư";
+                    }
+                }
+            });
+        }
+
         document.getElementById('i-btn-buy').addEventListener('click', function () {
             if (mySession != "") {
                 let jsonSession = JSON.parse(mySession);
@@ -127,55 +176,51 @@
                         document.getElementById('i-alert').innerText = "Bạn đang sở hữu bất động sản này. Không thể thực hiện giao dịc MUA.";
                         document.getElementById('i-alert').style.display = "block";
                     } else {
-                        console.log("chayj ajax");
-                        $.ajax({
-                            type: "POST",
-                            contentType: "application/json",
-                            url: 'http://localhost:8084/api/land/transaction',
-                            data: JSON.stringify({
-                                "address": jsonSession.userLogin,
-                                "landId": '${requestScope.landId}'
-                            }),
-                            success: function (objResponse) {
+                        getBalance();
+                        document.getElementById('i-modal-detail-transfer').style.display = "block";
+                        document.getElementById('i-status-success-password').style.display = "none";
+                        document.getElementById('i-click-buy-inside').addEventListener('click',function () {
+                            document.getElementById('i-updating-land').style.display = 'block';
+                            $.ajax({
+                                type: "POST",
+                                contentType: "application/json",
+                                url: 'http://localhost:8084/api/land/transaction',
+                                data: JSON.stringify({
+                                    "address": jsonSession.userLogin,
+                                    "landId": '${requestScope.landId}'
+                                }),
+                                success: function (objResponse) {
+                                    document.getElementById('i-updating-land').style.display = 'none';
+                                    document.getElementById('i-modal-detail-transfer').style.display = "none";
+                                    if (objResponse.success === true) {
+                                        document.getElementById('i-alert-title').innerText = "Giao dịch mua thành công";
+                                        document.getElementById('i-success-icon').style.display = "block";
+                                        document.getElementById('i-status-success-password').style.display = "block";
+                                        document.getElementById('i-modal-transfer').style.display = "block";
 
-                                if (objResponse.success === true) {
-                                    document.getElementById('i-alert-title').innerText = "Giao dịch mua thành công";
-                                    document.getElementById('i-success-icon').style.display = "block";
-                                    document.getElementById('i-modal-transfer').style.display = "block";
-                                } else if (objResponse.success === false && objResponse.strResult == "not-enough-money") {
-                                    document.getElementById('i-alert-title').innerText = "Giao dịch mua thất bại";
-                                    document.getElementById('i-alert-content').innerText = "Tài khoản không đủ tiền để thực hiện giao dịch";
-                                    document.getElementById('i-fail-icon').style.display = "block";
-                                    document.getElementById('i-modal-transfer').style.display = "block";
-                                } else if (objResponse.success === false && objResponse.strResult == "not-enough-gas") {
-                                    document.getElementById('i-alert-title').innerText = "Giao dịch mua thất bại";
-                                    document.getElementById('i-alert-content').innerText = "Tài khoản không đủ gas để thực hiện giao dịch";
-                                    document.getElementById('i-fail-icon').style.display = "block";
-                                    document.getElementById('i-modal-transfer').style.display = "block";
-                                }else if (objResponse.success === false && objResponse.strResult == "error-system") {
-                                    document.getElementById('i-alert-title').innerText = "Giao dịch mua thất bại";
-                                    document.getElementById('i-alert-content').innerText = "Lỗi hệ thống. Xin quay lại sau.";
-                                    document.getElementById('i-fail-icon').style.display = "block";
-                                    document.getElementById('i-modal-transfer').style.display = "block";
-                                }else if (objResponse.success === false) {
-                                    document.getElementById('i-alert-title').innerText = "Giao dịch mua thất bại";
-                                    document.getElementById('i-alert-content').innerText = "Hệ thống giao dịch đang bảo trì. Xin quay lại sau";
-                                    document.getElementById('i-fail-icon').style.display = "block";
-                                    document.getElementById('i-modal-transfer').style.display = "block";
+                                    } else if (objResponse.success === false && objResponse.strResult == "not-enough-money") {
+                                        document.getElementById('i-alert-title').innerText = "Giao dịch mua thất bại";
+                                        document.getElementById('i-alert-content').innerText = "Tài khoản không đủ tiền để thực hiện giao dịch";
+                                        document.getElementById('i-fail-icon').style.display = "block";
+                                        document.getElementById('i-modal-transfer').style.display = "block";
+                                    } else if (objResponse.success === false && objResponse.strResult == "not-enough-gas") {
+                                        document.getElementById('i-alert-title').innerText = "Giao dịch mua thất bại";
+                                        document.getElementById('i-alert-content').innerText = "Tài khoản không đủ gas để thực hiện giao dịch";
+                                        document.getElementById('i-fail-icon').style.display = "block";
+                                        document.getElementById('i-modal-transfer').style.display = "block";
+                                    }else if (objResponse.success === false && objResponse.strResult == "error-transfer-eth") {
+                                        document.getElementById('i-alert-title').innerText = "Giao dịch mua thất bại";
+                                        document.getElementById('i-alert-content').innerText = "Lỗi hệ thống thanh toán tiền tệ. Xin quay lại sau.";
+                                        document.getElementById('i-fail-icon').style.display = "block";
+                                        document.getElementById('i-modal-transfer').style.display = "block";
+                                    }else if (objResponse.success === false) {
+                                        document.getElementById('i-alert-title').innerText = "Giao dịch mua thất bại";
+                                        document.getElementById('i-alert-content').innerText = "Hệ thống giao dịch đang bảo trì. Xin quay lại sau";
+                                        document.getElementById('i-fail-icon').style.display = "block";
+                                        document.getElementById('i-modal-transfer').style.display = "block";
+                                    }
                                 }
-
-                                //     document.getElementById('address').innerText = objResponse.strResult;
-                                //     document.getElementById('i-update-private-key').style.display = "none";
-                                //     document.getElementById('i-status-success').style.display = "block";
-                                // } else {
-                                //     document.getElementById('i-error-content').innerText =
-                                //         "Lỗi không thể cập nhật địa chỉ. Xin thử lại một khóa riêng tư khác.";
-                                //     document.getElementById('i-content-update').style.display = "none";
-                                //     document.getElementById('i-status-fail').style.display = "block";
-                                //     document.getElementById('i-update-private-key').style.display = "none";
-                                //
-                                // }
-                            }
+                            });
                         });
                     }
                 }

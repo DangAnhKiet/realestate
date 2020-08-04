@@ -65,6 +65,9 @@ public class CurrencyConverter {
         try{
             String currUsd = new JSONObject(strUSD).getJSONObject("result").getString("ethusd");
             String currVnd = new JSONObject(strVND).getJSONObject("quotes").get("USDVND").toString();
+            if(currVnd.contains(".")){
+                currVnd = currVnd.substring(0,currVnd.indexOf("."));
+            }
 
             int usd = Integer.parseInt(currUsd.substring(0, currUsd.indexOf(".")));
             int vnd = Integer.parseInt(currVnd);

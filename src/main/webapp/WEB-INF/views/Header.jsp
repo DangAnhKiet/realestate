@@ -79,11 +79,16 @@
     let url = window.location.href;
 
     window.addEventListener('load',function () {
-        let mySession = '${sessionScope.MY_SESSION}';
-        if(mySession != ''){
+        let mySession1 = '${sessionScope.MY_SESSION}';
+        if(mySession1 != ''){
             let objSession = JSON.parse('${sessionScope.MY_SESSION}');
+            console.log(objSession);
+            console.log(objSession.imgPath);
             objImgIpfs.src = objSession.imgPath;
-            document.getElementById('i-fullName').innerText = objSession.fullName;
+            // document.getElementById('i-fullName').addEventListener('load',function () {
+            //     document.getElementById('i-fullName').innerText = objSession.fullName;
+            // });
+
         }
         if(objUrlToAdminHome != null){
             objUrlToAdminHome.addEventListener('click',function () {
