@@ -44,10 +44,13 @@
                         <div style="display: flex; width: 267px;">
                             <div>
                                 <input class="form-control" id="i-land-id" type="search"
-                                       placeholder="Nhập thông tin lô đất" aria-label="Search">
+                                       placeholder="Nhập id bất động sản" aria-label="Search">
+                                <br><span style="color: red;font-weight: 600;display: none;"  class="" id="i-alert-input-idland">Id bất động sản
+                                không đúng
+                                .</span>
                             </div>
                             <div>
-                                <button id="i-get-account" style="margin-left: 3px;font-weight: 600"
+                                <button id="i-get-land" style="margin-left: 3px;font-weight: 600"
                                         class="btn btn-outline-success my-2 my-sm-0"
                                         type="button"><span style="margin-left: 3px">Tìm</span></button>
                                 <div class="w3-section w3-center">
@@ -110,42 +113,49 @@
 
 </div>
 <script type="text/javascript">
+    document.getElementById('i-alert-input-idland').style.display = "none";
     window.addEventListener(('load'), function () {
         //get history by landId
         let objButtonUpdatePrivateKey = document.getElementById('i-land-id');
-        objButtonUpdatePrivateKey.addEventListener('click', function () {
-            // document.getElementById('i-p-alert-private-key').style.display = "none";
-            // if (document.getElementById('i-land-id').value.length != 64) {
-            //     document.getElementById('i-p-alert-private-key').innerText = "Khóa riêng tư không đúng. Vui lòng nhập lại";
-            //     document.getElementById('i-p-alert-private-key').style.display = "block";
-            //
-            // } else {
-            $.ajax({
-                type: "POST",
-                contentType: "application/json",
-                url: 'http://localhost:8084/api/land/history',
-                data: JSON.stringify({
-                    "privateKey": document.getElementById('i-land-id').value
-                }),
-                success: function (objResponse) {
-                    if (objResponse !== null) {
-                        document.getElementById('i-time').innerText = objResponse.timestamp;
-                        document.getElementById("i-buyer").innerText = objResponse.buyer;
-                        document.getElementById('i-seller').innerText = objResponse.seller;
-                        document.getElementById('i-price').innerText = objResponse.price;
-                        document.getElementById('i-image').innerText = objResponse.image;
-                        // document.getElementById('i-update-private-key').style.display = "none";
-                        // document.getElementById('i-status-success').style.display = "block";
-                    } else {
-                        document.getElementById('i-error-content').innerText =
-                            "không thể tìm thấy lịch sử";
-                        // document.getElementById('i-content-update').style.display = "none";
-                        // document.getElementById('i-status-fail').style.display = "block";
-                        // document.getElementById('i-get-account').style.display = "none";
+        document.getElementById('i-get-land').addEventListener('click', function () {
+            let idLand = document.getElementById('i-land-id').value;
+            if(idLand != ""){
+                document.getElementById('i-alert-input-idland').style.display = "none";
+                console.log(idLand);
+                $.ajax({
+                    type: "POST",
+                    url: 'http://localhost:8084/api/land/history',
+                    data: idLand,
+                    // dataType: "json",
+                    contentType: "text/plain",
+                    success: function (objResponse) {
+                        let arrJson = JSON.stringify(objResponse);
+                        console.log(arrJson);
+                        console.log(typeof  objResponse);
+                        console.log(objResponse);
+                        console.log(JSON.parse(objResponse));
+                        if (objResponse !== null) {
+                            document.getElementById('i-time').innerText = objResponse.timestamp;
+                            document.getElementById("i-buyer").innerText = objResponse.buyer;
+                            document.getElementById('i-seller').innerText = objResponse.seller;
+                            document.getElementById('i-price').innerText = objResponse.price;
+                            document.getElementById('i-image').innerText = objResponse.image;
+                            // document.getElementById('i-update-private-key').style.display = "none";
+                            // document.getElementById('i-status-success').style.display = "block";
+                        } else {
+                            document.getElementById('i-error-content').innerText =
+                                "không thể tìm thấy lịch sử";
+                            // document.getElementById('i-content-update').style.display = "none";
+                            // document.getElementById('i-status-fail').style.display = "block";
+                            // document.getElementById('i-get-account').style.display = "none";
 
+                        }
                     }
-                }
-            });
+                });
+            }else{
+                document.getElementById('i-alert-input-idland').style.display = "inline";
+            }
+
             // }
         });
     });

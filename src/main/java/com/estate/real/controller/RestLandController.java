@@ -6,9 +6,13 @@ import com.estate.real.model.response.GeneralResponse;
 import com.estate.real.model.response.HistoryLandResponse;
 import com.estate.real.model.response.LandResponse;
 import com.estate.real.service.inf.LandService;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -57,8 +61,19 @@ public class RestLandController {
     }
 
     @RequestMapping(value = "/history", method = RequestMethod.POST)
-    public List<HistoryLandResponse> getHistoryFromNetwork(@RequestBody HistoryLandRequest request) throws Exception {
-        return landService.getHistoryFromNetwork(request);
+    public List<JSONObject> updateAddressHolder(@RequestBody String landId) throws Exception {
+        List<JSONObject> stringList = new ArrayList<>();
+        for (HistoryLandResponse landResponse : landService.getHistoryFromNetwork(landId)){
+            JSONObject objList = new JSONObject();
+            objList.put("timestamp",landResponse.getTimestamp());
+            objList.put("buyer",landResponse.getBuyer());
+            objList.put("seller",landResponse.getSeller());
+            objList.put("price",landResponse.getPrice());
+            objList.put("image",landResponse.getImage());
+
+            stringList.add(objList);
+        }
+        return stringList;
     }
 
     @RequestMapping(value = "/status", method = RequestMethod.GET)

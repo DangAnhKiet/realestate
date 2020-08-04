@@ -344,7 +344,7 @@ public class LandServiceImpl implements LandService {
     }
 
     @Override
-    public List<HistoryLandResponse> getHistoryFromNetwork(HistoryLandRequest request) throws Exception {
+    public List<HistoryLandResponse> getHistoryFromNetwork(String landId) throws Exception {
         List<HistoryLandResponse> landResponses = new ArrayList<>();
 
         Web3j web3j = Web3j.build(new HttpService(ContractInfo.locationEthereum));
@@ -358,7 +358,7 @@ public class LandServiceImpl implements LandService {
                 gasLimit, gasPrice);
 
 
-        BigInteger landIdCurrent = BigInteger.valueOf(request.getLandId());
+        BigInteger landIdCurrent = BigInteger.valueOf(Long.parseLong(landId));
         BigInteger sizeArrayLandCurrent = manageRealEsate.getNoOfHistory(landIdCurrent).send();
         System.out.println("+++++++++++++++++++++++++++++++++++Danh sach LICH SU GIAO DICH CUA LANDID: ");
         for (int i = 0; i < sizeArrayLandCurrent.intValue(); i++) {

@@ -35,8 +35,12 @@
                 </li>
                 <li style="border-left: 1px dashed #fff;"><a class="nav-hover" id="i-member-help"
                                                              href="/member/help">Trợ giúp</a></li>
-                <li style="padding-top: 1rem; padding-left: 8%; color: white;">Số tiền trong ví:
-                    <span>  <strong>1234 </strong>ETH</span></li>
+                <li style="padding-top: 1rem; padding-left: 8%; color: white; width: 34%;">
+                    <img style="width: 12%;" src="/imgs/item-real/payment.png" alt="icon-wallet">   Số tiền trong ví:
+                    <span>  <strong id="i-my-wallet-header"> </strong> ETH</span>
+                    <img  id="i-open-eye" style="cursor: pointer; width: 8%;" src="/imgs/item-real/eye.svg" alt="icon-eye">
+                    <img id="i-close-eye" style="cursor: pointer;width: 8%;display: none;" src="/imgs/item-real/close-eye.svg" alt="icon-close-eye">
+                </li>
             </c:if>
             <li class="avatar">
                 <c:if test="${requestScope.role == 'admin'}">
@@ -79,7 +83,20 @@
     let objHome = document.getElementById("i-home");
     let objUrlToAdminHome = document.getElementById('i-a-logo-home');
     let url = window.location.href;
+    document.getElementById('i-close-eye').addEventListener('click', function () {
+        getBalance(document.getElementById('i-my-wallet-header'));
+        document.getElementById('i-close-eye').style.display = "none";
+        document.getElementById('i-open-eye').style.display = "inline";
+    });
+    document.getElementById('i-open-eye').addEventListener('click', function () {
+        document.getElementById('i-my-wallet-header').innerText = "*****";
+        document.getElementById('i-open-eye').style.display = "none";
+        document.getElementById('i-close-eye').style.display = "inline";
 
+    });
+    if(null != document.getElementById('i-my-wallet-header')){
+        getBalance(document.getElementById('i-my-wallet-header'));
+    }
     function getBalance(elemCurr){
         let mySession = '${sessionScope.MY_SESSION}';
         let jsonSession = JSON.parse(mySession);
@@ -153,6 +170,8 @@
                 listLi[i].classList.remove("tab-current");
             }
         }
+
+
     // });
 
 
