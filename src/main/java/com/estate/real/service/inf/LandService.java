@@ -28,9 +28,10 @@ public interface LandService {
 
     String getBalance(String userLogin);
 
+    public GeneralResponse updateAddressHolder(UpdateAddressRequest request);
+
     public List<HistoryLandResponse> getHistoryFromNetwork(String landId) throws Exception;
 
     public GeneralResponse updateLandStatus(int landId);
 
-    public List<HistoryLandResponse> getHistoryFromNetwork(HistoryLandRequest request) throws Exception;
 }
