@@ -15,7 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
-
+@CrossOrigin
 @RestController
 @RequestMapping(value = "api/account")
 public class RestAccountController {

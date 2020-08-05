@@ -128,7 +128,7 @@
             } );
 
             // Set up our request
-            XHR.open( 'POST', 'http://localhost:8084/api/account/update/image' );
+            XHR.open( 'POST', ' http://localhost:8084/api/account/update/image' );
 
             // Add the required HTTP header to handle a multipart form data POST request
             XHR.setRequestHeader( 'Content-Type','multipart/form-data; boundary=' + boundary );

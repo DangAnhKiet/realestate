@@ -27,7 +27,7 @@
                     Xin lỗi, đã có lỗi xảy ra trong quá trình xử lí.
                 </div>
                 <div class="error-actions">
-                    <a href="http://localhost:8084/" class="button"><i class="fa fa-home" aria-hidden="true"></i>
+                    <a href=" http://localhost:8084/" class="button"><i class="fa fa-home" aria-hidden="true"></i>
                         Về trang chủ </a>
                     <a href="#" class="button"><i class="fa fa-envelope" aria-hidden="true"></i>  Liên hệ</a>
                 </div>

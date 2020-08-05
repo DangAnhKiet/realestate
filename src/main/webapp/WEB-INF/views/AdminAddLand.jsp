@@ -272,7 +272,7 @@
             $.ajax({
                 type: "POST",
                 enctype: 'multipart/form-data',
-                url: "http://localhost:8084/api/ipfs/img/update",
+                url: " http://localhost:8084/api/ipfs/img/update",
                 data: data,
                 processData: false,
                 contentType: false,
@@ -315,7 +315,7 @@
             $.ajax({
                 type: "POST",
                 contentType: "application/json",
-                url: 'http://localhost:8084/api/land/add',
+                url: ' http://localhost:8084/api/land/add',
                 data: JSON.stringify({
                     "addressSeller": objHolderAddress.value,
                     "district": objSelectDistrict.options[objSelectDistrict.selectedIndex].text,
@@ -359,7 +359,7 @@
             $.ajax({
                 type: "POST",
                 // contentType: "application/json",
-                url: 'http://localhost:8084/api/account/get/name',
+                url: ' http://localhost:8084/api/account/get/name',
                 data: {name: username},
                 success: function (objResponse) {
                     if (objResponse.toString() == 'update') {

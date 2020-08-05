@@ -103,7 +103,7 @@
         $.ajax({
             type: "POST",
             contentType: "text/plain",
-            url: 'http://localhost:8084/api/land/checkBalance',
+            url: ' http://localhost:8084/api/land/checkBalance',
             data: jsonSession.userLogin,
             success: function (objResponse) {
                 if (objResponse.success === true) {

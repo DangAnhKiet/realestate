@@ -167,7 +167,7 @@
                         $.ajax({
                             type: "POST",
                             contentType: "application/json",
-                            url: 'http://localhost:8084/api/land/transaction',
+                            url: ' http://localhost:8084/api/land/transaction',
                             data: JSON.stringify({
                                 "address": jsonSessionLandDetail.userLogin,
                                 "landId": '${requestScope.landId}'

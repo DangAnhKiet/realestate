@@ -220,7 +220,7 @@
                 $.ajax({
                     type: "POST",
                     contentType: "application/json",
-                    url: 'http://localhost:8084/api/account/privateKey/update',
+                    url: ' http://localhost:8084/api/account/privateKey/update',
                     data: JSON.stringify({
                         "nameLogin": ""+stringSession.userLogin,
                         "privateKey": document.getElementById('i-private-key-input').value
@@ -255,7 +255,7 @@
                 $.ajax({
                     type: "POST",
                     contentType: "application/json",
-                    url: 'http://localhost:8084/api/account/password/change',
+                    url: ' http://localhost:8084/api/account/password/change',
                     data: JSON.stringify({
                         "nameLogin": "" + stringSession.userLogin,
                         "oldPass": document.getElementById('i-password-key-input').value,
@@ -307,7 +307,7 @@
             $.ajax({
                 type: "POST",
                 enctype: 'multipart/form-data',
-                url: "http://localhost:8084/api/session/update",
+                url: " http://localhost:8084/api/session/update",
                 processData: false,
                 contentType: false,
                 cache: false,
@@ -356,7 +356,7 @@
             $.ajax({
                 type: "POST",
                 enctype: 'multipart/form-data',
-                url: "http://localhost:8084/api/account/update/image",
+                url: " http://localhost:8084/api/account/update/image",
                 data: data,
                 processData: false,
                 contentType: false,

@@ -63,7 +63,7 @@
     var objHomePage = document.getElementById('i-btn-homepage');
 
     objHomePage.addEventListener('click', function () {
-        window.location.href = "http://localhost:8084";
+        window.location.href = "http://localhost:8084/";
     })
     document.getElementById("i-btn-login").addEventListener("click", function () {
         objErrorLogin.style.display = "none";
@@ -84,9 +84,9 @@
                 console.log(objResult.responseText);
                 console.log(objResult);
                 if (objResult.responseText.includes("admin")) {
-                    window.location.href = "http://localhost:8084/";
+                    window.location.href = " http://localhost:8084/";
                 } else if (objResult.responseText.includes("member")) {
-                    window.location.href = "http://localhost:8084/";
+                    window.location.href = " http://localhost:8084/";
                 } else {
                     objErrorLogin.innerText = objResult.responseText;
                     objErrorLogin.style.display = "block";
